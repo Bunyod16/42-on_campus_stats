@@ -1,25 +1,22 @@
-from flask import request, make_response
-from application import feature_switch
 from application import app
+from flask import jsonify
+from .models import Token
+
+SECRET = os.getenv('42_SECRET')
+UID = os.getenv('42_UID')
+t=Token(34, UID, SECRET)
 
 @app.route('/api/on-campus/active-users', methods=['GET'])
 def active_users():
-    if not set(['email', 'featureName', 'enable']).issubset(set(request.json.keys())):
-        return make_response("", 304)
-    return make_response(feature_switch.post_feature(
-            request.json['email'],
-            request.json['featureName'],
-            request.json['enable']
-            )
-        )
+    return (jsonify(token.get_active_users()))
 
 @app.route('/api/on-campus/active-user-projects', methods=['GET'])
 def user_projects():
-    pass
+    return (jsonify(token.active_user_projects()))
 
 @app.route('/api/on-campus/average-user-level', methods=['GET'])
 def feature():
-    pass
+    return (jsonify(token.average_user_level()))
 
 @app.route('/api/on-campus/average-session-time', methods=['GET'])
 def average_session_time():
