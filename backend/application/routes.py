@@ -20,11 +20,11 @@ def feature():
 
 @app.route('/api/on-campus/average-session-time', methods=['GET'])
 def average_session_time():
-    pass
+    return (jsonify(token.average_session_time()))
 
 @app.route('/api/most-recent-submission', methods=['GET'])
 def most_recent_submission():
-    pass
+    return (jsonify(token.most_recent_submission()))
 
 @app.route('/api/on-campus/daily-total-active-students', methods=['GET'])
 def daily_total_active_users():

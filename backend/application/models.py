@@ -63,10 +63,8 @@ class Token():
         SECRET = self.secret
         headers = {'Content-type':'application/json'}
         r = requests.post(f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={UID}&client_secret={SECRET}", headers=headers)
-        print(r.json())
         self.token = r.json()['access_token']
         self.expiry = datetime.now() + timedelta(seconds=r.json()['expires_in'])
-        print(self.expiry)
 
     def __init__(self, campus_id, uid, secret):
         self.uid = uid
@@ -74,6 +72,7 @@ class Token():
         self._renew_token()
         self.campus_id = campus_id
         self.active_users = None
+        return
         self.active_user_info = self.get_active_user_info()
 
     def is_expired(self):
@@ -120,9 +119,23 @@ class Token():
             count += 1
         return ({'average_level':round(level / count, 1)})
 
+    def average_session_time(self):
+        count = 0
+        total = 0
+        url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?access_token={self.token}'
+        response = requests.get(url)
+        for user in response.json():
+            if (user['end_at'] == None):
+                current_time = datetime.utcnow()
+                user['begin_at'] = user['begin_at'].replace('T', '-')
+                user['begin_at'] = user['begin_at'][:user['begin_at'].find('.')]
+                begin_at = datetime.strptime(user['begin_at'], "%Y-%m-%d-%H:%M:%S")
+                total += (current_time - begin_at).total_seconds()
+                count += 1
+        return ({"average_session_hours":round(total/count/60/60, 1)})
 
 
 # SECRET = os.getenv('42_SECRET')
 # UID = os.getenv('42_UID')
 # t=Token(34, UID, SECRET)
-# print(t.average_user_level())
+# print(t.average_session_time())
