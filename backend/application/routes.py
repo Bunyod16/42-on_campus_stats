@@ -2,8 +2,14 @@ from application import app
 from flask import jsonify
 from .models import Token
 import os
+from dotenv import load_dotenv
 
-token = Token(34, "u-s4t2ud-47d550c26c4d556cd46351d5f76bf895020de39c926832ef0057a0c7ad2ecf18", "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")
+load_dotenv()
+
+env_uid = os.getenv("42_UID")
+env_secret = os.getenv("42_SECRET")
+
+token = Token(34, env_uid, env_secret)
 
 @app.errorhandler(404)
 def page_not_found(e):
