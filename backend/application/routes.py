@@ -1,10 +1,11 @@
 from application import app
 from flask import jsonify
 from .models import Token
+import os
 
 SECRET = os.getenv('42_SECRET')
 UID = os.getenv('42_UID')
-t=Token(34, UID, SECRET)
+token=Token(34, UID, SECRET)
 
 @app.route('/api/on-campus/active-users', methods=['GET'])
 def active_users():

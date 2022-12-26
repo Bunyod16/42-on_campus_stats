@@ -3,13 +3,17 @@ import logo from "./logo.svg";
 // import './App.css';
 import tw from "twin.macro";
 import CurrentActiveUser from "./component/CurrentActiveUser";
+import AverageLevel from "./component/AverageLevel";
+import AverageSessionTime from "./component/AverageSessionTime";
+import MostRecentSubmission from "./component/MostRecentSubmission";
+import TotalActiveUser7Days from "./component/TotalActiveUser7Days";
 
 const StyledApp = tw.div`
-  text-center h-screen flex flex-col items-center
+  text-center h-screen flex flex-col items-center bg-gray-800 min-h-[896px] min-w-[1200px]
 `;
 
 const Header = tw.header`
-  bg-[#282c34]
+  bg-gray-900
   text-3xl
   flex flex-col items-center justify-center text-white
   py-4
@@ -30,7 +34,7 @@ const FlexList = tw.div`
 `;
 
 const FlexItem = tw.div`
-  text-center align-middle bg-teal-700 rounded-xl
+  text-center align-middle bg-gray-700 rounded-xl
 `;
 
 function App() {
@@ -47,12 +51,12 @@ function App() {
         </FlexList>
         <FlexList className="flex-[2_2_0%]">
           <CurrentActiveUser className="flex-[3_3_0%]" />
-          <FlexItem className="flex-[2_2_0%]">2</FlexItem>
+          <TotalActiveUser7Days className="flex-[2_2_0%]" />
         </FlexList>
         <FlexList className="flex-1">
-          <FlexItem className="flex-1">3</FlexItem>
-          <FlexItem className="flex-1">3</FlexItem>
-          <FlexItem className="flex-1">3</FlexItem>
+          <AverageLevel className="flex-1" />
+          <AverageSessionTime className="flex-1" />
+          <MostRecentSubmission className="flex-1" />
         </FlexList>
       </FlexContainer>
     </StyledApp>
