@@ -125,10 +125,18 @@ class Token():
         for user in self.saved_active_users():
             url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
             response = requests.get(url)
-            project = response.json()['projects_users'][0]['project']['name']
-            if (project not in projects.keys()):
+            projecters = response.json()['projects_users']
+            project = ""
+            for prod in projecters:
+                if not prod["validated?"] and "Piscine" not in prod["project"]["name"]:
+                    print(user)
+                    project = prod["project"]["name"]
+                    print(project)
+                    break
+            if project not in projects.keys() and project:
                 projects[project] = 0
-            projects[project] += 1
+            if project:
+                projects[project] += 1
         return (projects)
 
     def average_user_level(self):

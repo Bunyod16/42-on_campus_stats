@@ -2,8 +2,23 @@ from application import app
 from flask import jsonify
 from .models import Token
 import os
+from dotenv import load_dotenv
 
-token = Token(34, "u-s4t2ud-7955af256978a28c3c35fb31017a7dd4bad00f5b93ba094019054685716cc667", "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")
+load_dotenv()
+
+env_uid = os.getenv("42_UID")
+env_secret = os.getenv("42_SECRET")
+
+token = Token(34, env_uid, env_secret)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    html = r'<img src="https://api.intra.42.fr/assets/8-sorry.gif" alt="Girl in a jacket" width="100%" height="100%">'
+    return html, 404
+
+@app.route('/', methods=['GET'])
+def banana():
+    return ("BANANA IS PURPLE")
 
 @app.route('/api/on-campus/active-users', methods=['GET'])
 def active_users():
