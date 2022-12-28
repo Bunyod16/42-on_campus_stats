@@ -3,9 +3,7 @@ from flask import jsonify
 from .models import Token
 import os
 
-SECRET = os.getenv('42_SECRET')
-UID = os.getenv('42_UID')
-token=Token(34, UID, SECRET)
+token = Token(34, "u-s4t2ud-7955af256978a28c3c35fb31017a7dd4bad00f5b93ba094019054685716cc667", "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")
 
 @app.route('/api/on-campus/active-users', methods=['GET'])
 def active_users():
@@ -19,9 +17,9 @@ def user_projects():
 def feature():
     return (jsonify(token.average_user_level()))
 
-@app.route('/api/on-campus/average-session-time', methods=['GET'])
-def average_session_time():
-    return (jsonify(token.average_session_time()))
+@app.route('/api/on-campus/average-session-hours', methods=['GET'])
+def average_session_hours():
+    return (jsonify(token.average_session_hours()))
 
 @app.route('/api/most-recent-submission', methods=['GET'])
 def most_recent_submission():

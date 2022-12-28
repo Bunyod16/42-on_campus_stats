@@ -49,6 +49,26 @@ class User():
         self.campus_users = info_json['campus_users']
 
 class Token():
+    def get_all_user_info(self):
+        # info = []
+        # result_len = 100
+        # i = 0
+        # while(result_len == 100):
+        #     url = f"https://api.intra.42.fr/v2/campus/{self.campus_id}/users?per_page=100&page={i}&access_token={self.token}"
+        #     response = requests.get(url)
+        #     print(response.json())
+        #     result_len = len(response.json())
+        #     info += response.json()
+        #     i += 1
+        i = 0
+        url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]=34&filter[marked]=true&range[created_at]=2022-01-01T00%3A00%3A00.000Z,3000-01-01T00%3A00%3A00.000Z&access_token={self.token}"
+        response = requests.get(url)
+        with open("somef.json","w") as f:
+            f.write(json.dumps(response.json()))
+        exit()
+        info.append(user)
+        return (info)
+
     def get_active_user_info(self):
         info = []
         for user in self.saved_active_users():
@@ -72,7 +92,7 @@ class Token():
         self._renew_token()
         self.campus_id = campus_id
         self.active_users = None
-        return
+        # self.allcampus_users = self.get_all_user_info()
         self.active_user_info = self.get_active_user_info()
 
     def is_expired(self):
@@ -82,16 +102,16 @@ class Token():
     def get_active_users(self):
         url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?access_token={self.token}'
         response = requests.get(url)
-        users = []
+        oncampus_users = []
         for user in response.json():
             info = {}
             if (user['end_at'] == None):
                 info['login'] = user['user']['login']
                 info['image'] = user['user']['image']['link']
                 info['id'] = user['user']['id']
-                users.append(info)
-        self.active_users = users
-        return ({"users":users})
+                oncampus_users.append(info)
+        self.active_users = oncampus_users
+        return ({"users":oncampus_users})
 
     def saved_active_users(self):
         if (self.active_users != None):
@@ -119,7 +139,7 @@ class Token():
             count += 1
         return ({'average_level':round(level / count, 1)})
 
-    def average_session_time(self):
+    def average_session_hours(self):
         count = 0
         total = 0
         url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?access_token={self.token}'
@@ -134,8 +154,24 @@ class Token():
                 count += 1
         return ({"average_session_hours":round(total/count/60/60, 1)})
 
+    def most_recent_submission(self):
+        current_time = datetime.utcnow()
+        most_recent_time = None
+        most_recent_user = None
+        for user in self.allcampus_users:
+            print(user)
+            for project in (user.projects_users):
+                if (project['marked'] == True):
+                    user['marked_at'] = user['marked_at'].replace('T', '-')
+                    user['marked_at'] = user['marked_at'][:user['marked_at'].find('.')]
+                    marked_at = datetime.strptime(user['marked_at'], "%Y-%m-%d-%H:%M:%S")
+                    recency = (current_time - marked_at).total_seconds()
+                    if (most_recent_time is None or recency < most_recent_time):
+                        most_recent_user = user
+        return (most_recent_user)
+
 
 # SECRET = os.getenv('42_SECRET')
 # UID = os.getenv('42_UID')
 # t=Token(34, UID, SECRET)
-# print(t.average_session_time())
+# print(t.most_recent_submission())
