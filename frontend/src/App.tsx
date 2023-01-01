@@ -7,7 +7,8 @@ import AverageLevel from "./component/AverageLevel";
 import AverageSessionTime from "./component/AverageSessionTime";
 import MostRecentSubmission from "./component/MostRecentSubmission";
 import TotalActiveUser7Days from "./component/TotalActiveUser7Days";
-
+import ActiveUserProjects from "./component/ActiveUserProjects";
+import { H1Style } from "./styles";
 const StyledApp = tw.div`
   text-center h-screen flex flex-col items-center bg-gray-800 min-h-[896px] min-w-[1200px]
 `;
@@ -45,7 +46,7 @@ function App() {
       </Header>
       <FlexContainer>
         <FlexList className="flex-[2_2_0%]">
-          <FlexItem className="flex-[3_3_0%]">1</FlexItem>
+          <ActiveUserProjects/>
           <FlexItem className="flex-[3_3_0%]">1</FlexItem>
           <FlexItem className="flex-[2_2_0%]">1</FlexItem>
         </FlexList>
