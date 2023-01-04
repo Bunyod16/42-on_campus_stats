@@ -1,9 +1,10 @@
-.legend-text-size{
-    font-size: 14px;
+.legend-text{
+    font-size: 12px;
+    fill: white;
 }
 
 .pie-chart-svg
 {
     display: block;
-    margin: auto;
+    margin: auto; 
 }

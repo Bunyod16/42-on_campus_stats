@@ -37,20 +37,19 @@ dataset = [
   }
 ]
 */
-export default function ActiveUserProjects() {
+export default function ActiveUserProjects(props) {
   const ref = useRef(null);
 
   useEffect(() => {
     const color = d3.scaleOrdinal(d3.schemeTableau10);
     const svg = d3.select(ref.current),
-      width = 330,
-      height = 330,
-      radius = Math.min(width, height) / 3,
+      size = 300,
+      radius = size / 3,
       chart = svg
         .append("g")
         .attr(
           "transform",
-          "translate(" + ( width / 3 + 10) + "," + (10 + height / 3) + ")"
+          "translate(" + ( radius + 10) + "," + (10 + radius) + ")"
         );
     // creating pie chart thingy
     const pie = d3.pie().value((d) => {
@@ -75,13 +74,13 @@ export default function ActiveUserProjects() {
       .attr("transform", (d) => {
         return "translate(" + arc.centroid(d) + ")";
       })
-      .attr("class", "legend-text-size")
+      .attr("class", "legend-text")
       .style("text-anchor", "middle")
       .text((d) => {
         return d3.format(".0%")(d.data.percentage);
       });
     // creating legends here
-    const legend = svg.append("g").attr("transform", "translate(280,30)");
+    const legend = svg.append("g").attr("transform", "translate(270,25)");
     legend
       .selectAll("legend-dots")
       .data(dataset)
@@ -101,7 +100,7 @@ export default function ActiveUserProjects() {
       .data(dataset)
       .enter()
       .append("text")
-      .attr("class", "legend-text-size")
+      .attr("class", "legend-text")
       .attr("x", 10)
       .attr("y", (d, i) => {
         return 5 + i * 20;
@@ -114,7 +113,7 @@ export default function ActiveUserProjects() {
   return (
     <Card>
       <H1Style>Active User Projects</H1Style>
-      <svg className="pie-chart-svg" ref={ref} width="420px" height="250px"></svg>
+      <svg className="pie-chart-svg" ref={ref} width="420px" height="220px"></svg>
     </Card>
   );
 }
