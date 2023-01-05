@@ -98,13 +98,7 @@ const tmpUserList: User[] = [
     image:
       "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
     id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
+  }
 ];
 
 const UserStyle = tw.div`

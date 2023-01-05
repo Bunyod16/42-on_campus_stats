@@ -1,0 +1,10 @@
+.legend-text{
+    font-size: 12px;
+    fill: white;
+}
+
+.pie-chart-svg
+{
+    display: block;
+    margin: auto; 
+}
