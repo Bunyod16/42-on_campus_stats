@@ -11,7 +11,7 @@ import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
 
 const StyledApp = tw.div`
-  text-center h-full flex flex-col items-center bg-gray-800 min-h-[896px] min-w-[1200px]
+  text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px]
 `;
 
 const Header = tw.header`
@@ -28,11 +28,11 @@ const AppLogo = tw.img`
 `;
 
 const FlexContainer = tw.div`
-  flex w-full h-full gap-4 p-8 max-w-7xl content-center
+  flex-1 flex w-full h-full gap-4 max-w-7xl content-center
 `;
 
 const FlexList = tw.div`
-  flex-col flex gap-4
+  flex-col flex gap-4 py-4
 `;
 
 function App() {

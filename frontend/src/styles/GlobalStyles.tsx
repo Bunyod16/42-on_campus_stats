@@ -7,6 +7,7 @@ const CustomStyles = createGlobalStyle`
     -webkit-tap-highlight-color: ${theme`colors.purple.500`};
     ${tw`antialiased`}
     font-family: "Roboto", sans-serif;
+    background-color: #1f2937;
   }
 `;
 
