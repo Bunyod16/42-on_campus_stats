@@ -3,9 +3,6 @@ import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { Card, H1Style } from "../styles";
 import "../styles/radar.css";
-import tw from "twin.macro";
-import { useDimensions } from "../hooks/useDimension";
-
 // Radar Chart :
 // level : 4, width per level: 5
 let skills = [
@@ -53,17 +50,12 @@ let topSkills = getTopSkills(dataset);
 
 export default function AverageActiveUserSkill(props) {
   const ref = useRef(null);
-  const containerRef = React.useRef();
-
-  const dimension = useDimensions(containerRef);
 
   useEffect(() => {
-    if (!dimension.width) return;
-    console.log(dimension.width);
     const svg = d3.select(ref.current),
-      size = dimension.width * 1.1,
-      x = dimension.width / 2,
-      y = dimension.height / 2,
+      size = 330,
+      x = 120,
+      y = 115,
       radius = size / 4;
     // Data potting thingy.
     // domain(data range)
@@ -86,7 +78,7 @@ export default function AverageActiveUserSkill(props) {
     function angleToCoordinate(angle, value) {
       let x_in = Math.cos(angle) * radialScale(value);
       let y_in = Math.sin(angle) * radialScale(value);
-      return { x: x + x_in, y: y - y_in };
+      return { x: 120 + x_in, y: 115 - y_in };
     }
     // loops through each skills and plot where the label should be
     // and the lines in the spider chart
@@ -110,8 +102,8 @@ export default function AverageActiveUserSkill(props) {
       // append the lines
       svg
         .append("line")
-        .attr("x1", x)
-        .attr("y1", y)
+        .attr("x1", 120)
+        .attr("y1", 115)
         .attr("x2", line_cord.x)
         .attr("y2", line_cord.y)
         .attr("stroke", "#C0D0E0")
@@ -122,7 +114,7 @@ export default function AverageActiveUserSkill(props) {
         .attr("class", "radar-label")
         .attr("x", label_cord.x)
         .attr("y", label_cord.y)
-        .attr("font-size", 10);
+        .attr("font-size", 5);
       // this loop is to put labels and check for multiple words.
       // basically so the text go bottom of each other and not side by side
       for (let j = 0; j < label.length; j++) {
@@ -168,31 +160,21 @@ export default function AverageActiveUserSkill(props) {
       .attr("stroke-opacity", 1)
       .attr("fill", color)
       .attr("opacity", 0.5);
-  }, [dimension]);
-
+  }, []);
   return (
-    <Card className={props.className + " flex flex-col"}>
+    <Card>
       <H1Style>Average Active User Skills</H1Style>
-      <div className="avg-user-skill flex-1" ref={containerRef}>
-        <svg
-          className="radar-svg"
-          ref={ref}
-          width={dimension.width}
-          height={dimension.height}
-        ></svg>
-      </div>
-      <div className="avg-user-skill-top-3">
-        <h3>Top 3</h3>
-        <ul>
-          <ListItem key={1}>{topSkills[0][0]}</ListItem>
-          <ListItem key={2}>{topSkills[1][0]}</ListItem>
-          <ListItem key={3}>{topSkills[2][0]}</ListItem>
-        </ul>
+      <div className="avg-user-skill">
+        <svg className="radar-svg" ref={ref} width="270px" height="230px"></svg>
+        <div className="avg-user-skill-top-3">
+          <h3>Top 3</h3>
+          <ul>
+            <li key={1}>{topSkills[0][0]}</li>
+            <li key={2}>{topSkills[1][0]}</li>
+            <li key={3}>{topSkills[2][0]}</li>
+          </ul>
+        </div>
       </div>
     </Card>
   );
 }
-
-const ListItem = tw.li`
-  inline-block mx-2
-`;
