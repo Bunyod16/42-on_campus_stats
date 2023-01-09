@@ -8,124 +8,29 @@ interface ICurrentActiveUserProps {
   className?: string;
 }
 
-const tmpUserList: User[] = [
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-  {
-    login: "jatan",
-    image:
-      "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
-    id: "1",
-  },
-];
-
 const UserStyle = tw.div`
   flex flex-col items-center
-  [> img]:(rounded-full h-14 w-14 object-cover)
+  [> img]:(rounded-full h-10 w-10 object-cover)
   [> p]:(text-sm)
 `;
 
 const UserGalleryStyle = tw.div`
-  grid grid-cols-5 justify-between gap-4
+  grid grid-cols-5 justify-between gap-4 h-full
 `;
 
 function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
-  const [users, setUsers] = React.useState();
+  const [users, setUsers] = React.useState<User[]>([]);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/on-campus/active-users`
-        );
-        const data = await response.json();
-        // setUsers(data.users);
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
+      fetch("/api/on-campus/active-users")
+        .then((response) => {
+          if (response.ok) return response.json();
+        })
+        .then((data) => setUsers(data.users))
+        .catch((error) => {
+          console.error(error);
+        });
     };
     fetchUsers();
 
@@ -136,21 +41,19 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
     return () => clearInterval(interval);
   }, []);
 
-  const userGallery = tmpUserList.map((singleUser) => {
+  const userGallery = users.map((singleUser) => {
     return (
       <UserStyle>
-        <img src={singleUser.image} width={50} height={50} alt="" />
+        <img src={singleUser.image} width={32} height={32} alt="" />
         <p>{singleUser.login}</p>
       </UserStyle>
     );
   });
 
   return (
-    <Card className={className}>
-      <>
-        <H1Style>Current Active Users</H1Style>
-        <UserGalleryStyle>{userGallery}</UserGalleryStyle>
-      </>
+    <Card className={className + " flex flex-col"}>
+      <H1Style>Current Active Users</H1Style>
+      <UserGalleryStyle>{userGallery}</UserGalleryStyle>
     </Card>
   );
 }
