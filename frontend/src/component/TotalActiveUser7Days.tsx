@@ -92,10 +92,7 @@ const BarChart = ({ data, containerRef }: IBarChartProps) => {
   const margin = { top: 16, right: 16, bottom: 24, left: 32 };
 
   const dimension = useDimensions(containerRef);
-  // console.log(
-  //   "🚀 ~ file: TotalActiveUser7Days.tsx:94 ~ BarChart ~ dimension",
-  //   dimension
-  // );
+
   const width = dimension.width - margin.left - margin.right;
   const height = dimension.height - margin.top - margin.bottom;
 

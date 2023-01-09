@@ -98,7 +98,7 @@ const tmpUserList: User[] = [
     image:
       "https://cdn.pixabay.com/photo/2019/05/21/05/07/animal-4218265__480.jpg",
     id: "1",
-  }
+  },
 ];
 
 const UserStyle = tw.div`
@@ -112,6 +112,30 @@ const UserGalleryStyle = tw.div`
 `;
 
 function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
+  const [users, setUsers] = React.useState();
+
+  React.useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/on-campus/active-users`
+        );
+        const data = await response.json();
+        // setUsers(data.users);
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUsers();
+
+    // Call the API every 5 minutes
+    const interval = setInterval(fetchUsers, 1000 * 60 * 5);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []);
+
   const userGallery = tmpUserList.map((singleUser) => {
     return (
       <UserStyle>

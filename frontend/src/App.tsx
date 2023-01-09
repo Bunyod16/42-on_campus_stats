@@ -11,7 +11,7 @@ import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
 
 const StyledApp = tw.div`
-  text-center h-screen flex flex-col items-center bg-gray-800 min-h-[896px] min-w-[1200px]
+  text-center h-full flex flex-col items-center bg-gray-800 min-h-[896px] min-w-[1200px]
 `;
 
 const Header = tw.header`
@@ -35,10 +35,6 @@ const FlexList = tw.div`
   flex-col flex gap-4
 `;
 
-const FlexItem = tw.div`
-  text-center align-middle bg-gray-700 rounded-xl
-`;
-
 function App() {
   return (
     <StyledApp>
@@ -47,18 +43,18 @@ function App() {
       </Header>
       <FlexContainer>
         <FlexList className="flex-[2_2_0%]">
-          <ActiveUserProjects className="flex-[3_3_0%]"/>
-          <AverageActiveUserSkill className="flex-[3_3_0%]"/>
-          <CadetPiscineRatio className="flex-[2_2_0%]"/>
+          <ActiveUserProjects className="flex-[3_3_0%]" />
+          <CurrentActiveUser className="flex-[3_3_0%]" />
+          <CadetPiscineRatio className="flex-[2_2_0%]" />
         </FlexList>
         <FlexList className="flex-[2_2_0%]">
-          <CurrentActiveUser className="flex-[3_3_0%]" />
+          <AverageActiveUserSkill className="flex-[3_3_0%]" />
           <TotalActiveUser7Days className="flex-[2_2_0%]" />
         </FlexList>
         <FlexList className="flex-1">
-          <AverageLevel className="flex-1" />
-          <AverageSessionTime className="flex-1" />
-          <MostRecentSubmission className="flex-1" />
+          <AverageLevel className="flex-[1_1_0%]" />
+          <AverageSessionTime className="flex-[1_1_0%]" />
+          <MostRecentSubmission className="flex-[2_2_0%]" />
         </FlexList>
       </FlexContainer>
     </StyledApp>

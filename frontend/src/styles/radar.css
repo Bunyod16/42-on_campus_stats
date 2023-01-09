@@ -3,37 +3,33 @@
     height: 230px;
 } */
 
-.radar-label
-{
-    text-align: center;
-    fill: white;
+.radar-label {
+  text-align: center;
+  fill: white;
 }
 
-tspan
-{
-    margin: auto;
+tspan {
+  margin: auto;
 }
 
-.avg-user-skill
-{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
+.avg-user-skill {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
-.avg-user-skill h3{
-    margin-bottom: 10px;
-    background-color: rgb(75 85 99);
-    padding: .25rem;
-    border-radius: 9999px;
+.avg-user-skill h3 {
+  margin-bottom: 10px;
+  background-color: rgb(75 85 99);
+  padding: 0.25rem;
+  border-radius: 9999px;
 }
 
-.avg-user-skill-top-3
-{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    font-size: 10px;
-    line-height: 2;
+.avg-user-skill-top-3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  font-size: 10px;
+  line-height: 2;
 }
