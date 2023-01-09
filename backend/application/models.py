@@ -49,24 +49,17 @@ class User():
         self.campus_users = info_json['campus_users']
 
 class Token():
-    def get_all_user_info(self):
+    def get_most_recent_submission(self):
         # info = []
         # result_len = 100
         # i = 0
-        # while(result_len == 100):
         #     url = f"https://api.intra.42.fr/v2/campus/{self.campus_id}/users?per_page=100&page={i}&access_token={self.token}"
         #     response = requests.get(url)
         #     print(response.json())
         #     result_len = len(response.json())
         #     info += response.json()
         #     i += 1
-        i = 0
-        url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]=34&filter[marked]=true&range[created_at]=2022-01-01T00%3A00%3A00.000Z,3000-01-01T00%3A00%3A00.000Z&access_token={self.token}"
-        response = requests.get(url)
-        with open("somef.json","w") as f:
-            f.write(json.dumps(response.json()))
-        exit()
-        info.append(user)
+        
         return (info)
 
     def get_active_user_info(self):
@@ -92,7 +85,6 @@ class Token():
         self._renew_token()
         self.campus_id = campus_id
         self.active_users = None
-        # self.allcampus_users = self.get_all_user_info()
         self.active_user_info = self.get_active_user_info()
 
     def is_expired(self):
@@ -120,7 +112,14 @@ class Token():
         print(len(self.active_users))
         return self.active_users
 
-    def active_user_projects(self):        
+    def active_user_projects(self) -> dict:
+        """
+        Get data about projects being worked on at campus
+
+        Returns:
+            dict: {"projects" : [ {"project-name" : str, "user-num" : int} ] }
+        """
+
         projects = {}
         for user in self.saved_active_users():
             url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
@@ -139,7 +138,14 @@ class Token():
                 projects[project] += 1
         return (projects)
 
-    def average_user_level(self):
+    def average_user_level(self) -> dict:
+        """
+        Get average user level on campus
+
+        Returns:
+            dict: {'average_level': int}
+        """
+
         level = 0
         count = 0
         for user in self.active_user_info:
@@ -147,7 +153,14 @@ class Token():
             count += 1
         return ({'average_level':round(level / count, 1)})
 
-    def average_session_hours(self):
+    def average_session_hours(self) -> dict:
+        """
+        Get the average number of hours spent on campus iMacs
+
+        Returns:
+            dict: {"average_session_hours": int}
+        """
+
         count = 0
         total = 0
         url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?access_token={self.token}'
@@ -162,21 +175,53 @@ class Token():
                 count += 1
         return ({"average_session_hours":round(total/count/60/60, 1)})
 
-    def most_recent_submission(self):
+    def most_recent_submission(self) -> dict:
+        """
+        Gets the most recent project submissio on for a campus
+
+        Returns:
+            dict: {"users":users, "skills":skills, "project":project, "score":score}
+        """
+
         current_time = datetime.utcnow()
-        most_recent_time = None
         most_recent_user = None
-        for user in self.allcampus_users:
-            print(user)
-            for project in (user.projects_users):
-                if (project['marked'] == True):
-                    user['marked_at'] = user['marked_at'].replace('T', '-')
-                    user['marked_at'] = user['marked_at'][:user['marked_at'].find('.')]
-                    marked_at = datetime.strptime(user['marked_at'], "%Y-%m-%d-%H:%M:%S")
-                    recency = (current_time - marked_at).total_seconds()
-                    if (most_recent_time is None or recency < most_recent_time):
-                        most_recent_user = user
-        return (most_recent_user)
+        submissions = []
+
+        _month = current_time.month - 1 if current_time.month - 1 > 0 else 12
+        _year = current_time.year if _month != 12 else current_time.year - 1
+        for page_num in range(0, 100000):
+            url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]=34&filter[marked]=true&range[created_at]={_year}-{_month}-01T00%3A00%3A00.000Z,3000-01-01T00%3A00%3A00.000Z&per_page=100&page={page_num}&access_token={self.token}"
+            response = requests.get(url)
+            submissions += response.json()
+            if (len(response.json()) != 100):
+                break
+        
+        for submission in submissions:
+            submission_time = datetime.strptime(submission['marked_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+
+            if (most_recent_user == None or submission_time > most_recent_user['datetime']):
+                    most_recent_user = submission
+                    most_recent_user['datetime'] = submission_time
+        
+        users = []
+        for user in most_recent_user['teams'][-1]['users']:
+            _temp = {}
+            _temp['login'] = user['login']
+            _temp['image'] = requests.get(
+                                f"https://api.intra.42.fr/v2/users?filter[login]={user['login']}&access_token={self.token}"
+                            ).json()[0]['image']['link']
+            users.append(_temp)
+        
+        project = most_recent_user['project']['name']
+        score = most_recent_user['final_mark']
+
+        skills = []
+        skill_ids = requests.get(f"https://api.intra.42.fr/v2/project_sessions/{most_recent_user['teams'][-1]['project_session_id']}/project_sessions_skills?access_token={self.token}").json()
+        for skill_id in skill_ids:
+            skill_str = requests.get(f"https://api.intra.42.fr/v2/skills/{skill_id['skill_id']}?access_token={self.token}").json()['slug']
+            skills.append(skill_str)
+
+        return ({"users":users, "skills":skills, "project":project, "score":score})
 
 
 # SECRET = os.getenv('42_SECRET')
