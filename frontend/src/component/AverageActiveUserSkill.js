@@ -118,7 +118,7 @@ export default function AverageActiveUserSkill(props) {
       // this loop is to put labels and check for multiple words.
       // basically so the text go bottom of each other and not side by side
       for (let j = 0; j < label.length; j++) {
-        if (label.length == 1) svg_label.text(label[j]);
+        if (label.length === 1) svg_label.text(label[j]);
         else {
           if (j > 0) {
             svg_label

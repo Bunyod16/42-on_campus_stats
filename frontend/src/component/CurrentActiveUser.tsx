@@ -23,9 +23,12 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
   React.useEffect(() => {
     const fetchUsers = async () => {
-      fetch("/api/on-campus/active-users")
+      await fetch("/api/on-campus/active-users")
         .then((response) => {
-          if (response.ok) return response.json();
+          if (response.ok){
+            console.log("Successfully fetch Active Users Data");
+            return response.json();
+          };
         })
         .then((data) => setUsers(data.users))
         .catch((error) => {
@@ -36,7 +39,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
     // Call the API every 5 minutes
     const interval = setInterval(fetchUsers, 1000 * 60 * 5);
-
+    
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
