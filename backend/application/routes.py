@@ -17,8 +17,8 @@ def page_not_found(e):
     return html, 404
 
 @app.route('/', methods=['GET'])
-def banana():
-    return ("BANANA IS PURPLE")
+def index():
+    return ("API IS LIVE")
 
 @app.route('/api/on-campus/active-users', methods=['GET'])
 def active_users():
@@ -40,17 +40,19 @@ def average_session_hours():
 def most_recent_submission():
     return (jsonify(token.most_recent_submission()))
 
+@app.route('/api/on-campus/cadet-pisciner-ratio', methods=['GET'])
+def cadet_pisciner_ratio():
+    return (jsonify(token.cadet_pisciner_ratio()))
+
+@app.route('/api/on-campus/active-user-skills', methods=['GET'])
+def active_user_skills():
+    return (jsonify(token.active_users_skills()))
+
 @app.route('/api/on-campus/daily-total-active-students', methods=['GET'])
 def daily_total_active_users():
     pass
 
-@app.route('/api/on-campus/cadet-pisciner-ratio', methods=['GET'])
-def cadet_pisciner_ratio():
-    pass
 
-@app.route('/api/on-campus/active-user-skills', methods=['GET'])
-def active_user_skills():
-    pass
 
 #/api/on-campus/active-users
 #/api/on-campus/active-user-projects
