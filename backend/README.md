@@ -29,6 +29,7 @@ touch .env
 ```
 42_UID = "YOUR_UID_HERE"
 42_SECRET = "YOUR_SECRET_HERE"
+42_CAMPUS_ID = "YOUR_CAMPUS_ID_HERE"
 ```
 
 - Run the backend
