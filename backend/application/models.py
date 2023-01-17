@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 import requests
-import os
 from dotenv import load_dotenv
-import time
-import json
+import logging
+
 load_dotenv()
 
 class User():
@@ -49,18 +48,6 @@ class User():
         self.campus_users = info_json['campus_users']
 
 class Token():
-    def get_most_recent_submission(self):
-        # info = []
-        # result_len = 100
-        # i = 0
-        #     url = f"https://api.intra.42.fr/v2/campus/{self.campus_id}/users?per_page=100&page={i}&access_token={self.token}"
-        #     response = requests.get(url)
-        #     print(response.json())
-        #     result_len = len(response.json())
-        #     info += response.json()
-        #     i += 1
-        
-        return (info)
 
     def get_active_user_info(self):
         info = []
@@ -72,6 +59,7 @@ class Token():
         return (info)
 
     def _renew_token(self):
+        logging.debug("requesting for credentials")
         UID = self.uid
         SECRET = self.secret
         headers = {'Content-type':'application/json'}
@@ -109,7 +97,7 @@ class Token():
         if (self.active_users != None):
             return (self.active_users)
         self.get_active_users()
-        print(len(self.active_users))
+        print(f"Fetching data of {len(self.active_users)} active campus users, this may take a while...")
         return self.active_users
 
     def active_user_projects(self) -> dict:
@@ -223,6 +211,46 @@ class Token():
 
         return ({"users":users, "skills":skills, "project":project, "score":score})
 
+    def cadet_pisciner_ratio(self) -> dict:
+        """
+        Get the ratio of pisciners to cadets on campus
+
+        Returns:
+            dict: { "cadets" : 15, "pisciners":33 }
+        """
+
+        cadets = 0
+        pisciners = 0
+        for user in self.active_user_info:
+            if len(user.cursus_users) > 1:
+                cadets += 1
+            else:
+                pisciners += 1
+        return ({"cadets":cadets, "pisciners":pisciners})
+
+    def active_users_skills(self):
+        """
+        Get skills of cadets on campus
+
+        Returns:
+            dict: {'Skill name': int}
+        """
+
+        skills = {}
+        _count = {}
+        for user in self.active_user_info:
+            if len(user.cursus_users) > 1:
+                for skill in user.cursus_users[-1]['skills']:
+                    if (skill['name'] not in skills.keys()):
+                        skills[skill['name']] = 0
+                        _count[skill['name']] = 0
+                    _count[skill['name']] += 1
+                    skills[skill['name']] += float(skill['level'])
+        
+        for skill in skills.keys():
+            skills[skill] = round(skills[skill] / _count[skill], 2)
+
+        return (skills)
 
 # SECRET = os.getenv('42_SECRET')
 # UID = os.getenv('42_UID')
