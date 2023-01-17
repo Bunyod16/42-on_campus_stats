@@ -109,10 +109,8 @@ class Token():
         """
 
         projects = {}
-        for user in self.saved_active_users():
-            url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
-            response = requests.get(url)
-            projecters = response.json()['projects_users']
+        for user in self.active_user_info:
+            projecters = user.projects_users
             project = ""
             for prod in projecters:
                 if not prod["validated?"] and "Piscine" not in prod["project"]["name"]:
@@ -218,7 +216,6 @@ class Token():
         Returns:
             dict: { "cadets" : 15, "pisciners":33 }
         """
-
         cadets = 0
         pisciners = 0
         for user in self.active_user_info:
