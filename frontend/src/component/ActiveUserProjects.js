@@ -3,22 +3,6 @@ import { Card, H1Style } from "../styles";
 import * as d3 from "d3";
 import "../styles/chart.css";
 
-
-const data = {
-  Born2beroot: 1,
-  "CPP Module 07": 1,
-  "Exam Rank 02": 2,
-  "Exam Rank 03": 1,
-  NetPractice: 1,
-  Philosophers: 1,
-  ft_containers: 3,
-  ft_printf: 1,
-  get_next_line: 3,
-  minishell: 1,
-  minitalk: 2,
-  push_swap: 1,
-  so_long: 2,
-};
 // turn data object into array of objects
 /*
 Example :
@@ -38,15 +22,14 @@ dataset = [
 function cleaningData(dataObj) {
   let dataset = [];
   let tots = 0;
-  for (let d in data) {
-    dataset = [...dataset, { project: d, user_num: data[d]}];
+  for (let d in dataObj) {
+    dataset = [...dataset, { project: d, user_num: dataObj[d]}];
   }
   dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
   tots = d3.sum(dataset, (d) => d["user_num"]);
   dataset.forEach((x) => (x.percentage = ((x.user_num / tots) * 100).toFixed(2) + "%"));
   return (dataset);
 }
-const dataset = cleaningData(data);
 
 // Function PieChart Plotting
 function PieChart({projects, color, radius}) {
@@ -106,44 +89,35 @@ export default function ActiveUserProjects(props) {
   const color = d3.scaleOrdinal(d3.schemeTableau10);
   const size = 300,
         radius = size / 3;
-  // // This is TO FETCH DATA FROM API
-  // useEffect(() => {
-  //   const fetchProjects = async () => {
-  //     await fetch("/api/on-campus/active-user-projects")
-  //     .then((response) => {
-  //       if (response.ok)
-  //       {
-  //         console.log("Successfully fetch active user projects");
-  //         return response.json();
-  //       };
-  //     })
-  //     .then( (data) =>{
-  //       let dataset = [];
-  //       let tots = 0;
-  //       for (let d in data) {
-  //       dataset = [...dataset, { project: d, user_num: data[d] }];
-  //       }
-  //       dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
-  //       tots = d3.sum(dataset, (d) => d["user_num"]);
-  //       dataset.forEach((x) => (x.percentage = x.user_num / tots));
-  //       setProjects(dataset);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  //   }
-  //   setTimeout(fetchProjects, 2000);
-  //   const interval = setInterval(fetchProjects, 1000 * 60 * 5);
-
-  //   return () => clearInterval(interval);
-  // }, []);
+  // This is TO FETCH DATA FROM API
+  useEffect(() => {
+    const fetchProjects = async () => {
+      fetch("/api/on-campus/active-user-projects")
+      .then((response) => {
+        if (response.ok)
+        {
+          console.log("Successfully fetch active user projects");
+          return response.json();
+        };
+      })
+      .then( (data) =>{
+        setProjects(cleaningData(data));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
+    fetchProjects();
+    const interval = setInterval(fetchProjects, 1000 * 60 * 5);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Card>
       <H1Style>Active User Projects</H1Style>
       <svg className="pie-chart-svg" width="420px" height="220px">
-        <PieChart projects={dataset} color={color} radius={radius} />
-        <ChartLegends projects={dataset} color={color} />
+        <PieChart projects={projects} color={color} radius={radius} />
+        <ChartLegends projects={projects} color={color} />
       </svg>
     </Card>
   );
