@@ -31,20 +31,18 @@ let skills = [
 let temp = skills[19];
 skills[19] = skills[16];
 skills[16] = temp;
-function randIntGen(max) {
-  return Math.floor(Math.random() * max);
-}
 
-let defaultData = {};
 // Data is a object that contains {"skills": level}
+let defaultData = {};
 for (let i = 0; i < skills.length; i++) defaultData[skills[i]] = 0;
 /* Example dataset: 
-dataset = {
-  Web: 1.7,
-  Unit: 2.5,
-  Shell: 5
+defaultData = {
+  Web:0,
+  Unit:0,
+  Shell:0
 }
 */
+
 // Function to get a array of skills in a ordered array from biggest to smallest
 function getTopSkills(dataset) {
   let arr = [];
@@ -56,7 +54,7 @@ function getTopSkills(dataset) {
 }
 let topSkills = getTopSkills(defaultData);
 
-// Fancy Math Blackbox
+// Fancy Math Blackbox to calculate angle
 function angleToCoordinate(angle, value, radialScale) {
   let x_in = Math.cos(angle) * radialScale(value);
   let y_in = Math.sin(angle) * radialScale(value);

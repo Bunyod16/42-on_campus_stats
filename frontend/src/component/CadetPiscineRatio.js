@@ -3,17 +3,7 @@ import * as d3 from "d3";
 import { Card, H1Style } from "../styles";
 import "../styles/ratio.css";
 
-function randIntGen(max) { 
-    return Math.floor(Math.random() * max)
-  }
-
-// let totalCadet = randIntGen(200);
-// let totalPiscine = randIntGen(100);
-// console.log("Total Cadet: ", totalCadet);
-// console.log("Total Piscine: ", totalPiscine);
-// let total = totalCadet + totalPiscine;
-// let widthCadet = (totalCadet / total) * 395;
-// let widthPiscine = (totalPiscine / total) * 395;
+// Ratio Bar for Cadets vs Pisciners
 export default function CadetPiscineRatio(props) {
   const [barWidth, setBarWidth] = useState({cadet:0,pisciner:0});
   useEffect( () =>{
