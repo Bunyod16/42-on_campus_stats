@@ -3,6 +3,12 @@
     fill: white;
 }
 
+.chart-text{
+    font-size: 10px;
+    fill: white;
+    text-anchor: middle;
+}
+
 .pie-chart-svg
 {
     display: block;
