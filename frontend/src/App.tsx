@@ -28,7 +28,7 @@ const AppLogo = tw.img`
 `;
 
 const FlexContainer = tw.div`
-  flex-1 flex w-full h-full gap-4 max-w-7xl content-center
+  flex-1 flex w-full h-full gap-4 max-w-7xl content-center p-4
 `;
 
 const FlexList = tw.div`
