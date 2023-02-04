@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 import requests
 from dotenv import load_dotenv
 import logging
+import threading
+import time
 
 load_dotenv()
 
@@ -65,7 +67,18 @@ class Token():
         headers = {'Content-type':'application/json'}
         r = requests.post(f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={UID}&client_secret={SECRET}", headers=headers)
         self.token = r.json()['access_token']
-        self.expiry = datetime.now() + timedelta(seconds=r.json()['expires_in'])
+        self.token_expiration = datetime.now() + timedelta(seconds=r.json()['expires_in'])
+        self.token_renewal_thread = threading.Thread(target=self.run_token_renewal)
+        self.token_renewal_thread.start()
+
+    def run_token_renewal(self):
+        """Renew the 42 API token
+        """
+        while True:
+            if datetime.now() > self.token_expiration + timedelta(seconds=60):
+                logging.debug("API token expired, requesting for renewal")
+                self._renew_token()
+            time.sleep(60)
 
     def __init__(self, campus_id, uid, secret):
         self.uid = uid
@@ -74,10 +87,6 @@ class Token():
         self.campus_id = campus_id
         self.active_users = None
         self.active_user_info = self.get_active_user_info()
-
-    def is_expired(self):
-        if (datetime.now() - self.expiry).seconds < 30:
-            self._renew_token()
 
     def get_active_users(self):
         url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?access_token={self.token}'
