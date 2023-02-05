@@ -35,7 +35,7 @@ skills[16] = temp;
 // Data is a object that contains {"skills": level}
 let defaultData = {};
 for (let i = 0; i < skills.length; i++) defaultData[skills[i]] = 0;
-/* Example dataset: 
+/* Example dataset:
 defaultData = {
   Web:0,
   Unit:0,
@@ -86,10 +86,10 @@ function ChartCircle({ticks, x, y, radialScale}) {
         stroke="#C0D0E0"
         stroke-width="0.5"
         r={radialScale(t)}
-      ></circle> 
+      ></circle>
       ))
     }
-    </>  
+    </>
   );
 }
 // Draw Lines and plot Labels
@@ -178,7 +178,7 @@ export default function AverageActiveUserSkill(props) {
   const [topSkills, setTopSkills] = useState(getTopSkills(defaultData));
   useEffect( ()=>{
     const fetchSkills = async () =>{
-      fetch("/api/on-campus/active-user-skills")
+      fetch("https://backend-flask.onrender.com/api/on-campus/active-user-skills")
       .then((response) => {
         if (response.ok)
         {

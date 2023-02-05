@@ -19,7 +19,7 @@ const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await fetch("/api/on-campus/average-session-hours")
+      await fetch("https://backend-flask.onrender.com/api/on-campus/average-session-hours")
         .then((response) => {
           if (response.ok) {
             console.log("Successfully fetch Average Session Hours");

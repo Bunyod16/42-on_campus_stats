@@ -8,7 +8,7 @@ export default function CadetPiscineRatio(props) {
   const [barWidth, setBarWidth] = useState({cadet:0,pisciner:0});
   useEffect( () =>{
     let fetchRatio = async () =>{
-      fetch("/api/on-campus/cadet-pisciner-ratio")
+      fetch("https://backend-flask.onrender.com/api/on-campus/cadet-pisciner-ratio")
       .then( (response) =>{
         if (response.ok)
         {

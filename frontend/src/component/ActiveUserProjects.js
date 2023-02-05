@@ -42,14 +42,14 @@ function PieChart({projects, color, radius}) {
               return (
               <g className="arc">
                 <path fill={color(i)} d={arc(d)}></path>
-                <text 
+                <text
                 className="chart-text"
                 transform={`translate(${arc.centroid(d)[0]}, ${arc.centroid(d)[1]})`}
                 >{d.data.percentage}</text>
               </g>
               )
             })
-          }         
+          }
       </g>
   );
 }
@@ -92,7 +92,7 @@ export default function ActiveUserProjects(props) {
   // This is TO FETCH DATA FROM API
   useEffect(() => {
     const fetchProjects = async () => {
-      fetch("/api/on-campus/active-user-projects")
+      fetch("https://backend-flask.onrender.com/api/on-campus/active-user-projects")
       .then((response) => {
         if (response.ok)
         {

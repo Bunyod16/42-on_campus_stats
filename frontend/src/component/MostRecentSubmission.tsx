@@ -39,7 +39,7 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await fetch("/api/most-recent-submission")
+      await fetch("https://backend-flask.onrender.com/api/most-recent-submission")
         .then((response) => {
           if (response.ok) {
             console.log("Successfully fetch Most Recent Submission");

@@ -15,7 +15,7 @@ const AverageLevel = ({ className }: IAverageLevelProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await fetch("/api/on-campus/average-user-level")
+      await fetch("https://backend-flask.onrender.com/api/on-campus/average-user-level")
         .then((response) => {
           if (response.ok) {
             console.log("Successfully fetch Average User Level");
