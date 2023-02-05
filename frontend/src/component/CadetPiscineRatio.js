@@ -29,7 +29,7 @@ export default function CadetPiscineRatio(props) {
       })
     }
     fetchRatio();
-    const interval = setInterval(fetchRatio, 1000 * 60 * 5);
+    const interval = setInterval(fetchRatio, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
   return (

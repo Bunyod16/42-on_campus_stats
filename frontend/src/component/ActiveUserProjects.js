@@ -108,7 +108,7 @@ export default function ActiveUserProjects(props) {
       });
     }
     fetchProjects();
-    const interval = setInterval(fetchProjects, 1000 * 60 * 5);
+    const interval = setInterval(fetchProjects, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
 

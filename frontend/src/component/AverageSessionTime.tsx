@@ -34,7 +34,7 @@ const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
     fetchData();
 
     // Call the API every 5 minutes
-    const interval = setInterval(fetchData, 1000 * 60 * 5);
+    const interval = setInterval(fetchData, 1000 * 60 * 1);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);

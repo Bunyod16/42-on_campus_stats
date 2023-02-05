@@ -197,7 +197,7 @@ export default function AverageActiveUserSkill(props) {
       })
     }
     fetchSkills();
-    const interval = setInterval(fetchSkills, 1000 * 60 * 5);
+    const interval = setInterval(fetchSkills, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
   return (
