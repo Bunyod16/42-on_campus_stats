@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-token = Token(int(os.getenv("42_CAMPUS_ID")), os.getenv("42_UID"), os.getenv("42_SECRET"))
+token = Token(int(os.getenv("42_CAMPUS_ID")), os.getenv("CAMPUS_UID"), os.getenv("CAMPUS_SECRET"))
 
 @app.errorhandler(404)
 def page_not_found(e):

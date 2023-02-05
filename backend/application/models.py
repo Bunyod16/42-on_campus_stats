@@ -258,7 +258,7 @@ class Token():
 
         return (skills)
 
-# SECRET = os.getenv('42_SECRET')
-# UID = os.getenv('42_UID')
+# SECRET = os.getenv('CAMPUS_SECRET')
+# UID = os.getenv('CAMPUS_UID')
 # t=Token(34, UID, SECRET)
 # print(t.most_recent_submission())
