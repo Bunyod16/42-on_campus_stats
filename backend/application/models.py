@@ -93,12 +93,16 @@ class Token():
         response = requests.get(url)
         oncampus_users = []
         for user in response.json():
-            info = {}
-            if (user['end_at'] == None):
-                info['login'] = user['user']['login']
-                info['image'] = user['user']['image']['link']
-                info['id'] = user['user']['id']
-                oncampus_users.append(info)
+            try:
+                info = {}
+                print(user['end_at'])
+                if (user['end_at'] == None):
+                    info['login'] = user['user']['login']
+                    info['image'] = user['user']['image']['link']
+                    info['id'] = user['user']['id']
+                    oncampus_users.append(info)
+            except Exception as err:
+                print(err)
         self.active_users = oncampus_users
         return ({"users":oncampus_users})
 
