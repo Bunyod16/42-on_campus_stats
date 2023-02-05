@@ -1,12 +1,17 @@
-FROM python:3.9
+# Use an official Python image as the base image
+FROM python:3.9-alpine
 
-ENV PYTHONUNBUFFERED True
+# Set the working directory
+WORKDIR /backend
 
-ENV APP_HOME /app
+# Copy the requirements.txt file to the container
+COPY backend/requirements.txt ./
 
-WORKDIR $APP_HOME
-COPY . ./
+# Install the dependencies for the Python application
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install -r requirements.txt
+# Copy the rest of the code for the Python application
+COPY backend/ .
 
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app:app
+# Set up a command to run the Gunicorn server
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:5000"]

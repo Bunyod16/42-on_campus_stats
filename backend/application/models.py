@@ -185,7 +185,7 @@ class Token():
         _month = current_time.month - 1 if current_time.month - 1 > 0 else 12
         _year = current_time.year if _month != 12 else current_time.year - 1
         for page_num in range(0, 100000):
-            url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]=34&filter[marked]=true&range[created_at]={_year}-{_month}-01T00%3A00%3A00.000Z,3000-01-01T00%3A00%3A00.000Z&per_page=100&page={page_num}&access_token={self.token}"
+            url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]={self.campus_id}&filter[marked]=true&range[created_at]={_year}-{_month}-01T00%3A00%3A00.000Z,3000-01-01T00%3A00%3A00.000Z&per_page=100&page={page_num}&access_token={self.token}"
             response = requests.get(url)
             submissions += response.json()
             if (len(response.json()) != 100):
