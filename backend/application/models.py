@@ -255,6 +255,8 @@ class Token():
             _temp['image'] = requests.get(
                                 f"https://api.intra.42.fr/v2/users?filter[login]={user['login']}&access_token={self.token}"
                             ).json()[0]['image']['link']
+            if not _temp['image']:
+                _temp['image'] = "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs2/143743992/original/8e2aa89710331eb6413a3383f63e49a987b4d575/make-you-into-a-lego-star-wars-character-profile-pic.png"
             users.append(_temp)
         
         project = most_recent_user['project']['name']
@@ -266,6 +268,7 @@ class Token():
             skill_str = requests.get(f"https://api.intra.42.fr/v2/skills/{skill_id['skill_id']}?access_token={self.token}").json()['slug']
             skills.append(skill_str)
 
+        
         return ({"users":users, "skills":skills, "project":project, "score":score})
 
     def cadet_pisciner_ratio(self) -> dict:
