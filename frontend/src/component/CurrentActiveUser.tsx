@@ -51,14 +51,14 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
     function updateScroll()
     {
-      scrollInt += 50;
+      scrollInt += 10;
       if (scrollInt >= divHeight)
         scrollInt = 0;
       div.scrollTo(0, scrollInt);
     }
-    const intervalId = setInterval(updateScroll, 1000);
+    const intervalId = setInterval(updateScroll, 100);
     return(()=>clearInterval(intervalId));
-  }, []);
+  }, [users]);
   const userGallery = users.map((singleUser) => {
     return (
       <UserStyle>
