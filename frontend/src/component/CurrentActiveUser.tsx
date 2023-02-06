@@ -18,6 +18,8 @@ const UserGalleryStyle = tw.div`
   grid grid-cols-5 justify-between gap-4 h-full max-h-[60vh] overflow-hidden scroll-smooth top-[5.5rem]
 `;
 
+
+
 function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
   const [users, setUsers] = React.useState<User[]>([]);
   const divRef = React.useRef(null);
@@ -31,7 +33,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
             return response.json();
           };
         })
-        .then((data) => setUsers(data.users))
+        .then((data) => setUsers(data))
         .catch((error) => {
           console.error(error);
         });
@@ -43,6 +45,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
+    // setUsers(tmp);
   }, []);
   React.useEffect(() => {
     const div:any = divRef.current;
@@ -51,12 +54,17 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
     function updateScroll()
     {
-      scrollInt += 50;
-      if (scrollInt >= divHeight)
-        scrollInt = 0;
-      div.scrollTo(0, scrollInt);
+      scrollInt += 1;
+      if (scrollInt >= divHeight-50)
+      {
+        scrollInt = -50;
+        div.scrollTo({left:0, top:0, behavior:"instant"});
+        // div.scrollTop = 0;
+      }
+      else
+        div.scrollTo(0, scrollInt);
     }
-    const intervalId = setInterval(updateScroll, 1000);
+    const intervalId = setInterval(updateScroll, 100);
     return(()=>clearInterval(intervalId));
   }, []);
   const userGallery = users.map((singleUser) => {
