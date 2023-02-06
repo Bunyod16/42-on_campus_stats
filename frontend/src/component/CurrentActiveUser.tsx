@@ -15,12 +15,13 @@ const UserStyle = tw.div`
 `;
 
 const UserGalleryStyle = tw.div`
-  grid grid-cols-5 justify-between gap-4 h-full overflow-auto
+  grid grid-cols-5 justify-between gap-4 h-full max-h-[60vh] overflow-hidden scroll-smooth top-[5.5rem]
 `;
 
 function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
   const [users, setUsers] = React.useState<User[]>([]);
-
+  const divRef = React.useRef(null);
+  console.log(divRef.current);
   React.useEffect(() => {
     const fetchUsers = async () => {
       await fetch("https://backend-flask.onrender.com/api/on-campus/active-users")
@@ -43,7 +44,21 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
+  React.useEffect(() => {
+    const div:any = divRef.current;
+    const divHeight = div.scrollHeight;
+    let scrollInt = 0;
 
+    function updateScroll()
+    {
+      scrollInt += 50;
+      if (scrollInt >= divHeight)
+        scrollInt = 0;
+      div.scrollTo(0, scrollInt);
+    }
+    const intervalId = setInterval(updateScroll, 1000);
+    return(()=>clearInterval(intervalId));
+  }, []);
   const userGallery = users.map((singleUser) => {
     return (
       <UserStyle>
@@ -54,9 +69,9 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
   });
 
   return (
-    <Card className={className + " flex flex-col"}>
+    <Card className={className + " flex flex-col min-h-[60vh]"}>
       <H1Style>Current Active Users ({users.length})</H1Style>
-      <UserGalleryStyle>{userGallery}</UserGalleryStyle>
+      <UserGalleryStyle ref={divRef} id="user-gallery">{userGallery}</UserGalleryStyle>
     </Card>
   );
 }
