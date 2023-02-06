@@ -56,9 +56,15 @@ class Token():
         info = []
         for user in self.saved_active_users():
             url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
-            response = requests.get(url)
-            user = User(response.json())
-            info.append(user)
+            if not response.ok:
+                time.sleep(2)
+                url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
+            try:
+                response = requests.get(url)
+                user = User(response.json())
+                info.append(user)
+            except:
+                pass
         return (info)
 
     def _renew_token(self):
@@ -93,13 +99,12 @@ class Token():
         response = None
         temp = []
         x = 1
-        while (len(temp) == 0 or len(response.json()) == 100 and x < 10):
+        while (len(temp) == 0 or len(response.json()) == 100):
             url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?filter[active]=true&per_page=100&page={x}&access_token={self.token}'
             response = requests.get(url)
             temp += response.json()
-            print(len(response.json()))
+
             x += 1
-            print(response.json()[0]['id'])
 
         oncampus_users = []
         for user in temp:
