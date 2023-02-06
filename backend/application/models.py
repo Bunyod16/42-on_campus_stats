@@ -67,6 +67,17 @@ class Token():
                 pass
         return (info)
 
+    def run_users_querry(self):
+        """Renew the 42 API token
+        """
+        start_time = self.token_expiration
+        while True:
+            if datetime.now() > start_time + timedelta(minutes=30):
+                start_time = self.token_expiration
+                logging.debug("User info timed out, requerry")
+                self.get_active_user_info()
+            time.sleep(60)
+
     def _renew_token(self):
         logging.debug("requesting for credentials")
         UID = self.uid
@@ -75,6 +86,8 @@ class Token():
         r = requests.post(f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={UID}&client_secret={SECRET}", headers=headers)
         self.token = r.json()['access_token']
         self.token_expiration = datetime.now() + timedelta(seconds=r.json()['expires_in'])
+        
+        #start renew token thread
         self.token_renewal_thread = threading.Thread(target=self.run_token_renewal)
         self.token_renewal_thread.start()
 
@@ -92,8 +105,13 @@ class Token():
         self.secret = secret
         self._renew_token()
         self.campus_id = campus_id
+        self.week_active_users = {}
+        self._save_daily_total_active_users()
         self.active_users = None
         self.active_user_info = self.get_active_user_info()
+        #start requerry users thread
+        self.active_users_querry = threading.Thread(target=self.run_users_querry)
+        self.active_users_querry.start()
 
     def get_active_users(self):
         response = None
@@ -188,7 +206,7 @@ class Token():
         if (response.ok):
             for user in response.json():
                 if (user['end_at'] == None):
-                    current_time = datetime.utcnow()
+                    current_time = datetime.utcdatetime.now()
                     user['begin_at'] = user['begin_at'].replace('T', '-')
                     user['begin_at'] = user['begin_at'][:user['begin_at'].find('.')]
                     begin_at = datetime.strptime(user['begin_at'], "%Y-%m-%d-%H:%M:%S")
@@ -206,7 +224,7 @@ class Token():
             dict: {"users":users, "skills":skills, "project":project, "score":score}
         """
 
-        current_time = datetime.utcnow()
+        current_time = datetime.utcdatetime.now()
         most_recent_user = None
         submissions = []
 
@@ -287,6 +305,51 @@ class Token():
             skills[skill] = round(skills[skill] / _count[skill], 2)
 
         return (skills)
+
+    def _save_daily_total_active_users(self):
+        logging.debug("Loading daily user data from last 7 days")
+        response = None
+        week_sessions = []
+        week_ago = datetime.now() - timedelta(days=7)
+        page = 0
+        while (1):
+                url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?per_page=100&page={page}&access_token={self.token}'
+                response = requests.get(url)
+                for session in response.json():
+                    session_start = datetime.strptime(session['begin_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+                    if (session_start < week_ago):
+                        break
+                    else:
+                        week_sessions.append(session)
+                if (session_start < week_ago):
+                        break
+                page += 1
+                
+
+        dates = {}
+
+        for session in week_sessions:
+            start_time = datetime.strptime(session['begin_at'], "%Y-%m-%dT%H:%M:%S.%fZ").date()
+            if f"{start_time.year} {start_time.month} {start_time.day}" not in dates.keys():
+                dates[f"{start_time.year} {start_time.month} {start_time.day}"] = []
+            if (session['user']['login'] not in dates[f"{start_time.year} {start_time.month} {start_time.day}"]):
+                dates[f"{start_time.year} {start_time.month} {start_time.day}"].append(session['user']['login'])
+
+        temp = {}
+        for day in dates.keys():
+            date_obj = datetime.strptime(day, '%Y %m %d')
+            date_obj = date_obj.replace(hour=0, minute=0, second=0, microsecond=0)
+            temp[date_obj.isoformat()] = len(dates[day])
+
+        self.week_active_users = temp
+
+    def get_daily_total_active_users(self):
+        today = datetime.now()
+        today = today.replace(hour=0, minute=0, second=0, microsecond=0)
+        if (today.isoformat() not in self.week_active_users):
+            thread = threading.Thread(target=self._save_daily_total_active_users)
+            thread.start()
+        return (self.week_active_users)
 
 # SECRET = os.getenv('CAMPUS_SECRET')
 # UID = os.getenv('CAMPUS_UID')

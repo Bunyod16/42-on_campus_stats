@@ -54,4 +54,4 @@ def active_user_skills():
 
 @app.route('/api/on-campus/daily-total-active-students', methods=['GET'])
 def daily_total_active_users():
-    pass
+    return (jsonify(token.get_daily_total_active_users()))
