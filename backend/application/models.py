@@ -56,11 +56,11 @@ class Token():
         info = []
         for user in self.saved_active_users():
             url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
+            response = requests.get(url)
             if not response.ok:
                 time.sleep(2)
                 url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
             try:
-                response = requests.get(url)
                 user = User(response.json())
                 info.append(user)
             except:
@@ -110,7 +110,6 @@ class Token():
         for user in temp:
             try:
                 info = {}
-                print(user['end_at'])
                 if (user['end_at'] == None):
                     info['login'] = user['user']['login']
                     info['image'] = user['user']['image']['link']
