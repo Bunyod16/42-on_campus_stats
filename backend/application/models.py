@@ -179,7 +179,7 @@ class Token():
 
         count = 0
         total = 0
-        url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?access_token={self.token}'
+        url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?filter[active]=true&access_token={self.token}'
         response = requests.get(url)
         if (response.ok):
             for user in response.json():

@@ -66,7 +66,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
     }
     const intervalId = setInterval(updateScroll, 100);
     return(()=>clearInterval(intervalId));
-  }, []);
+  }, [users]);
   const userGallery = users.map((singleUser) => {
     return (
       <UserStyle>
