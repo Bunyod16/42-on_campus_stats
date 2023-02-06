@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import logging
 import threading
 import time
+import json
 
 load_dotenv()
 
@@ -89,10 +90,19 @@ class Token():
         self.active_user_info = self.get_active_user_info()
 
     def get_active_users(self):
-        url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?access_token={self.token}'
-        response = requests.get(url)
+        response = None
+        temp = []
+        x = 1
+        while (len(temp) == 0 or len(response.json()) == 100 and x < 10):
+            url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?filter[active]=true&per_page=100&page={x}&access_token={self.token}'
+            response = requests.get(url)
+            temp += response.json()
+            print(len(response.json()))
+            x += 1
+            print(response.json()[0]['id'])
+
         oncampus_users = []
-        for user in response.json():
+        for user in temp:
             try:
                 info = {}
                 print(user['end_at'])
