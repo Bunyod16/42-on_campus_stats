@@ -152,8 +152,11 @@ class Token():
         level = 0
         count = 0
         for user in self.active_user_info:
-            level += user.cursus_users[-1]['level']
-            count += 1
+            try:
+                level += user.cursus_users[-1]['level']
+                count += 1
+            except Exception as err:
+                pass
         return ({'average_level':round(level / count, 1)})
 
     def average_session_hours(self) -> dict:
