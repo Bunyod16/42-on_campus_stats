@@ -100,6 +100,8 @@ class Token():
                     info['login'] = user['user']['login']
                     info['image'] = user['user']['image']['link']
                     info['id'] = user['user']['id']
+                    if (not info['image']):
+                        info['image'] = "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs2/143743992/original/8e2aa89710331eb6413a3383f63e49a987b4d575/make-you-into-a-lego-star-wars-character-profile-pic.png"
                     oncampus_users.append(info)
             except Exception as err:
                 print(err)
