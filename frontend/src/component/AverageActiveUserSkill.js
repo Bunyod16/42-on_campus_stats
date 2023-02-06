@@ -67,42 +67,45 @@ function getPathCords(data_point, radialScale) {
   for (let i = 0; i < skills.length; i++) {
     let label = skills[i];
     let angle = Math.PI / 2 + (2 * Math.PI * i) / skills.length;
-    coords = [...coords, angleToCoordinate(angle, data_point[label], radialScale)];
+    coords = [
+      ...coords,
+      angleToCoordinate(angle, data_point[label], radialScale),
+    ];
   }
   return coords;
 }
 
 // Draw Circles on Chart
-function ChartCircle({ticks, x, y, radialScale}) {
+function ChartCircle({ ticks, x, y, radialScale }) {
   return (
     <>
-    {
-      ticks.map( t => (
+      {ticks.map((t) => (
         <circle
-        className="spider-circle"
-        cx={x}
-        cy={y}
-        fill="none"
-        stroke="#C0D0E0"
-        stroke-width="0.5"
-        r={radialScale(t)}
-      ></circle>
-      ))
-    }
+          className="spider-circle"
+          cx={x}
+          cy={y}
+          fill="none"
+          stroke="#C0D0E0"
+          stroke-width="0.5"
+          r={radialScale(t)}
+        ></circle>
+      ))}
     </>
   );
 }
 // Draw Lines and plot Labels
-function LinesAndLabels({radialScale}) {
+function LinesAndLabels({ radialScale }) {
   let attributes = [];
-  for (let i = 0; i < skills.length; i++){
-    let objs = {}
-    let label= skills[i].split(" ");
-    let angle = (Math.PI / 2) + ((2 * Math.PI * i) / skills.length);
+  for (let i = 0; i < skills.length; i++) {
+    let objs = {};
+    let label = skills[i].split(" ");
+    let angle = Math.PI / 2 + (2 * Math.PI * i) / skills.length;
     let line_cord = angleToCoordinate(angle, 20, radialScale);
     let label_cord = angleToCoordinate(angle, 26, radialScale);
-    if ((i >= 0 && i < 3) || i > 7) label_cord = angleToCoordinate(angle, 23, radialScale);
-    if (i === 6 || i === 7) label_cord = angleToCoordinate(angle, 27, radialScale);
+    if ((i >= 0 && i < 3) || i > 7)
+      label_cord = angleToCoordinate(angle, 23, radialScale);
+    if (i === 6 || i === 7)
+      label_cord = angleToCoordinate(angle, 27, radialScale);
     if (i === 10) {
       label_cord.x -= 15;
       label_cord.y += 5;
@@ -121,93 +124,99 @@ function LinesAndLabels({radialScale}) {
   }
   return (
     <>
-    {
-      attributes.map(({label, angle, line_cord, label_cord}) => (
+      {attributes.map(({ label, angle, line_cord, label_cord }) => (
         <>
-        <line
-        x1={120} y1={115}
-        x2={line_cord.x} y2={line_cord.y}
-        stroke="#C0D0E0" stroke-width={0.5}
-        ></line>
-        <text
-        className="radar-label"
-        x={label_cord.x} y={label_cord.y}
-        fontSize={5}
-        >
-          {
-          label.map( (x,i )=> {
-            if (i > 0)
-              return (<tspan dy={6} x={label_cord.x}>{x}</tspan>);
-            else
-              return (<tspan>{x}</tspan>);
-          })
-        }
-        </text>
+          <line
+            x1={120}
+            y1={115}
+            x2={line_cord.x}
+            y2={line_cord.y}
+            stroke="#C0D0E0"
+            stroke-width={0.5}
+          ></line>
+          <text
+            className="radar-label"
+            x={label_cord.x}
+            y={label_cord.y}
+            fontSize={5}
+          >
+            {label.map((x, i) => {
+              if (i > 0)
+                return (
+                  <tspan dy={6} x={label_cord.x}>
+                    {x}
+                  </tspan>
+                );
+              else return <tspan>{x}</tspan>;
+            })}
+          </text>
         </>
-      ))
-    }
+      ))}
     </>
-  )
+  );
 }
 
 // Draw Butterfly on Radar
-function DrawSkills({skills, radialScale}){
+function DrawSkills({ skills, radialScale }) {
   let color = "#00BABC";
   let coordinates = getPathCords(skills, radialScale);
-  let line = d3.line()
-                .x((d)=>d.x)
-                .y((d)=>d.y);
+  let line = d3
+    .line()
+    .x((d) => d.x)
+    .y((d) => d.y);
   return (
     <path
-    d={line(coordinates) + " Z"}
-    stroke={color}
-    stroke-width={3}
-    fill={color}
-    opacity={0.5}
+      d={line(coordinates) + " Z"}
+      stroke={color}
+      stroke-width={3}
+      fill={color}
+      opacity={0.5}
     ></path>
-  )
+  );
 }
 
 export default function AverageActiveUserSkill(props) {
   const size = 330,
-        x = 120, y = 115,
-        radius = size / 4,
-        radialScale = d3.scaleLinear().domain([0, 20]).range([0, radius]),
-        ticks = [5, 10, 15, 20];
+    x = 120,
+    y = 115,
+    radius = size / 4,
+    radialScale = d3.scaleLinear().domain([0, 20]).range([0, radius]),
+    ticks = [5, 10, 15, 20];
   const [skills, setSkills] = useState({});
   const [topSkills, setTopSkills] = useState(getTopSkills(defaultData));
-  useEffect( ()=>{
-    const fetchSkills = async () =>{
-      fetch("https://backend-flask.onrender.com/api/on-campus/active-user-skills")
-      .then((response) => {
-        if (response.ok)
-        {
-          console.log("Fetch average active user skills success")
-          return response.json();
-        };
-      })
-      .then( (data) => {
-        let finalObj = {...defaultData};
-        for(const key in data) finalObj[key] = data[key];
-        setSkills(finalObj);
-        setTopSkills(getTopSkills(finalObj));
-      })
-      .catch( (error) =>{
-        console.error(error);
-      })
-    }
+  useEffect(() => {
+    const fetchSkills = async () => {
+      fetch(
+        "https://backend-flask.onrender.com/api/on-campus/active-user-skills"
+      )
+        .then((response) => {
+          if (response.ok) {
+            console.log("Fetch average active user skills success");
+            return response.json();
+          }
+        })
+        .then((data) => {
+          let finalObj = { ...defaultData };
+          for (const key in data) finalObj[key] = data[key];
+          setSkills(finalObj);
+          setTopSkills(getTopSkills(finalObj));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     fetchSkills();
     const interval = setInterval(fetchSkills, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
   return (
-    <Card>
+    <Card className={props.className}>
       <H1Style>Average Active User Skills</H1Style>
       <div className="avg-user-skill">
         <svg className="radar-svg" width="270px" height="230px">
-          <ChartCircle ticks={ticks} x={x} y={y} radialScale={radialScale}/>
-          <LinesAndLabels radialScale={radialScale}/>
-          <DrawSkills skills={skills} radialScale={radialScale}/>
+          <ChartCircle ticks={ticks} x={x} y={y} radialScale={radialScale} />
+          <LinesAndLabels radialScale={radialScale} />
+          <DrawSkills skills={skills} radialScale={radialScale} />
         </svg>
         <div className="avg-user-skill-top-3">
           <h3>Top 3</h3>

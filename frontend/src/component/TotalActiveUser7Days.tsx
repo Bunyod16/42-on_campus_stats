@@ -44,8 +44,8 @@ const tmp = {
   "2023-02-03T00:00:00": 39,
   "2023-02-04T00:00:00": 16,
   "2023-02-05T00:00:00": 16,
-  "2023-02-06T00:00:00": 135
-}
+  "2023-02-06T00:00:00": 135,
+};
 
 // const DATA: Data[] = [
 //   { label: "23rd Nov", value: 20 },
@@ -74,7 +74,7 @@ function AxisLeft({ scale }: AxisLeftProps) {
 
   React.useEffect(() => {
     if (ref.current) {
-      select(ref.current).call(axisLeft(scale));
+      select(ref.current).call(axisLeft(scale).ticks(5));
     }
   }, [scale]);
 
@@ -137,18 +137,23 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
   React.useEffect(() => {
     const fetchUsers = async () => {
-      await fetch("https://backend-flask.onrender.com/api/on-campus/daily-total-active-students")
+      await fetch(
+        "https://backend-flask.onrender.com/api/on-campus/daily-total-active-students"
+      )
         .then((response) => {
-          if (response.ok){
+          if (response.ok) {
             console.log("Successfully fetch Daily Total Active Students");
             return response.json();
-          };
+          }
         })
         .then((data) => {
           const newData = Object.keys(data).map((key) => {
             const date = new Date(key).toDateString().split(" ");
-            return ({label:date[1] + " " + date[2] , value:tmp[key as keyof typeof tmp] })
-          })
+            return {
+              label: date[1] + " " + date[2],
+              value: tmp[key as keyof typeof tmp],
+            };
+          });
           setData(newData);
         })
         .catch((error) => {
@@ -165,10 +170,13 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
     const newData = Object.keys(tmp).map((key) => {
       const date = new Date(key).toDateString().split(" ");
-      return ({label:date[1] + " " + date[2] , value:tmp[key as keyof typeof tmp] })
-    })
+      return {
+        label: date[1] + " " + date[2],
+        value: tmp[key as keyof typeof tmp],
+      };
+    });
     setData(newData);
-  }, [])
+  }, []);
 
   return (
     // the container for the svg
