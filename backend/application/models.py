@@ -105,6 +105,7 @@ class Token():
                     oncampus_users.append(info)
             except Exception as err:
                 print(err)
+                time.sleep(1)
         self.active_users = oncampus_users
         return ({"users":oncampus_users})
 
@@ -128,7 +129,8 @@ class Token():
             projecters = user.projects_users
             project = ""
             for prod in projecters:
-                if not prod["validated?"] and "Piscine" not in prod["project"]["name"]:
+                # if not prod["validated?"] and "Piscine" not in prod["project"]["name"]:
+                if not prod["validated?"]:
                     print(user)
                     project = prod["project"]["name"]
                     print(project)
