@@ -57,14 +57,11 @@ class Token():
         for user in self.saved_active_users():
             url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
             response = requests.get(url)
-            if not response.ok:
-                time.sleep(2)
-                url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
             try:
                 user = User(response.json())
                 info.append(user)
-            except:
-                pass
+            except Exception as err:
+                print(err)
         return (info)
 
     def run_users_querry(self):
@@ -75,7 +72,7 @@ class Token():
             if datetime.now() > start_time + timedelta(minutes=30):
                 start_time = self.token_expiration
                 logging.debug("User info timed out, requerry")
-                self.get_active_user_info()
+                self.active_user_info = self.get_active_user_info()
             time.sleep(60)
 
     def _renew_token(self):
