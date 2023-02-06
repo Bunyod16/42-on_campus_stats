@@ -46,9 +46,14 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
             return response.json();
           }
         })
-        .then((data) => setData(data))
+        .then((data) => {
+          if (JSON.stringify(data) !== "{}")
+            setData(data);
+          console.log("data:", data);
+        })
         .catch((error) => {
           console.error(error);
+          setData(undefined);
         });
     };
     fetchData();
@@ -65,14 +70,14 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
       {data && (
         <Container>
           <img
-            src={data.users[0].image}
+            src={data.users[0]?.image}
             width={50}
             height={50}
             alt=""
             className="rounded-full h-12 w-12 object-cover"
           />
-          <p className="text-lg">{data.users[0].login}</p>
-          <p className="text-lg">{data.project}</p>
+          <p className="text-lg">{data.users[0]?.login}</p>
+          <p className="text-lg">{data?.project}</p>
         </Container>
       )}
     </Card>
