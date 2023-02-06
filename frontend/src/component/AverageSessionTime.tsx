@@ -45,7 +45,6 @@ const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
       <H1Style>Average session time</H1Style>
       <NumberDisplay>
         {averageSessionTime}hr
-        <SubText>last 7 days</SubText>
       </NumberDisplay>
     </Card>
   );
