@@ -37,15 +37,25 @@ interface IBarChartProps {
   containerRef: React.RefObject<any>;
 }
 
-const DATA: Data[] = [
-  { label: "23rd Nov", value: 20 },
-  { label: "24th Nov", value: 10 },
-  { label: "25th Nov", value: 5 },
-  { label: "26th Nov", value: 15 },
-  { label: "27th Nov", value: 11 },
-  { label: "28th Nov", value: 21 },
-  { label: "29th Nov", value: 18 },
-];
+const tmp = {
+  "2023-01-31T00:00:00": 21,
+  "2023-02-01T00:00:00": 32,
+  "2023-02-02T00:00:00": 33,
+  "2023-02-03T00:00:00": 39,
+  "2023-02-04T00:00:00": 16,
+  "2023-02-05T00:00:00": 16,
+  "2023-02-06T00:00:00": 135
+}
+
+// const DATA: Data[] = [
+//   { label: "23rd Nov", value: 20 },
+//   { label: "24th Nov", value: 10 },
+//   { label: "25th Nov", value: 5 },
+//   { label: "26th Nov", value: 15 },
+//   { label: "27th Nov", value: 11 },
+//   { label: "28th Nov", value: 21 },
+//   { label: "29th Nov", value: 18 },
+// ];
 
 function AxisBottom({ scale, transform }: AxisBottomProps) {
   const ref = React.useRef<SVGGElement>(null);
@@ -123,13 +133,22 @@ interface ITotalActiveUser7Days {
 }
 const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const [data, setData] = React.useState<any>([]);
+
+  React.useEffect(() => {
+    const newData = Object.keys(tmp).map((key) => {
+      const date = new Date(key).toDateString().split(" ");
+      return ({label:date[1] + " " + date[2] , value:tmp[key as keyof typeof tmp] })
+    })
+    setData(newData);
+  }, [])
 
   return (
     // the container for the svg
     <Card className={className + " flex flex-col"}>
       <H1Style>Total active users last 7 days</H1Style>
       <div ref={containerRef} className="h-full w-full">
-        <BarChart data={DATA} containerRef={containerRef} />
+        <BarChart data={data} containerRef={containerRef} />
       </div>
     </Card>
   );
