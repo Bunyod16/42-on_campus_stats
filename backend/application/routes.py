@@ -18,9 +18,9 @@ def index():
     return (f"API IS LIVE")
 
 @app.route('/api/on-campus/active-users', methods=['GET'])
-@cache.cached(timeout=30)
+@cache.cached(timeout=600)
 def active_users():
-    return (jsonify(token.get_active_users()))
+    return (jsonify(token.saved_active_users(requerry=True)))
 
 @app.route('/api/on-campus/active-user-projects', methods=['GET'])
 @cache.cached(timeout=60)

@@ -139,10 +139,14 @@ class Token():
                 print(err)
                 time.sleep(1)
         self.active_users = oncampus_users
-        return ({"users":oncampus_users})
+        return (oncampus_users)
 
-    def saved_active_users(self):
+    def saved_active_users(self, requerry=False):
         if (self.active_users != None):
+            if (requerry):
+                logging.debug("starting requerry thread for saved active users")
+                querry_thread = threading.Thread(target=self.get_active_users)
+                querry_thread.start()
             return (self.active_users)
         self.get_active_users()
         print(f"Fetching data of {len(self.active_users)} active campus users, this may take a while...")
@@ -163,9 +167,7 @@ class Token():
             for prod in projecters:
                 # if not prod["validated?"] and "Piscine" not in prod["project"]["name"]:
                 if not prod["validated?"]:
-                    print(user)
                     project = prod["project"]["name"]
-                    print(project)
                     break
             if project not in projects.keys() and project:
                 projects[project] = 0
