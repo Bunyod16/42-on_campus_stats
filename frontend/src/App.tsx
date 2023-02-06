@@ -23,11 +23,11 @@ const Header = tw.header`
 `;
 
 const FlexContainer = tw.div`
-  flex-1 flex  w-full  gap-4 max-w-7xl content-center m-4 px-4
+  flex w-full gap-4 max-w-7xl content-center m-4 px-4 h-full
 `;
 
 const FlexList = tw.div`
-  flex-col inline-flex gap-4
+  flex-col inline-flex gap-4 max-h-full
 `;
 
 function App() {
@@ -38,8 +38,8 @@ function App() {
       </Header>
       <FlexContainer>
         <FlexList className="flex-[2]">
-          <ActiveUserProjects className="flex-1" />
-          <CurrentActiveUser className="flex-[2] grow" />
+          <ActiveUserProjects className="" />
+          <CurrentActiveUser className="basis-3/5" />
         </FlexList>
         <FlexList className="flex-[2]">
           <AverageActiveUserSkill className="col-span-2 row-span-2" />

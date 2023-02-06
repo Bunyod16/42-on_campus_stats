@@ -116,11 +116,7 @@ export default function ActiveUserProjects(props) {
   return (
     <Card className={props.className} ref={ref}>
       <H1Style>Active User Projects</H1Style>
-      <svg
-        className="pie-chart-svg"
-        width={dimension.width}
-        height={dimension.height}
-      >
+      <svg className="pie-chart-svg" width={400} height={220}>
         <PieChart projects={projects} color={color} radius={radius} />
         <ChartLegends projects={projects} color={color} />
       </svg>
