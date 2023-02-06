@@ -136,6 +136,33 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
   const [data, setData] = React.useState<any>([]);
 
   React.useEffect(() => {
+    const fetchUsers = async () => {
+      await fetch("https://backend-flask.onrender.com/api/on-campus/daily-total-active-students")
+        .then((response) => {
+          if (response.ok){
+            console.log("Successfully fetch Daily Total Active Students");
+            return response.json();
+          };
+        })
+        .then((data) => {
+          const newData = Object.keys(data).map((key) => {
+            const date = new Date(key).toDateString().split(" ");
+            return ({label:date[1] + " " + date[2] , value:tmp[key as keyof typeof tmp] })
+          })
+          setData(newData);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+    fetchUsers();
+
+    // Call the API every 5 minutes
+    const interval = setInterval(fetchUsers, 1000 * 60 * 1);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
+
     const newData = Object.keys(tmp).map((key) => {
       const date = new Date(key).toDateString().split(" ");
       return ({label:date[1] + " " + date[2] , value:tmp[key as keyof typeof tmp] })
