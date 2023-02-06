@@ -15,7 +15,7 @@ const UserStyle = tw.div`
 `;
 
 const UserGalleryStyle = tw.div`
-  grid grid-cols-5 justify-between gap-4 h-full
+  grid grid-cols-5 justify-between gap-4 h-full overflow-auto
 `;
 
 function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
@@ -55,7 +55,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
   return (
     <Card className={className + " flex flex-col"}>
-      <H1Style>Current Active Users</H1Style>
+      <H1Style>Current Active Users ({users.length})</H1Style>
       <UserGalleryStyle>{userGallery}</UserGalleryStyle>
     </Card>
   );
