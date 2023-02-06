@@ -206,7 +206,7 @@ class Token():
         if (response.ok):
             for user in response.json():
                 if (user['end_at'] == None):
-                    current_time = datetime.utcdatetime.now()
+                    current_time = datetime.utcnow()
                     user['begin_at'] = user['begin_at'].replace('T', '-')
                     user['begin_at'] = user['begin_at'][:user['begin_at'].find('.')]
                     begin_at = datetime.strptime(user['begin_at'], "%Y-%m-%d-%H:%M:%S")
@@ -224,7 +224,7 @@ class Token():
             dict: {"users":users, "skills":skills, "project":project, "score":score}
         """
 
-        current_time = datetime.utcdatetime.now()
+        current_time = datetime.utcnow()
         most_recent_user = None
         submissions = []
 
