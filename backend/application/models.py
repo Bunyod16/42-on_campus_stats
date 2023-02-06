@@ -64,13 +64,13 @@ class Token():
                 print(err)
         return (info)
 
-    def run_users_querry(self):
-        """Renew the 42 API token
+    def _run_users_querry(self):
+        """Re querry user info every 30mins
         """
-        start_time = self.token_expiration
+        start_time = datetime.now()
         while True:
             if datetime.now() > start_time + timedelta(minutes=30):
-                start_time = self.token_expiration
+                start_time = datetime.now()
                 logging.debug("User info timed out, requerry")
                 self.active_user_info = self.get_active_user_info()
             time.sleep(60)
@@ -107,7 +107,7 @@ class Token():
         self.active_users = None
         self.active_user_info = self.get_active_user_info()
         #start requerry users thread
-        self.active_users_querry = threading.Thread(target=self.run_users_querry)
+        self.active_users_querry = threading.Thread(target=self._run_users_querry)
         self.active_users_querry.start()
 
     def get_active_users(self):
@@ -146,7 +146,6 @@ class Token():
                 querry_thread.start()
             return (self.active_users)
         self.get_active_users()
-        print(f"Fetching data of {len(self.active_users)} active campus users, this may take a while...")
         return self.active_users
 
     def active_user_projects(self) -> dict:
