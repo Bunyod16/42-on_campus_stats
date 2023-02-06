@@ -315,7 +315,7 @@ class Token():
         logging.debug("Loading daily user data from last 7 days")
         response = None
         week_sessions = []
-        week_ago = datetime.now() - timedelta(days=7)
+        week_ago = datetime.now() - timedelta(days=6)
         page = 0
         while (1):
                 url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?per_page=100&page={page}&access_token={self.token}'
