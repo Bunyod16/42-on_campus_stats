@@ -11,7 +11,7 @@ import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
 
 const StyledApp = tw.div`
-  text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px]
+  text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[800px]
 `;
 
 const Header = tw.header`
@@ -22,17 +22,12 @@ const Header = tw.header`
   w-full
 `;
 
-const AppLogo = tw.img`
-  h-80
-  animate-spin
-`;
-
 const FlexContainer = tw.div`
-  flex-1 flex w-full h-full gap-4 max-w-7xl content-center p-4
+  flex w-full gap-4 max-w-7xl content-center m-4 px-4 h-full
 `;
 
 const FlexList = tw.div`
-  flex-col flex gap-4 py-4
+  flex-col inline-flex gap-4 max-h-full
 `;
 
 function App() {
@@ -42,19 +37,19 @@ function App() {
         <h1>Live Stat: 42 Kuala Lumpur</h1>
       </Header>
       <FlexContainer>
-        <FlexList className="flex-[2_2_0%]">
-          <ActiveUserProjects className="flex-[3_3_0%]" />
-          <CurrentActiveUser className="flex-[3_3_0%]" />
-          <CadetPiscineRatio className="flex-[2_2_0%]" />
+        <FlexList className="flex-[2]">
+          <ActiveUserProjects className="" />
+          <CurrentActiveUser className="basis-3/5" />
         </FlexList>
-        <FlexList className="flex-[2_2_0%]">
-          <AverageActiveUserSkill className="flex-[3_3_0%]" />
-          <TotalActiveUser7Days className="flex-[2_2_0%]" />
+        <FlexList className="flex-[2]">
+          <AverageActiveUserSkill className="col-span-2 row-span-2" />
+          <TotalActiveUser7Days className="col-span-2 flex-1" />
+          <CadetPiscineRatio className="col-span-2" />
         </FlexList>
-        <FlexList className="flex-1">
-          <AverageLevel className="flex-[1_1_0%]" />
-          <AverageSessionTime className="flex-[1_1_0%]" />
-          <MostRecentSubmission className="flex-[2_2_0%]" />
+        <FlexList className="">
+          <AverageLevel className="" />
+          <AverageSessionTime className="" />
+          <MostRecentSubmission className="flex-1" />
         </FlexList>
       </FlexContainer>
     </StyledApp>
