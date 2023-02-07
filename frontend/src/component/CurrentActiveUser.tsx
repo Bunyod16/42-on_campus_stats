@@ -110,7 +110,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
     return () => clearInterval(intervalId);
   }, [users]);
 
-  const userGallery = tmp.map((singleUser) => {
+  const userGallery = users.map((singleUser) => {
     return (
       <UserStyle>
         <img src={singleUser.image} width={32} height={32} alt="" />
