@@ -37,6 +37,10 @@ class User():
         self.active = info_json['active?']
         self.groups = info_json['groups']
         self.cursus_users = info_json['cursus_users']
+        self.is_cadet = False
+        for user in self.cursus_users:
+            if user['cursus_id'] == 21:
+                self.is_cadet = True
         self.projects_users = info_json['projects_users']
         self.language_users = info_json['languages_users']
         self.achievements = info_json['achievements']
@@ -61,7 +65,7 @@ class Token():
                 user = User(response.json())
                 info.append(user)
             except Exception as err:
-                print(err)
+                logging.error(err)
         return (info)
 
     def _run_users_querry(self):
@@ -133,7 +137,7 @@ class Token():
                         info['image'] = "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs2/143743992/original/8e2aa89710331eb6413a3383f63e49a987b4d575/make-you-into-a-lego-star-wars-character-profile-pic.png"
                     oncampus_users.append(info)
             except Exception as err:
-                print(err)
+                logging.error(err)
                 time.sleep(1)
         self.active_users = oncampus_users
         return (oncampus_users)
@@ -161,6 +165,8 @@ class Token():
             projecters = user.projects_users
             project = ""
             for prod in projecters:
+                if (user.is_cadet and 21 not in prod['cursus_ids']):
+                    continue
                 # if not prod["validated?"] and "Piscine" not in prod["project"]["name"]:
                 if not prod["validated?"]:
                     project = prod["project"]["name"]
