@@ -33,7 +33,7 @@ interface BarsProps {
 }
 
 interface IBarChartProps {
-  data: Data[];
+  data: any[];
   containerRef: React.RefObject<any>;
 }
 
@@ -151,7 +151,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
             const date = new Date(key).toDateString().split(" ");
             return {
               label: date[1] + " " + date[2],
-              value: tmp[key as keyof typeof tmp],
+              value: data[key as keyof typeof data],
             };
           });
           setData(newData);
@@ -163,7 +163,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
     fetchUsers();
 
     // Call the API every 5 minutes
-    const interval = setInterval(fetchUsers, 1000 * 60 * 1);
+    const interval = setInterval(fetchUsers, 1000 * 60 * 5);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
@@ -174,7 +174,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
     <Card className={className + " flex flex-col"}>
       <H1Style>Total active users last 7 days</H1Style>
       <div ref={containerRef} className="h-full w-full">
-        <BarChart data={data} containerRef={containerRef} />
+        {data && <BarChart data={data} containerRef={containerRef} />}
       </div>
     </Card>
   );
