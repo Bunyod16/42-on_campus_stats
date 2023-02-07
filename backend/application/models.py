@@ -81,23 +81,17 @@ class Token():
 
     def _renew_token(self):
         logging.debug("requesting for credentials")
-        UID = self.uid
-        SECRET = self.secret
         headers = {'Content-type':'application/json'}
-        r = requests.post(f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={UID}&client_secret={SECRET}", headers=headers)
+        r = requests.post(f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={self.uid}&client_secret={self.secret}", headers=headers)
         self.token = r.json()['access_token']
         self.token_expiration = datetime.now() + timedelta(seconds=r.json()['expires_in'])
-        
-        #start renew token thread
-        self.token_renewal_thread = threading.Thread(target=self.run_token_renewal)
-        self.token_renewal_thread.start()
 
     def run_token_renewal(self):
         """Renew the 42 API token
         """
         while True:
             if datetime.now() > self.token_expiration + timedelta(seconds=60):
-                logging.debug("API token expired, requesting for renewal")
+                logging.debug("API token expired")
                 self._renew_token()
             time.sleep(60)
 
@@ -110,9 +104,14 @@ class Token():
         self._save_daily_total_active_users()
         self.active_users = None
         self.active_user_info = self.get_active_user_info()
+        
         #start requerry users thread
         self.active_users_querry = threading.Thread(target=self._run_users_querry)
         self.active_users_querry.start()
+
+        #start renew token thread
+        self.token_renewal_thread = threading.Thread(target=self.run_token_renewal)
+        self.token_renewal_thread.start()
 
     def get_active_users(self):
         response = None
@@ -165,9 +164,10 @@ class Token():
             projecters = user.projects_users
             project = ""
             for prod in projecters:
+
+                #skip unfinished projects
                 if (user.is_cadet and 21 not in prod['cursus_ids']):
                     continue
-                # if not prod["validated?"] and "Piscine" not in prod["project"]["name"]:
                 if not prod["validated?"]:
                     project = prod["project"]["name"]
                     break
@@ -300,7 +300,8 @@ class Token():
         skills = {}
         _count = {}
         for user in self.active_user_info:
-            if len(user.cursus_users) > 1:
+
+            if user.is_cadet:
                 for skill in user.cursus_users[-1]['skills']:
                     if (skill['name'] not in skills.keys()):
                         skills[skill['name']] = 0
@@ -309,7 +310,7 @@ class Token():
                     skills[skill['name']] += float(skill['level'])
         
         for skill in skills.keys():
-            skills[skill] = round(skills[skill] / _count[skill], 2)
+            skills[skill] = round((skills[skill] * 2.5) / _count[skill], 2)
 
         return (skills)
 
