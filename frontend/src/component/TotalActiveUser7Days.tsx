@@ -167,15 +167,6 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
-
-    const newData = Object.keys(tmp).map((key) => {
-      const date = new Date(key).toDateString().split(" ");
-      return {
-        label: date[1] + " " + date[2],
-        value: tmp[key as keyof typeof tmp],
-      };
-    });
-    setData(newData);
   }, []);
 
   return (
