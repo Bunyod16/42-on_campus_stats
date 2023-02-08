@@ -1,7 +1,7 @@
 import { Card, H1Style } from "../styles";
 import tw from "twin.macro";
 import React from "react";
-
+import axios from "axios";
 interface IAverageLevelProps {
   className?: string;
 }
@@ -15,17 +15,14 @@ const AverageLevel = ({ className }: IAverageLevelProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await fetch("https://backend-flask.onrender.com/api/on-campus/average-user-level")
-        .then((response) => {
-          if (response.ok) {
-            console.log("Successfully fetch Average User Level");
-            return response.json();
-          }
-        })
-        .then((data) => setAverageLvl(data.average_level))
-        .catch((error) => {
-          console.error(error);
-        });
+      await axios.get("/on-campus/average-user-level")
+            .then( res => {
+              let data = res.data;
+              setAverageLvl(data["average_level"]);
+            })
+            .catch( err => {
+              console.log(err);
+            })
     };
     fetchData();
 

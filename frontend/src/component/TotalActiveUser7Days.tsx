@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { useDimensions } from "../hooks/useDimension";
 import { Card, H1Style } from "../styles";
-
+import axios from "axios";
 interface Data {
   label: string;
   value: number;
@@ -46,17 +46,6 @@ const tmp = {
   "2023-02-05T00:00:00": 16,
   "2023-02-06T00:00:00": 135,
 };
-
-// const DATA: Data[] = [
-//   { label: "23rd Nov", value: 20 },
-//   { label: "24th Nov", value: 10 },
-//   { label: "25th Nov", value: 5 },
-//   { label: "26th Nov", value: 15 },
-//   { label: "27th Nov", value: 11 },
-//   { label: "28th Nov", value: 21 },
-//   { label: "29th Nov", value: 18 },
-// ];
-
 function AxisBottom({ scale, transform }: AxisBottomProps) {
   const ref = React.useRef<SVGGElement>(null);
 
@@ -137,28 +126,21 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
   React.useEffect(() => {
     const fetchUsers = async () => {
-      await fetch(
-        "https://backend-flask.onrender.com/api/on-campus/daily-total-active-students"
-      )
-        .then((response) => {
-          if (response.ok) {
-            console.log("Successfully fetch Daily Total Active Students");
-            return response.json();
-          }
-        })
-        .then((data) => {
-          const newData = Object.keys(data).map((key) => {
-            const date = new Date(key).toDateString().split(" ");
-            return {
-              label: date[1] + " " + date[2],
-              value: data[key as keyof typeof data],
-            };
-          });
-          setData(newData);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      await axios.get("/on-campus/daily-total-active-students")
+            .then( res => {
+              let data = res.data;
+              const newData = Object.keys(data).map((key) => {
+                const date = new Date(key).toDateString().split(" ");
+                return {
+                  label: date[1] + " " + date[2],
+                  value: data[key as keyof typeof data],
+                };
+              });
+              setData(newData);
+            })
+            .catch( err => {
+              console.log(err);
+            })
     };
     fetchUsers();
 

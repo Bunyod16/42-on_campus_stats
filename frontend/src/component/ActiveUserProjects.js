@@ -3,7 +3,7 @@ import { Card, H1Style } from "../styles";
 import * as d3 from "d3";
 import "../styles/chart.css";
 import { useDimensions } from "../hooks/useDimension";
-
+import axios from "axios";
 // turn data object into array of objects
 /*
 Example :
@@ -92,21 +92,13 @@ export default function ActiveUserProjects(props) {
   // This is TO FETCH DATA FROM API
   useEffect(() => {
     const fetchProjects = async () => {
-      fetch(
-        "https://backend-flask.onrender.com/api/on-campus/active-user-projects"
-      )
-        .then((response) => {
-          if (response.ok) {
-            console.log("Successfully fetch active user projects");
-            return response.json();
-          }
-        })
-        .then((data) => {
-          setProjects(cleaningData(data));
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      await axios.get("/on-campus/active-user-projects")
+            .then( res =>{
+              setProjects(cleaningData(res.data));
+            })
+            .catch( err => {
+              console.log(err);
+            })
     };
     fetchProjects();
     const interval = setInterval(fetchProjects, 1000 * 60 * 1);

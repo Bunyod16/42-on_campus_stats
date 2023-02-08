@@ -2,8 +2,8 @@ import React from "react";
 import { Card, H1Style } from "../styles";
 import { User } from "../../types";
 import tw from "twin.macro";
-import { getAllCurrentActiveUsers } from "../utils/service";
-
+import axios from "axios";
+// import { getAllCurrentActiveUsers } from "../utils/service";
 interface ICurrentActiveUserProps {
   className?: string;
 }
@@ -68,19 +68,18 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
   React.useEffect(() => {
     const fetchUsers = async () => {
-      await fetch(
-        "https://backend-flask.onrender.com/api/on-campus/active-users"
-      )
-        .then((response) => {
-          if (response.ok) {
-            console.log("Successfully fetch Active Users Data");
-            return response.json();
-          }
-        })
-        .then((data) => setUsers(data))
-        .catch((error) => {
-          console.error(error);
-        });
+      await axios.get("/on-campus/active-users")
+      .then( res=>{
+        if (res.data.length !== 0)
+          setUsers(res.data)
+        else{
+          console.log("CurrentActiveUser get successful but data empty.")
+          setUsers(tmp);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     };
     fetchUsers();
 
@@ -97,7 +96,6 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
     const divHeight = div.scrollHeight;
     let scrollInt = 0;
 
-    console.log("divHeight: ", divHeight);
     function updateScroll() {
       scrollInt += 1;
       if (scrollInt >= divHeight / 2) {

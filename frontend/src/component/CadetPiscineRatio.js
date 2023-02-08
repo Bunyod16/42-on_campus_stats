@@ -2,31 +2,24 @@ import { useEffect, useState } from "react";
 import * as d3 from "d3";
 import { Card, H1Style } from "../styles";
 import "../styles/ratio.css";
-
+import axios from "axios";
 // Ratio Bar for Cadets vs Pisciners
 export default function CadetPiscineRatio(props) {
   const [barWidth, setBarWidth] = useState({cadet:0,pisciner:0});
   useEffect( () =>{
     let fetchRatio = async () =>{
-      fetch("https://backend-flask.onrender.com/api/on-campus/cadet-pisciner-ratio")
-      .then( (response) =>{
-        if (response.ok)
-        {
-          console.log("Fetch cadet piscine ratio : Success");
-          return response.json();
-        }
-      })
-      .then ((data) => {
-        let parseData = {cadets : parseInt(data["cadets"]), pisciners: parseInt(data["pisciners"])};
-        let total = parseInt(parseData["cadets"]) + parseInt(parseData["pisciners"]);
-        let widthCadet = (parseData["cadets"] / total) * 395;
-        let widthPiscine = (parseData["pisciners"] / total) * 395;
-        setBarWidth({cadet: widthCadet, pisciner: widthPiscine});
-        console.log(barWidth);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
+      await axios.get("/on-campus/cadet-pisciner-ratio")
+            .then( res => {
+              let data = res.data
+              let parseData = {cadets : parseInt(data["cadets"]), pisciners: parseInt(data["pisciners"])};
+              let total = parseInt(parseData["cadets"]) + parseInt(parseData["pisciners"]);
+              let widthCadet = (parseData["cadets"] / total) * 395;
+              let widthPiscine = (parseData["pisciners"] / total) * 395;
+              setBarWidth({cadet: widthCadet, pisciner: widthPiscine});
+            })
+            .catch ( err => {
+            console.log(err);
+            })
     }
     fetchRatio();
     const interval = setInterval(fetchRatio, 1000 * 60 * 1);

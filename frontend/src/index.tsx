@@ -4,6 +4,9 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyles from "./styles/GlobalStyles";
+import axios from "axios";
+
+axios.defaults.baseURL = 'https://backend-flask.onrender.com/api';
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
