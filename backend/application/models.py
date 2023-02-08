@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import logging
 import threading
 import time
-import json
 
 load_dotenv()
 
@@ -56,100 +55,85 @@ class User():
 
 class Token():
 
-    def get_active_user_info(self):
+    async def get_active_user_info(self):
+        """Querry percise information about every single saved user on campus
+
+        Returns:
+            _type_: _description_
+        """
+        #get info about every active user on campus, 
+        temp = []
+        for page in range (0, 10000):
+            url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?filter[active]=true&per_page=100&page={page}&access_token={self.get_token()}'
+            response = requests.get(url)
+            temp += [user['user'] for user in response.json()]
+            if (len(response.json()) != 100):
+                break
+
         info = []
-        for user in self.saved_active_users():
-            url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.token}"
+        for user in temp:
+            url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.get_token()}"
             response = requests.get(url)
             try:
                 user = User(response.json())
                 info.append(user)
             except Exception as err:
                 logging.error(err)
+
         return (info)
 
-    def _run_users_querry(self):
+    def _run_get_active_user_info(self):
         """Re querry user info every 30mins
         """
+
         start_time = datetime.now()
         while True:
             if datetime.now() > start_time + timedelta(minutes=30):
-                start_time = datetime.now()
                 logging.debug("User info timed out, requerry")
-                self.active_user_info = self.get_active_user_info()
+                start_time = datetime.now()
+                self.active_user_info = asyncio.run(self.get_active_user_info())
             time.sleep(60)
 
-    def _renew_token(self):
-        logging.debug("requesting for credentials")
-        headers = {'Content-type':'application/json'}
-        r = requests.post(f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={self.uid}&client_secret={self.secret}", headers=headers)
-        self.token = r.json()['access_token']
-        self.token_expiration = datetime.now() + timedelta(seconds=r.json()['expires_in'])
-
-    def run_token_renewal(self):
-        """Renew the 42 API token
+    def get_token(self):
+        """Get the 42 API token, renew if expired
         """
-        while True:
-            if datetime.now() > self.token_expiration + timedelta(seconds=60):
-                logging.debug("API token expired")
-                self._renew_token()
-            time.sleep(60)
+        if datetime.now() > self._token_expiration - timedelta(seconds=60):
+            logging.debug("API token expired")
+            headers = {'Content-type' : 'application/json'}
+            r = requests.post(f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={self.uid}&client_secret={self.secret}", headers=headers)
+            self._token = r.json()['access_token']
+            self._token_expiration = datetime.now() + timedelta(seconds=r.json()['expires_in'])
+        return (self._token)
 
     def __init__(self, campus_id, uid, secret):
         self.uid = uid
         self.secret = secret
-        self._renew_token()
         self.campus_id = campus_id
+
+        self._token = None
+        self._token_expiration = datetime.now()
         self.week_active_users = {}
-        self._save_daily_total_active_users()
         self.active_users = None
-        self.active_user_info = self.get_active_user_info()
+        self.active_user_info = asyncio.run(self.get_active_user_info())
+        self.weekly_active_users = self.load_weekly_active_users()
         
         #start requerry users thread
-        self.active_users_querry = threading.Thread(target=self._run_users_querry)
+        self.active_users_querry = threading.Thread(target=self._run_get_active_user_info)
         self.active_users_querry.start()
 
-        #start renew token thread
-        self.token_renewal_thread = threading.Thread(target=self.run_token_renewal)
-        self.token_renewal_thread.start()
-
     def get_active_users(self):
-        response = None
-        temp = []
-        x = 1
-        while (len(temp) == 0 or len(response.json()) == 100):
-            url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?filter[active]=true&per_page=100&page={x}&access_token={self.token}'
-            response = requests.get(url)
-            temp += response.json()
-
-            x += 1
-
-        oncampus_users = []
-        for user in temp:
-            try:
-                info = {}
-                if (user['end_at'] == None):
-                    info['login'] = user['user']['login']
-                    info['image'] = user['user']['image']['link']
-                    info['id'] = user['user']['id']
-                    if (not info['image']):
-                        info['image'] = "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs2/143743992/original/8e2aa89710331eb6413a3383f63e49a987b4d575/make-you-into-a-lego-star-wars-character-profile-pic.png"
-                    oncampus_users.append(info)
-            except Exception as err:
-                logging.error(err)
-                time.sleep(1)
-        self.active_users = oncampus_users
-        return (oncampus_users)
-
-    def saved_active_users(self, requerry=False):
-        if (self.active_users != None):
-            if (requerry):
-                logging.debug("starting requerry thread for saved active users")
-                querry_thread = threading.Thread(target=self.get_active_users)
-                querry_thread.start()
-            return (self.active_users)
-        self.get_active_users()
-        return self.active_users
+        
+        #return info in a pretty format
+        ret = []
+        for user in self.active_user_info:
+            temp = {}
+            temp['login'] = user.login
+            temp['image'] = user.image
+            if not user.image:
+                temp['image'] = "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs2/143743992/original/8e2aa89710331eb6413a3383f63e49a987b4d575/make-you-into-a-lego-star-wars-character-profile-pic.png"
+            temp['id'] = user.id
+            ret.append(temp)
+        return ret
 
     def active_user_projects(self) -> dict:
         """
@@ -192,7 +176,7 @@ class Token():
                 level += user.cursus_users[-1]['level']
                 count += 1
             except Exception as err:
-                pass
+                logging.error(err)
         return ({'average_level':round(level / count, 1)})
 
     def average_session_hours(self) -> dict:
@@ -205,7 +189,7 @@ class Token():
 
         count = 0
         total = 0
-        url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?filter[active]=true&access_token={self.token}'
+        url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?filter[active]=true&access_token={self.get_token()}'
         response = requests.get(url)
         if (response.ok):
             for user in response.json():
@@ -222,27 +206,27 @@ class Token():
 
     def most_recent_submission(self) -> dict:
         """
-        Gets the most recent project submissio on for a campus
+        Gets the most recent project submission on for a campus
 
         Returns:
             dict: {"users":users, "skills":skills, "project":project, "score":score}
         """
 
-        current_time = datetime.utcnow()
         most_recent_user = None
         submissions = []
 
-        _month = current_time.month - 1 if current_time.month - 1 > 0 else 12
-        _year = current_time.year if _month != 12 else current_time.year - 1
-        for page_num in range(0, 100000):
-            url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]={self.campus_id}&filter[marked]=true&range[created_at]={_year}-{_month}-01T00%3A00%3A00.000Z,3000-01-01T00%3A00%3A00.000Z&per_page=100&page={page_num}&access_token={self.token}"
+        _now = datetime.now()
+        _week_ago = datetime.now() - timedelta(days=7)
+        for page in range(0, 100000):
+            url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]={self.campus_id}&filter[marked]=true&range[marked_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&per_page=100&page={page}&access_token={self.get_token()}"
             response = requests.get(url)
             if (not response.ok):
+                logging.error("Intra returned not ok for most_recent")
                 return {}
             submissions += response.json()
             if (len(response.json()) != 100):
                 break
-        
+
         for submission in submissions:
             submission_time = datetime.strptime(submission['marked_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
 
@@ -255,7 +239,7 @@ class Token():
             _temp = {}
             _temp['login'] = user['login']
             _temp['image'] = requests.get(
-                                f"https://api.intra.42.fr/v2/users?filter[login]={user['login']}&access_token={self.token}"
+                                f"https://api.intra.42.fr/v2/users?filter[login]={user['login']}&access_token={self.get_token()}"
                             ).json()[0]['image']['link']
             if not _temp['image']:
                 _temp['image'] = "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs2/143743992/original/8e2aa89710331eb6413a3383f63e49a987b4d575/make-you-into-a-lego-star-wars-character-profile-pic.png"
@@ -264,14 +248,16 @@ class Token():
         project = most_recent_user['project']['name']
         score = most_recent_user['final_mark']
 
-        skills = []
-        skill_ids = requests.get(f"https://api.intra.42.fr/v2/project_sessions/{most_recent_user['teams'][-1]['project_session_id']}/project_sessions_skills?access_token={self.token}").json()
-        for skill_id in skill_ids:
-            skill_str = requests.get(f"https://api.intra.42.fr/v2/skills/{skill_id['skill_id']}?access_token={self.token}").json()['slug']
-            skills.append(skill_str)
+        # skills = []
+        # skill_ids = requests.get(f"https://api.intra.42.fr/v2/project_sessions/{most_recent_user['teams'][-1]['project_session_id']}/project_sessions_skills?access_token={self.get_token()}").json()
+        # for skill_id in skill_ids:
+        #     skill_str = requests.get(f"https://api.intra.42.fr/v2/skills/{skill_id['skill_id']}?access_token={self.get_token()}").json()['slug']
+        #     skills.append(skill_str)
 
         
-        return ({"users":users, "skills":skills, "project":project, "score":score})
+        # return ({"users":users, "skills":skills, "project":project, "score":score})
+        return ({"users":users, "project":project, "score":score})
+    
 
     def cadet_pisciner_ratio(self) -> dict:
         """
@@ -283,7 +269,7 @@ class Token():
         cadets = 0
         pisciners = 0
         for user in self.active_user_info:
-            if len(user.cursus_users) > 1:
+            if user.is_cadet:
                 cadets += 1
             else:
                 pisciners += 1
@@ -314,24 +300,25 @@ class Token():
 
         return (skills)
 
-    def _save_daily_total_active_users(self):
+    def load_weekly_active_users(self):
         logging.debug("Loading daily user data from last 7 days")
         response = None
         week_sessions = []
-        week_ago = datetime.now() - timedelta(days=6)
-        page = 0
-        while (1):
-                url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?per_page=100&page={page}&access_token={self.token}'
+        _now = datetime.now()
+        _week_ago = datetime.now() - timedelta(days=6)
+        for page in range(0, 1000):
+                url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?per_page=100&page={page}&range[begin_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&access_token={self.get_token()}'
                 response = requests.get(url)
+                
                 for session in response.json():
-                    session_start = datetime.strptime(session['begin_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-                    if (session_start < week_ago):
-                        break
-                    else:
-                        week_sessions.append(session)
-                if (session_start < week_ago):
-                        break
-                page += 1
+                    week_sessions.append(session)
+                    # session_start = datetime.strptime(session['begin_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+                    # if (session_start < _week_ago):
+                    #     break
+                # if (session_start < _week_ago):
+                #         break
+                if (len(response.json()) < 100):
+                    break
                 
 
         dates = {}
@@ -349,17 +336,12 @@ class Token():
             date_obj = date_obj.replace(hour=0, minute=0, second=0, microsecond=0)
             temp[date_obj.isoformat()] = len(dates[day])
 
-        self.week_active_users = temp
+        return temp
 
-    def get_daily_total_active_users(self):
+    def get_weekly_active_users(self):
         today = datetime.now()
         today = today.replace(hour=0, minute=0, second=0, microsecond=0)
-        if (today.isoformat() not in self.week_active_users):
-            thread = threading.Thread(target=self._save_daily_total_active_users)
+        if (today.isoformat() not in self.weekly_active_users):
+            thread = threading.Thread(target=self.load_weekly_active_users)
             thread.start()
-        return (self.week_active_users)
-
-# SECRET = os.getenv('CAMPUS_SECRET')
-# UID = os.getenv('CAMPUS_UID')
-# t=Token(34, UID, SECRET)
-# print(t.most_recent_submission())
+        return (self.weekly_active_users)

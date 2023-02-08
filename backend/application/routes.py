@@ -20,7 +20,7 @@ def index():
 @app.route('/api/on-campus/active-users', methods=['GET'])
 @cache.cached(timeout=600)
 def active_users():
-    return (jsonify(token.saved_active_users(requerry=True)))
+    return (jsonify(token.get_active_users()))
 
 @app.route('/api/on-campus/active-user-projects', methods=['GET'])
 @cache.cached(timeout=60)
@@ -54,4 +54,4 @@ def active_user_skills():
 
 @app.route('/api/on-campus/daily-total-active-students', methods=['GET'])
 def daily_total_active_users():
-    return (jsonify(token.get_daily_total_active_users()))
+    return (jsonify(token.get_weekly_active_users()))
