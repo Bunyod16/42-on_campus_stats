@@ -55,7 +55,7 @@ class User():
 
 class Token():
 
-    async def get_active_user_info(self):
+    def get_active_user_info(self):
         """Querry percise information about every single saved user on campus
 
         Returns:
@@ -91,7 +91,7 @@ class Token():
             if datetime.now() > start_time + timedelta(minutes=30):
                 logging.debug("User info timed out, requerry")
                 start_time = datetime.now()
-                self.active_user_info = asyncio.run(self.get_active_user_info())
+                self.active_user_info = self.get_active_user_info()
             time.sleep(60)
 
     def get_token(self):
@@ -114,7 +114,7 @@ class Token():
         self._token_expiration = datetime.now()
         self.week_active_users = {}
         self.active_users = None
-        self.active_user_info = asyncio.run(self.get_active_user_info())
+        self.active_user_info = self.get_active_user_info()
         self.weekly_active_users = self.load_weekly_active_users()
         
         #start requerry users thread
