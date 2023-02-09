@@ -129,9 +129,12 @@ class Token():
             temp = {}
             temp['login'] = user.login
             temp['image'] = user.image['link']
+            temp['id'] = user.id
             if not temp['image']:
                 temp['image'] = "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs2/143743992/original/8e2aa89710331eb6413a3383f63e49a987b4d575/make-you-into-a-lego-star-wars-character-profile-pic.png"
-            temp['id'] = user.id
+            temp['is_cadet'] = False
+            if (user.is_cadet):
+                temp['is_cadet'] = True
             ret.append(temp)
         return ret
 
