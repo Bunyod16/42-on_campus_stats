@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { Card, H1Style } from "../styles";
 import "../styles/radar.css";
+import axios from "axios";
 // Radar Chart :
 // level : 4, width per level: 5
 let skills = [
@@ -186,24 +187,17 @@ export default function AverageActiveUserSkill(props) {
   const [topSkills, setTopSkills] = useState(getTopSkills(defaultData));
   useEffect(() => {
     const fetchSkills = async () => {
-      fetch(
-        "https://backend-flask.onrender.com/api/on-campus/active-user-skills"
-      )
-        .then((response) => {
-          if (response.ok) {
-            console.log("Fetch average active user skills success");
-            return response.json();
-          }
-        })
-        .then((data) => {
-          let finalObj = { ...defaultData };
-          for (const key in data) finalObj[key] = data[key];
-          setSkills(finalObj);
-          setTopSkills(getTopSkills(finalObj));
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      await axios.get("/on-campus/active-user-skills")
+            .then( res => {
+              let data = res.data;
+              let finalObj = { ...defaultData };
+              for (const key in data) finalObj[key] = data[key];
+              setSkills(finalObj);
+              setTopSkills(getTopSkills(finalObj));
+            })
+            .catch( err => {
+              console.log(err);
+            })
     };
     fetchSkills();
     const interval = setInterval(fetchSkills, 1000 * 60 * 1);

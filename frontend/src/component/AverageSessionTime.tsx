@@ -1,7 +1,7 @@
 import { Card, H1Style } from "../styles";
 import tw from "twin.macro";
 import React from "react";
-
+import axios from "axios";
 interface IAverageSessionTimeProps {
   className?: string;
 }
@@ -19,17 +19,13 @@ const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await fetch("https://backend-flask.onrender.com/api/on-campus/average-session-hours")
-        .then((response) => {
-          if (response.ok) {
-            console.log("Successfully fetch Average Session Hours");
-            return response.json();
-          }
-        })
-        .then((data) => setAverageSessionTime(data.average_session_hours))
-        .catch((error) => {
-          console.error(error);
-        });
+      await axios.get("/on-campus/average-session-hours")
+                 .then( res => {
+                  setAverageSessionTime(res.data["average_session_hours"])
+                 })
+                 .catch( err => {
+                  console.log(err);
+                 })
     };
     fetchData();
 

@@ -1,7 +1,7 @@
 import { Card, H1Style } from "../styles";
 import tw from "twin.macro";
 import React from "react";
-
+import axios from "axios";
 interface IMostRecentSubmissionProps {
   className?: string;
 }
@@ -39,22 +39,18 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await fetch("https://backend-flask.onrender.com/api/most-recent-submission")
-        .then((response) => {
-          if (response.ok) {
-            console.log("Successfully fetch Most Recent Submission");
-            return response.json();
-          }
-        })
-        .then((data) => {
-          if (JSON.stringify(data) !== "{}")
-            setData(data);
-          console.log("data:", data);
-        })
-        .catch((error) => {
-          console.error(error);
-          setData(undefined);
-        });
+      await axios.get("/most-recent-submission")
+            .then( res => {
+              let data = res.data;
+              if (JSON.stringify(data) !== "{}")
+                setData(data);
+              else
+                console.log("MostRecentSubmission get successful but data empty.");
+            })
+            .catch( err => {
+              console.log(err);
+              setData(undefined);
+            })
     };
     fetchData();
 
