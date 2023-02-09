@@ -3,8 +3,7 @@ import requests
 from dotenv import load_dotenv
 import logging
 import threading
-import time
-
+import json
 load_dotenv()
 
 class User():
@@ -61,7 +60,8 @@ class Token():
         Returns:
             _type_: _description_
         """
-        #get info about every active user on campus, 
+        #get info about every active user on campus
+        logging.debug("Querrying for active users")
         temp = []
         for page in range (0, 10000):
             url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?filter[active]=true&per_page=100&page={page}&access_token={self.get_token()}'
@@ -71,28 +71,21 @@ class Token():
                 break
 
         info = []
+        json_data = []
         for user in temp:
             url = f"https://api.intra.42.fr/v2/users/{user['id']}?access_token={self.get_token()}"
             response = requests.get(url)
             try:
                 user = User(response.json())
+                json_data.append(response.json())
                 info.append(user)
             except Exception as err:
                 logging.error(err)
 
+        #save info as json, to pass between proccesses
+        with open("active_user_info.json", "w") as _f:
+            _f.write(json.dumps(json_data))
         return (info)
-
-    def _run_get_active_user_info(self):
-        """Re querry user info every 30mins
-        """
-
-        start_time = datetime.now()
-        while True:
-            if datetime.now() > start_time + timedelta(minutes=30):
-                logging.debug("User info timed out, requerry")
-                start_time = datetime.now()
-                self.active_user_info = self.get_active_user_info()
-            time.sleep(60)
 
     def get_token(self):
         """Get the 42 API token, renew if expired
@@ -115,15 +108,28 @@ class Token():
         self.week_active_users = {}
         self.active_users = None
         self.active_user_info = self.get_active_user_info()
+        self.user_info_timeout = datetime.now() + timedelta(minutes=30)
         self.weekly_active_users = self.load_weekly_active_users()
         
         #start requerry users thread
-        self.active_users_querry = threading.Thread(target=self._run_get_active_user_info)
-        self.active_users_querry.start()
+        
 
     def get_active_users(self):
         
         #return info in a pretty format
+        if datetime.now() > self.user_info_timeout:
+            logging.debug("User info timed out, requerry")
+            active_users_querry = threading.Thread(target=self.get_active_user_info)
+            active_users_querry.start()
+            self.user_info_timeout = datetime.now() + timedelta(minutes=30)
+
+        with open("active_user_info.json", "r") as _f:
+            temp = json.loads(_f.read())
+
+        self.active_user_info = []
+        for user in temp:
+            self.active_user_info.append(User(user))
+
         ret = []
         for user in self.active_user_info:
             temp = {}
