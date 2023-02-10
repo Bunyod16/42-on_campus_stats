@@ -110,6 +110,7 @@ class Token():
         self.active_user_info = self.get_active_user_info()
         self.user_info_timeout = datetime.now() + timedelta(minutes=30)
         self.weekly_active_users = self.load_weekly_active_users()
+        self.weekly_active_user_timeout = datetime.now() + timedelta(minutes=30)
         
         #start requerry users thread
         
@@ -339,13 +340,16 @@ class Token():
             date_obj = datetime.strptime(day, '%Y %m %d')
             date_obj = date_obj.replace(hour=0, minute=0, second=0, microsecond=0)
             temp[date_obj.isoformat()] = len(dates[day])
-
+        with open("weekly_active_users.json", "w") as _f:
+            _f.write(json.dumps(temp))
         return temp
 
     def get_weekly_active_users(self):
-        today = datetime.now()
-        today = today.replace(hour=0, minute=0, second=0, microsecond=0)
-        if (today.isoformat() not in self.weekly_active_users):
+        with open("weekly_active_users.json", "r") as _f:
+            self.week_active_users = json.loads(_f.read())
+        if (datetime.now() + timedelta(minutes=30) > weekly_active_user_timeout):
             thread = threading.Thread(target=self.load_weekly_active_users)
             thread.start()
+            self.weekly_active_user_timeout = datetime.now() + timedelta(minutes=30)
         return (self.weekly_active_users)
+        
