@@ -222,27 +222,22 @@ class Token():
         """
 
         most_recent_user = None
-        submissions = []
 
-        _now = datetime.now()
+        _now = datetime.now() + timedelta(days=7) #just make it into the future to get everything
         _week_ago = datetime.now() - timedelta(days=7)
-        for page in range(0, 100000):
-            url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]={self.campus_id}&filter[marked]=true&range[marked_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&per_page=100&page={page}&access_token={self.get_token()}"
-            response = requests.get(url)
-            if (not response.ok):
-                logging.error("Intra returned not ok for most_recent")
-                return {}
-            submissions += response.json()
-            if (len(response.json()) != 100):
-                break
+        url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]={self.campus_id}&filter[marked]=true&range[marked_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&per_page=100&page=0&access_token={self.get_token()}"
+        response = requests.get(url)
+        if (not response.ok):
+            logging.error("Intra returned not ok for most_recent")
+            return {}
 
-        for submission in submissions:
+        for submission in response.json():
             submission_time = datetime.strptime(submission['marked_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
 
             if (not most_recent_user or submission_time > most_recent_user['datetime']):
                     most_recent_user = submission
                     most_recent_user['datetime'] = submission_time
-        
+
         users = []
         for user in most_recent_user['teams'][-1]['users']:
             _temp = {}
