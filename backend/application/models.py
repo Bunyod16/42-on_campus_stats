@@ -347,7 +347,7 @@ class Token():
     def get_weekly_active_users(self):
         with open("weekly_active_users.json", "r") as _f:
             self.week_active_users = json.loads(_f.read())
-        if (datetime.now() + timedelta(minutes=30) > weekly_active_user_timeout):
+        if (datetime.now() + timedelta(minutes=30) > self.weekly_active_user_timeout):
             thread = threading.Thread(target=self.load_weekly_active_users)
             thread.start()
             self.weekly_active_user_timeout = datetime.now() + timedelta(minutes=30)
