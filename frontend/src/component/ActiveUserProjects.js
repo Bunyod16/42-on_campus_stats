@@ -60,22 +60,23 @@ function PieChart({ projects, color, radius }) {
 }
 
 // Plot Chart Legends
-function ChartLegends({ projects, color, size }) {
+function ChartLegends({ projects, color, size, height }) {
+  let legendMargin = ((height - ((height/16) * 10)) / 2);
   return (
-    <g transform={`translate(${size},${(size / 16) * 2.5})`}>
+    <g transform={`translate(${size * .9},${(height / 16) })`}>
       {projects.map(({ project, user_num }, i) => (
         <>
           <circle
             className="legend-dots"
             cx="0"
-            cy={i * (size / 16)}
+            cy={legendMargin + i * (height / 18)}
             r="7"
             fill={color(i)}
           ></circle>
           <text
             className="text-sm"
             x="16"
-            y={5 + i * (size / 16)}
+            y={legendMargin + i * (height / 18)}
             style={{ fill: "#f3f4f6" }}
           >
             {project}
@@ -115,13 +116,12 @@ export default function ActiveUserProjects(props) {
     <Card className={props.className} ref={ref}>
       <H1Style>Active User Projects</H1Style>
       <svg
-        className="pie-chart-svg"
+        className="pie-chart-svg border-4	border-white"
         width={dimension.width}
         height={(dimension.width / 16) * 9}
       >
         <PieChart projects={projects} color={color} radius={radius} />
-        <ChartLegends projects={projects} color={color} size={size} />
-        <p>banana</p>
+        <ChartLegends projects={projects} color={color} size={size} height={(dimension.width / 16) * 9}/>
       </svg>
     </Card>
   );
