@@ -11,18 +11,19 @@ const NumberDisplay = tw.div`
 `;
 
 const AverageLevel = ({ className }: IAverageLevelProps) => {
-  const [averageLvl, setAverageLvl] = React.useState(0);
+  const [averageLvl, setAverageLvl] = React.useState(undefined);
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await axios.get("/on-campus/average-user-level")
-            .then( res => {
-              let data = res.data;
-              setAverageLvl(data["average_level"]);
-            })
-            .catch( err => {
-              console.log(err);
-            })
+      await axios
+        .get("/on-campus/average-user-level")
+        .then((res) => {
+          let data = res.data;
+          setAverageLvl(data["average_level"]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     fetchData();
 
@@ -35,7 +36,11 @@ const AverageLevel = ({ className }: IAverageLevelProps) => {
   return (
     <Card className={className + " flex flex-col"}>
       <H1Style>Average level</H1Style>
-      <NumberDisplay>{averageLvl}</NumberDisplay>
+      {averageLvl ? (
+        <NumberDisplay>{averageLvl}</NumberDisplay>
+      ) : (
+        <div className="bg-gray-500 rounded animate-pulse w-full h-16" />
+      )}
     </Card>
   );
 };

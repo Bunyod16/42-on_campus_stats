@@ -88,7 +88,7 @@ function ChartLegends({ projects, color, size }) {
 
 // Component for Active User Projects in Campus
 export default function ActiveUserProjects(props) {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(undefined);
   const color = d3.scaleOrdinal(d3.schemeTableau10);
   const ref = useRef();
   const dimension = useDimensions(ref);
@@ -114,15 +114,25 @@ export default function ActiveUserProjects(props) {
   return (
     <Card className={props.className} ref={ref}>
       <H1Style>Active User Projects</H1Style>
-      <svg
-        className="pie-chart-svg"
-        width={dimension.width}
-        height={(dimension.width / 16) * 9}
-      >
-        <PieChart projects={projects} color={color} radius={radius} />
-        <ChartLegends projects={projects} color={color} size={size} />
-        <p>banana</p>
-      </svg>
+      {projects ? (
+        <svg
+          className="pie-chart-svg"
+          width={dimension.width}
+          height={(dimension.width / 16) * 9}
+        >
+          <PieChart projects={projects} color={color} radius={radius} />
+          <ChartLegends projects={projects} color={color} size={size} />
+          <p>banana</p>
+        </svg>
+      ) : (
+        <div
+          className="bg-gray-500 rounded animate-pulse"
+          style={{
+            width: `${dimension.width}px`,
+            height: `${(dimension.width / 16) * 9}px`,
+          }}
+        />
+      )}
     </Card>
   );
 }
