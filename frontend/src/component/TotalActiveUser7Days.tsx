@@ -55,7 +55,7 @@ function AxisBottom({ scale, transform }: AxisBottomProps) {
     }
   }, [scale]);
 
-  return <g ref={ref} transform={transform} />;
+  return <g ref={ref} transform={transform} style={{ fontSize: "0.7rem" }} />;
 }
 
 function AxisLeft({ scale }: AxisLeftProps) {
@@ -67,7 +67,7 @@ function AxisLeft({ scale }: AxisLeftProps) {
     }
   }, [scale]);
 
-  return <g ref={ref} />;
+  return <g ref={ref} style={{ fontSize: "0.7rem" }} />;
 }
 
 function Bars({ data, height, scaleX, scaleY }: BarsProps) {
