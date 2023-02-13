@@ -11,7 +11,7 @@ import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
 
 const StyledApp = tw.div`
-  text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[800px] text-base
+  text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[1200px] text-base
 `;
 
 const Header = tw.header`
@@ -43,10 +43,10 @@ function App() {
         </FlexList>
         <FlexList className="flex-[2]">
           <AverageActiveUserSkill className="" />
-          <TotalActiveUser7Days className="flex-1" />
+          <TotalActiveUser7Days className="" />
           <CadetPiscineRatio className="h-full" />
         </FlexList>
-        <FlexList className="">
+        <FlexList className="flex-1">
           <AverageLevel className="" />
           <AverageSessionTime className="" />
           <MostRecentSubmission className="flex-1" />

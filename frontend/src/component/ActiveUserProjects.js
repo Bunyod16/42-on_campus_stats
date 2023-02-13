@@ -37,7 +37,10 @@ function cleaningData(dataObj) {
 // Function PieChart Plotting
 function PieChart({ projects, color, radius }) {
   const pie = d3.pie().value((d) => d["user_num"]);
-  const arc = d3.arc().innerRadius(0).outerRadius(radius * .9);
+  const arc = d3
+    .arc()
+    .innerRadius(0)
+    .outerRadius(radius * 0.9);
   return (
     <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
       {pie(projects).map((d, i) => {
@@ -61,9 +64,9 @@ function PieChart({ projects, color, radius }) {
 
 // Plot Chart Legends
 function ChartLegends({ projects, color, size, height }) {
-  let legendMargin = ((height - ((height/16) * 10)) / 2);
+  let legendMargin = (height - (height / 16) * 10) / 2;
   return (
-    <g transform={`translate(${size * .9},${(height / 16) })`}>
+    <g transform={`translate(${size * 0.9},${height / 16})`}>
       {projects.map(({ project, user_num }, i) => (
         <>
           <circle
@@ -89,7 +92,7 @@ function ChartLegends({ projects, color, size, height }) {
 
 // Component for Active User Projects in Campus
 export default function ActiveUserProjects(props) {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(undefined);
   const color = d3.scaleOrdinal(d3.schemeTableau10);
   const ref = useRef();
   const dimension = useDimensions(ref);
@@ -115,14 +118,30 @@ export default function ActiveUserProjects(props) {
   return (
     <Card className={props.className} ref={ref}>
       <H1Style>Active User Projects</H1Style>
-      <svg
-        className="pie-chart-svg"
-        width={dimension.width}
-        height={(dimension.width / 16) * 9}
-      >
-        <PieChart projects={projects} color={color} radius={radius} />
-        <ChartLegends projects={projects} color={color} size={size} height={(dimension.width / 16) * 9}/>
-      </svg>
+      {projects ? (
+        <svg
+          className="pie-chart-svg"
+          width={dimension.width}
+          height={(dimension.width / 16) * 9}
+        >
+          <PieChart projects={projects} color={color} radius={radius} />
+          <ChartLegends
+            projects={projects}
+            color={color}
+            size={size}
+            height={(dimension.width / 16) * 9}
+          />
+          <p>banana</p>
+        </svg>
+      ) : (
+        <div
+          className="bg-gray-500 rounded animate-pulse"
+          style={{
+            width: `${dimension.width}px`,
+            height: `${(dimension.width / 16) * 9}px`,
+          }}
+        />
+      )}
     </Card>
   );
 }

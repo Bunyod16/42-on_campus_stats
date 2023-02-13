@@ -63,7 +63,7 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
   return (
     <Card className={className + " flex flex-col 2xl:max-h-[50vh]"}>
       <H1Style>Most recent submission</H1Style>
-      {data && (
+      {data ? (
         <Container>
           <img
             src={data.users[0]?.image}
@@ -75,6 +75,8 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
           <p className="text-lg">{data.users[0]?.login}</p>
           <p className="text-lg">{data?.project}</p>
         </Container>
+      ) : (
+        <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
       )}
     </Card>
   );

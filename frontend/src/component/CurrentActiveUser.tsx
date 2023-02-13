@@ -15,7 +15,7 @@ const UserStyle = tw.div`
 `;
 
 const UserGalleryStyle = tw.div`
-  grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink
+  grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full
 `;
 
 const tmp = [
@@ -63,7 +63,7 @@ const tmp = [
 ];
 
 function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
-  const [users, setUsers] = React.useState<User[]>([]);
+  const [users, setUsers] = React.useState<User[] | undefined>(undefined);
   const divRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -108,7 +108,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
     return () => clearInterval(intervalId);
   }, [users]);
 
-  const userGallery = users.map((singleUser) => {
+  const userGallery = users?.map((singleUser) => {
     return (
       <UserStyle>
         <img src={singleUser.image} width={32} height={32} alt="" />
@@ -119,9 +119,13 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
   return (
     <Card className={className + " flex flex-col max-h-[50vh]"}>
-      <H1Style>Current Active Users ({users.length})</H1Style>
+      <H1Style>Current Active Users ({users?.length})</H1Style>
       <UserGalleryStyle ref={divRef} id="user-gallery">
-        {userGallery}
+        {users ? (
+          userGallery
+        ) : (
+          <div className="col-span-5 h-full rounded bg-gray-500 animate-pulse"></div>
+        )}
       </UserGalleryStyle>
     </Card>
   );

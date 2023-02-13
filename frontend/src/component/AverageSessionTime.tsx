@@ -19,13 +19,14 @@ const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await axios.get("/on-campus/average-session-hours")
-                 .then( res => {
-                  setAverageSessionTime(res.data["average_session_hours"])
-                 })
-                 .catch( err => {
-                  console.log(err);
-                 })
+      await axios
+        .get("/on-campus/average-session-hours")
+        .then((res) => {
+          setAverageSessionTime(res.data["average_session_hours"]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     fetchData();
 
@@ -39,9 +40,11 @@ const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
   return (
     <Card className={className + " flex flex-col"}>
       <H1Style>Average session time</H1Style>
-      <NumberDisplay>
-        {averageSessionTime}hr
-      </NumberDisplay>
+      {averageSessionTime ? (
+        <NumberDisplay>{averageSessionTime}hr</NumberDisplay>
+      ) : (
+        <div className="bg-gray-500 rounded animate-pulse w-full h-16" />
+      )}
     </Card>
   );
 };
