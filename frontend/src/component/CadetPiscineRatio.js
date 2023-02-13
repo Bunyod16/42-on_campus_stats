@@ -35,7 +35,8 @@ export default function CadetPiscineRatio(props) {
     const interval = setInterval(fetchRatio, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
-  let barWidth = getRatio(students.cadets, students.pisciners, dimension.width);
+  let barWidth =
+    students && getRatio(students.cadets, students.pisciners, dimension.width);
   return (
     <Card ref={cardRef}>
       <H1Style>
