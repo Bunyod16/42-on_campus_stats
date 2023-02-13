@@ -57,21 +57,21 @@ function getTopSkills(dataset) {
 let topSkills = getTopSkills(defaultData);
 
 // Fancy Math Blackbox to calculate angle
-function angleToCoordinate(angle, value, radialScale) {
+function angleToCoordinate(angle, value, radialScale, x, y) {
   let x_in = Math.cos(angle) * radialScale(value);
   let y_in = Math.sin(angle) * radialScale(value);
-  return { x: 120 + x_in, y: 115 - y_in };
+  return { x: x + x_in, y: y - y_in };
 }
 
 // Get coordinates to plot path to draw the Butterfly on the Radar
-function getPathCords(data_point, radialScale) {
+function getPathCords(data_point, radialScale, x, y) {
   let coords = [];
   for (let i = 0; i < skills.length; i++) {
     let label = skills[i];
     let angle = Math.PI / 2 + (2 * Math.PI * i) / skills.length;
     coords = [
       ...coords,
-      angleToCoordinate(angle, data_point[label], radialScale),
+      angleToCoordinate(angle, data_point[label], radialScale, x, y),
     ];
   }
   return coords;
@@ -102,12 +102,12 @@ function LinesAndLabels({ radialScale, x, y }) {
     let objs = {};
     let label = skills[i].split(" ");
     let angle = Math.PI / 2 + (2 * Math.PI * i) / skills.length;
-    let line_cord = angleToCoordinate(angle, 20, radialScale);
-    let label_cord = angleToCoordinate(angle, 26, radialScale);
+    let line_cord = angleToCoordinate(angle, 20, radialScale, x, y);
+    let label_cord = angleToCoordinate(angle, 26, radialScale, x, y);
     if ((i >= 0 && i < 3) || i > 7)
-      label_cord = angleToCoordinate(angle, 23, radialScale);
+      label_cord = angleToCoordinate(angle, 23, radialScale, x, y);
     if (i === 6 || i === 7)
-      label_cord = angleToCoordinate(angle, 27, radialScale);
+      label_cord = angleToCoordinate(angle, 27, radialScale, x, y);
     if (i === 10) {
       label_cord.x -= 15;
       label_cord.y += 5;
@@ -160,9 +160,9 @@ function LinesAndLabels({ radialScale, x, y }) {
 }
 
 // Draw Butterfly on Radar
-function DrawSkills({ skills, radialScale }) {
+function DrawSkills({ skills, radialScale, x, y}) {
   let color = "#00BABC";
-  let coordinates = getPathCords(skills, radialScale);
+  let coordinates = getPathCords(skills, radialScale, x, y);
   let line = d3
     .line()
     .x((d) => d.x)
@@ -183,8 +183,8 @@ export default function AverageActiveUserSkill(props) {
   const dimension = useDimensions(ref);
   const size = dimension.width - 100,
     x = size / 2,
-    y = 115, // todo  this one need to adjust
-    radius = size / 3.5,
+    y = (((dimension.width - 50) / 16) * 9 )/ 2, // todo  this one need to adjust
+    radius = size / 4,
     radialScale = d3.scaleLinear().domain([0, 20]).range([0, radius]),
     ticks = [5, 10, 15, 20];
   const [skills, setSkills] = useState({});
@@ -219,7 +219,7 @@ export default function AverageActiveUserSkill(props) {
         >
           <ChartCircle ticks={ticks} x={x} y={y} radialScale={radialScale} />
           <LinesAndLabels radialScale={radialScale} x={x} y={y} />
-          <DrawSkills skills={skills} radialScale={radialScale} />
+          <DrawSkills skills={skills} radialScale={radialScale} x={x} y={y} />
         </svg>
         <div className="avg-user-skill-top-3">
           <h3>Top 3</h3>
