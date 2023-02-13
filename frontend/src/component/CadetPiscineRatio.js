@@ -14,7 +14,7 @@ function getRatio(cadets, pisciners, width) {
 export default function CadetPiscineRatio(props) {
   const cardRef = useRef(null);
   const dimension = useDimensions(cardRef);
-  const [students, setStudents] = useState({ cadets: 50, pisciners: 50 });
+  const [students, setStudents] = useState(undefined);
   useEffect(() => {
     const fetchRatio = async () => {
       await axios
@@ -42,43 +42,47 @@ export default function CadetPiscineRatio(props) {
         <span className="h1-cadets">Cadets</span> to{" "}
         <span className="h1-piscine">Piscine</span> ratio
       </H1Style>
-      <svg
-        width={dimension.width * 0.8 + 5}
-        height="1.25rem"
-        className="cadet-piscine-ratio-svg"
-      >
-        <g>
-          <rect
-            className="cadet-rect"
-            width={barWidth["cadets"]}
-            height="100%"
-            rx="5"
-          ></rect>
-          <text
-            x={barWidth["cadets"] / 2 - 21}
-            y="70%"
-            className="cadet-piscine-ratio-text"
-          >
-            Cadet
-          </text>
-        </g>
-        <g>
-          <rect
-            className="piscine-rect"
-            width={barWidth["pisciners"]}
-            x={barWidth["cadets"] + 5}
-            height="100%"
-            rx="5"
-          ></rect>
-          <text
-            x={barWidth["cadets"] + 5 + barWidth["pisciners"] / 2 - 26}
-            y="70%"
-            className="cadet-piscine-ratio-text"
-          >
-            Piscine
-          </text>
-        </g>
-      </svg>
+      {students ? (
+        <svg
+          width={dimension.width * 0.8 + 5}
+          height="1.25rem"
+          className="cadet-piscine-ratio-svg"
+        >
+          <g>
+            <rect
+              className="cadet-rect"
+              width={barWidth["cadet"]}
+              height="100%"
+              rx="5"
+            ></rect>
+            <text
+              x={barWidth["cadet"] / 2 - 21}
+              y="70%"
+              className="cadet-piscine-ratio-text"
+            >
+              Cadet
+            </text>
+          </g>
+          <g>
+            <rect
+              className="piscine-rect"
+              width={barWidth["pisciner"]}
+              x={barWidth["cadet"] + 5}
+              height="100%"
+              rx="5"
+            ></rect>
+            <text
+              x={barWidth["cadet"] + 5 + barWidth["pisciner"] / 2 - 26}
+              y="70%"
+              className="cadet-piscine-ratio-text"
+            >
+              Piscine
+            </text>
+          </g>
+        </svg>
+      ) : (
+        <div className="bg-gray-500 animate-pulse w-full h-6" />
+      )}
     </Card>
   );
 }

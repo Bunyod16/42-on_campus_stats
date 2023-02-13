@@ -189,7 +189,7 @@ export default function AverageActiveUserSkill(props) {
     radius = size / 4,
     radialScale = d3.scaleLinear().domain([0, 20]).range([0, radius]),
     ticks = [5, 10, 15, 20];
-  const [skills, setSkills] = useState({});
+  const [skills, setSkills] = useState(undefined);
   const [topSkills, setTopSkills] = useState(getTopSkills(defaultData));
   useEffect(() => {
     const fetchSkills = async () => {
@@ -213,31 +213,41 @@ export default function AverageActiveUserSkill(props) {
   return (
     <Card className={props.className} ref={ref}>
       <H1Style>Average Active User Skills</H1Style>
-      <div className="avg-user-skill">
-        <svg
-          className="radar-svg"
-          width={dimension.width - 100}
-          height={((dimension.width - 50) / 16) * 9}
-        >
-          <ChartCircle ticks={ticks} x={x} y={y} radialScale={radialScale} />
-          <LinesAndLabels radialScale={radialScale} x={x} y={y} />
-          <DrawSkills skills={skills} radialScale={radialScale} x={x} y={y} />
-        </svg>
-        <div className="avg-user-skill-top-3">
-          <h3>Top 3</h3>
-          <ul className="text-sm flex gap-4">
-            <li className="w-32" key={1}>
-              {topSkills[0][0]}
-            </li>
-            <li className="w-32" key={2}>
-              {topSkills[1][0]}
-            </li>
-            <li className="w-32" key={3}>
-              {topSkills[2][0]}
-            </li>
-          </ul>
+      {skills ? (
+        <div className="avg-user-skill">
+          <svg
+            className="radar-svg"
+            width={dimension.width - 100}
+            height={((dimension.width - 50) / 16) * 9}
+          >
+            <ChartCircle ticks={ticks} x={x} y={y} radialScale={radialScale} />
+            <LinesAndLabels radialScale={radialScale} x={x} y={y} />
+            <DrawSkills skills={skills} radialScale={radialScale} x={x} y={y} />
+          </svg>
+          <div className="avg-user-skill-top-3">
+            <h3>Top 3</h3>
+            <ul className="text-sm flex gap-4">
+              <li className="w-32" key={1}>
+                {topSkills[0][0]}
+              </li>
+              <li className="w-32" key={2}>
+                {topSkills[1][0]}
+              </li>
+              <li className="w-32" key={3}>
+                {topSkills[2][0]}
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div
+          className="bg-gray-500 rounded animate-pulse"
+          style={{
+            width: `${dimension.width}px`,
+            height: `${((dimension.width - 50) / 16) * 9}px`,
+          }}
+        />
+      )}
     </Card>
   );
 }
