@@ -88,7 +88,7 @@ function Bars({ data, height, scaleX, scaleY }: BarsProps) {
 }
 
 const BarChart = ({ data, dimension }: IBarChartProps) => {
-  const margin = { top: 16, right: 16, bottom: 24, left: 32 };
+  const margin = { top: 16, right: 16, bottom: 32, left: 40 };
 
   const width = dimension.width - margin.left - margin.right;
   const height = dimension.width / 3 - margin.top - margin.bottom;
