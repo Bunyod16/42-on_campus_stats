@@ -126,21 +126,22 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
   React.useEffect(() => {
     const fetchUsers = async () => {
-      await axios.get("/on-campus/daily-total-active-students")
-            .then( res => {
-              let data = res.data;
-              const newData = Object.keys(data).map((key) => {
-                const date = new Date(key).toDateString().split(" ");
-                return {
-                  label: date[1] + " " + date[2],
-                  value: data[key as keyof typeof data],
-                };
-              });
-              setData(newData);
-            })
-            .catch( err => {
-              console.log(err);
-            })
+      await axios
+        .get("/on-campus/daily-total-active-students")
+        .then((res) => {
+          let data = res.data;
+          const newData = Object.keys(data).map((key) => {
+            const date = new Date(key).toDateString().split(" ");
+            return {
+              label: date[1] + " " + date[2],
+              value: data[key as keyof typeof data],
+            };
+          });
+          setData(newData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     fetchUsers();
 
@@ -153,7 +154,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
   return (
     // the container for the svg
-    <Card className={className + " flex flex-col"}>
+    <Card className={className + " flex flex-col 2xl:max-h-[20vh]"}>
       <H1Style>Total active users last 7 days</H1Style>
       <div ref={containerRef} className="h-full w-full">
         {data && <BarChart data={data} containerRef={containerRef} />}

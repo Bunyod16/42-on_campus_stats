@@ -14,22 +14,22 @@ tspan {
 
 .avg-user-skill {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
 }
 
 .avg-user-skill h3 {
   margin-bottom: 10px;
-  background-color: rgb(75 85 99);
-  padding: 0.25rem;
-  border-radius: 9999px;
+  border-bottom: 2px solid rgb(75 85 99);
+  padding: 4px 16px;
+  width: 100%;
 }
 
 .avg-user-skill-top-3 {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  font-size: 10px;
+  align-items: center;
+  font-size: 1rem;
   line-height: 2;
 }

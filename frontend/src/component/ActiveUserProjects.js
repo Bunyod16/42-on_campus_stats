@@ -39,7 +39,7 @@ function PieChart({ projects, color, radius }) {
   const pie = d3.pie().value((d) => d["user_num"]);
   const arc = d3.arc().innerRadius(0).outerRadius(radius);
   return (
-    <g transform={"translate(" + (radius + 10) + "," + (10 + radius) + ")"}>
+    <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
       {pie(projects).map((d, i) => {
         return (
           <g className="arc">
@@ -60,20 +60,27 @@ function PieChart({ projects, color, radius }) {
 }
 
 // Plot Chart Legends
-function ChartLegends({ projects, color }) {
+function ChartLegends({ projects, color, size }) {
+  console.log("projects", projects);
   return (
-    <g transform="translate(270,25)">
+    <g transform={`translate(${size},${(size / 16) * 2.5})`}>
       {projects.map(({ project, user_num }, i) => (
         <>
           <circle
             className="legend-dots"
             cx="0"
-            cy={i * 20}
+            cy={i * 24}
             r="7"
             fill={color(i)}
           ></circle>
-          <text className="legend-text" x="10" y={5 + i * 20}>
+          <text
+            className="text-sm"
+            x="16"
+            y={5 + i * 24}
+            style={{ fill: "#f3f4f6" }}
+          >
             {project}
+            {console.log(project)}
           </text>
         </>
       ))}
@@ -85,20 +92,21 @@ function ChartLegends({ projects, color }) {
 export default function ActiveUserProjects(props) {
   const [projects, setProjects] = useState([]);
   const color = d3.scaleOrdinal(d3.schemeTableau10);
-  const size = 300,
-    radius = size / 3;
   const ref = useRef();
   const dimension = useDimensions(ref);
+  const size = dimension.width - 200,
+    radius = size / Math.PI;
   // This is TO FETCH DATA FROM API
   useEffect(() => {
     const fetchProjects = async () => {
-      await axios.get("/on-campus/active-user-projects")
-            .then( res =>{
-              setProjects(cleaningData(res.data));
-            })
-            .catch( err => {
-              console.log(err);
-            })
+      await axios
+        .get("/on-campus/active-user-projects")
+        .then((res) => {
+          setProjects(cleaningData(res.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     fetchProjects();
     const interval = setInterval(fetchProjects, 1000 * 60 * 1);
@@ -108,9 +116,13 @@ export default function ActiveUserProjects(props) {
   return (
     <Card className={props.className} ref={ref}>
       <H1Style>Active User Projects</H1Style>
-      <svg className="pie-chart-svg" width={400} height={220}>
+      <svg
+        className="pie-chart-svg"
+        width={dimension.width}
+        height={(dimension.width / 16) * 9}
+      >
         <PieChart projects={projects} color={color} radius={radius} />
-        <ChartLegends projects={projects} color={color} />
+        <ChartLegends projects={projects} color={color} size={size} />
       </svg>
     </Card>
   );

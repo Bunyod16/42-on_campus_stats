@@ -39,18 +39,18 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      await axios.get("/most-recent-submission")
-            .then( res => {
-              let data = res.data;
-              if (JSON.stringify(data) !== "{}")
-                setData(data);
-              else
-                console.log("MostRecentSubmission get successful but data empty.");
-            })
-            .catch( err => {
-              console.log(err);
-              setData(undefined);
-            })
+      await axios
+        .get("/most-recent-submission")
+        .then((res) => {
+          let data = res.data;
+          if (JSON.stringify(data) !== "{}") setData(data);
+          else
+            console.log("MostRecentSubmission get successful but data empty.");
+        })
+        .catch((err) => {
+          console.log(err);
+          setData(undefined);
+        });
     };
     fetchData();
 
@@ -61,7 +61,7 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <Card className={className + " flex flex-col"}>
+    <Card className={className + " flex flex-col 2xl:max-h-[50vh]"}>
       <H1Style>Most recent submission</H1Style>
       {data && (
         <Container>
