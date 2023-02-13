@@ -37,7 +37,10 @@ function cleaningData(dataObj) {
 // Function PieChart Plotting
 function PieChart({ projects, color, radius }) {
   const pie = d3.pie().value((d) => d["user_num"]);
-  const arc = d3.arc().innerRadius(0).outerRadius(radius);
+  const arc = d3
+    .arc()
+    .innerRadius(0)
+    .outerRadius(radius * 0.9);
   return (
     <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
       {pie(projects).map((d, i) => {
@@ -60,22 +63,23 @@ function PieChart({ projects, color, radius }) {
 }
 
 // Plot Chart Legends
-function ChartLegends({ projects, color, size }) {
+function ChartLegends({ projects, color, size, height }) {
+  let legendMargin = (height - (height / 16) * 10) / 2;
   return (
-    <g transform={`translate(${size},${(size / 16) * 2.5})`}>
+    <g transform={`translate(${size * 0.9},${height / 16})`}>
       {projects.map(({ project, user_num }, i) => (
         <>
           <circle
             className="legend-dots"
             cx="0"
-            cy={i * (size / 16)}
+            cy={legendMargin + i * (height / 18)}
             r="7"
             fill={color(i)}
           ></circle>
           <text
             className="text-sm"
             x="16"
-            y={5 + i * (size / 16)}
+            y={legendMargin + 5 + i * (height / 18)}
             style={{ fill: "#f3f4f6" }}
           >
             {project}
@@ -121,7 +125,12 @@ export default function ActiveUserProjects(props) {
           height={(dimension.width / 16) * 9}
         >
           <PieChart projects={projects} color={color} radius={radius} />
-          <ChartLegends projects={projects} color={color} size={size} />
+          <ChartLegends
+            projects={projects}
+            color={color}
+            size={size}
+            height={(dimension.width / 16) * 9}
+          />
           <p>banana</p>
         </svg>
       ) : (
