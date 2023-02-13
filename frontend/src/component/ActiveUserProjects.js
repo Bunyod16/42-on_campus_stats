@@ -61,7 +61,6 @@ function PieChart({ projects, color, radius }) {
 
 // Plot Chart Legends
 function ChartLegends({ projects, color, size }) {
-  console.log("projects", projects);
   return (
     <g transform={`translate(${size},${(size / 16) * 2.5})`}>
       {projects.map(({ project, user_num }, i) => (
@@ -69,18 +68,17 @@ function ChartLegends({ projects, color, size }) {
           <circle
             className="legend-dots"
             cx="0"
-            cy={i * 24}
+            cy={i * (size / 16)}
             r="7"
             fill={color(i)}
           ></circle>
           <text
             className="text-sm"
             x="16"
-            y={5 + i * 24}
+            y={5 + i * (size / 16)}
             style={{ fill: "#f3f4f6" }}
           >
             {project}
-            {console.log(project)}
           </text>
         </>
       ))}
@@ -123,6 +121,7 @@ export default function ActiveUserProjects(props) {
       >
         <PieChart projects={projects} color={color} radius={radius} />
         <ChartLegends projects={projects} color={color} size={size} />
+        <p>banana</p>
       </svg>
     </Card>
   );
