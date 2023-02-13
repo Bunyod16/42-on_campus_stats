@@ -51,12 +51,12 @@ export default function CadetPiscineRatio(props) {
           <g>
             <rect
               className="cadet-rect"
-              width={barWidth["cadet"]}
+              width={barWidth["cadets"]}
               height="100%"
               rx="5"
             ></rect>
             <text
-              x={barWidth["cadet"] / 2 - 21}
+              x={barWidth["cadets"] / 2 - 21}
               y="70%"
               className="cadet-piscine-ratio-text"
             >
@@ -66,13 +66,13 @@ export default function CadetPiscineRatio(props) {
           <g>
             <rect
               className="piscine-rect"
-              width={barWidth["pisciner"]}
-              x={barWidth["cadet"] + 5}
+              width={barWidth["pisciners"]}
+              x={barWidth["cadets"] + 5}
               height="100%"
               rx="5"
             ></rect>
             <text
-              x={barWidth["cadet"] + 5 + barWidth["pisciner"] / 2 - 26}
+              x={barWidth["cadets"] + 5 + barWidth["pisciners"] / 2 - 26}
               y="70%"
               className="cadet-piscine-ratio-text"
             >
