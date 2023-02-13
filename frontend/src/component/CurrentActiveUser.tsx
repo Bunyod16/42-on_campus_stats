@@ -68,18 +68,18 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
   React.useEffect(() => {
     const fetchUsers = async () => {
-      await axios.get("/on-campus/active-users")
-      .then( res=>{
-        if (res.data.length !== 0)
-          setUsers(res.data)
-        else{
-          console.log("CurrentActiveUser get successful but data empty.")
-          setUsers(tmp);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      await axios
+        .get("/on-campus/active-users")
+        .then((res) => {
+          if (res.data.length !== 0) setUsers(res.data);
+          else {
+            console.log("CurrentActiveUser get successful but data empty.");
+            setUsers(tmp);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     };
     fetchUsers();
 
@@ -118,7 +118,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
   });
 
   return (
-    <Card className={className + " flex flex-col max-h-full"}>
+    <Card className={className + " flex flex-col max-h-[50vh]"}>
       <H1Style>Current Active Users ({users.length})</H1Style>
       <UserGalleryStyle ref={divRef} id="user-gallery">
         {userGallery}

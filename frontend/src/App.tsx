@@ -11,7 +11,7 @@ import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
 
 const StyledApp = tw.div`
-  text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[800px]
+  text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[800px] text-base
 `;
 
 const Header = tw.header`
@@ -23,7 +23,7 @@ const Header = tw.header`
 `;
 
 const FlexContainer = tw.div`
-  flex w-full gap-4 max-w-7xl content-center m-4 px-4 h-full
+  flex w-full gap-4 max-w-[2000px] content-center m-4 px-4 h-full
 `;
 
 const FlexList = tw.div`
@@ -39,12 +39,12 @@ function App() {
       <FlexContainer>
         <FlexList className="flex-[2]">
           <ActiveUserProjects className="" />
-          <CurrentActiveUser className="basis-3/5" />
+          <CurrentActiveUser className="flex-1" />
         </FlexList>
         <FlexList className="flex-[2]">
-          <AverageActiveUserSkill className="col-span-2 row-span-2" />
-          <TotalActiveUser7Days className="col-span-2 flex-1" />
-          <CadetPiscineRatio className="col-span-2" />
+          <AverageActiveUserSkill className="" />
+          <TotalActiveUser7Days className="flex-1" />
+          <CadetPiscineRatio className="h-full" />
         </FlexList>
         <FlexList className="">
           <AverageLevel className="" />

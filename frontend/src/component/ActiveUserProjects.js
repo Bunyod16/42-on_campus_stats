@@ -60,19 +60,24 @@ function PieChart({ projects, color, radius }) {
 }
 
 // Plot Chart Legends
-function ChartLegends({ projects, color }) {
+function ChartLegends({ projects, color, size }) {
   return (
-    <g transform="translate(270,25)">
+    <g transform={`translate(${(size / 3) * 2.5},25)`}>
       {projects.map(({ project, user_num }, i) => (
         <>
           <circle
             className="legend-dots"
             cx="0"
-            cy={i * 20}
+            cy={i * 24}
             r="7"
             fill={color(i)}
           ></circle>
-          <text className="legend-text" x="10" y={5 + i * 20}>
+          <text
+            className="text-sm"
+            x="16"
+            y={5 + i * 16}
+            style={{ fill: "#f3f4f6" }}
+          >
             {project}
           </text>
         </>
@@ -85,20 +90,21 @@ function ChartLegends({ projects, color }) {
 export default function ActiveUserProjects(props) {
   const [projects, setProjects] = useState([]);
   const color = d3.scaleOrdinal(d3.schemeTableau10);
-  const size = 300,
-    radius = size / 3;
   const ref = useRef();
   const dimension = useDimensions(ref);
+  const size = dimension.width - 150,
+    radius = size / 3;
   // This is TO FETCH DATA FROM API
   useEffect(() => {
     const fetchProjects = async () => {
-      await axios.get("/on-campus/active-user-projects")
-            .then( res =>{
-              setProjects(cleaningData(res.data));
-            })
-            .catch( err => {
-              console.log(err);
-            })
+      await axios
+        .get("/on-campus/active-user-projects")
+        .then((res) => {
+          setProjects(cleaningData(res.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     fetchProjects();
     const interval = setInterval(fetchProjects, 1000 * 60 * 1);
@@ -108,9 +114,13 @@ export default function ActiveUserProjects(props) {
   return (
     <Card className={props.className} ref={ref}>
       <H1Style>Active User Projects</H1Style>
-      <svg className="pie-chart-svg" width={400} height={220}>
+      <svg
+        className="pie-chart-svg"
+        width={dimension.width}
+        height={(dimension.width / 16) * 9}
+      >
         <PieChart projects={projects} color={color} radius={radius} />
-        <ChartLegends projects={projects} color={color} />
+        <ChartLegends projects={projects} color={color} size={size} />
       </svg>
     </Card>
   );

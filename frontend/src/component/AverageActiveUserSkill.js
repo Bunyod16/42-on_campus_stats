@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import { Card, H1Style } from "../styles";
 import "../styles/radar.css";
 import axios from "axios";
+import { useDimensions } from "../hooks/useDimension";
 // Radar Chart :
 // level : 4, width per level: 5
 let skills = [
@@ -95,7 +96,7 @@ function ChartCircle({ ticks, x, y, radialScale }) {
   );
 }
 // Draw Lines and plot Labels
-function LinesAndLabels({ radialScale }) {
+function LinesAndLabels({ radialScale, x, y }) {
   let attributes = [];
   for (let i = 0; i < skills.length; i++) {
     let objs = {};
@@ -128,15 +129,16 @@ function LinesAndLabels({ radialScale }) {
       {attributes.map(({ label, angle, line_cord, label_cord }) => (
         <>
           <line
-            x1={120}
-            y1={115}
+            x1={x}
+            y1={y}
             x2={line_cord.x}
             y2={line_cord.y}
             stroke="#C0D0E0"
             stroke-width={0.5}
           ></line>
           <text
-            className="radar-label"
+            className="text-[0.6rem]"
+            fill="#f3f4f6"
             x={label_cord.x}
             y={label_cord.y}
             fontSize={5}
@@ -177,47 +179,60 @@ function DrawSkills({ skills, radialScale }) {
 }
 
 export default function AverageActiveUserSkill(props) {
-  const size = 330,
-    x = 120,
-    y = 115,
-    radius = size / 4,
+  const ref = useRef();
+  const dimension = useDimensions(ref);
+  const size = dimension.width - 100,
+    x = size / 2,
+    y = 115, // todo  this one need to adjust
+    radius = size / 3.5,
     radialScale = d3.scaleLinear().domain([0, 20]).range([0, radius]),
     ticks = [5, 10, 15, 20];
   const [skills, setSkills] = useState({});
   const [topSkills, setTopSkills] = useState(getTopSkills(defaultData));
   useEffect(() => {
     const fetchSkills = async () => {
-      await axios.get("/on-campus/active-user-skills")
-            .then( res => {
-              let data = res.data;
-              let finalObj = { ...defaultData };
-              for (const key in data) finalObj[key] = data[key];
-              setSkills(finalObj);
-              setTopSkills(getTopSkills(finalObj));
-            })
-            .catch( err => {
-              console.log(err);
-            })
+      await axios
+        .get("/on-campus/active-user-skills")
+        .then((res) => {
+          let data = res.data;
+          let finalObj = { ...defaultData };
+          for (const key in data) finalObj[key] = data[key];
+          setSkills(finalObj);
+          setTopSkills(getTopSkills(finalObj));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     fetchSkills();
     const interval = setInterval(fetchSkills, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
   return (
-    <Card className={props.className}>
+    <Card className={props.className} ref={ref}>
       <H1Style>Average Active User Skills</H1Style>
       <div className="avg-user-skill">
-        <svg className="radar-svg" width="270px" height="230px">
+        <svg
+          className="radar-svg"
+          width={dimension.width - 100}
+          height={((dimension.width - 50) / 16) * 9}
+        >
           <ChartCircle ticks={ticks} x={x} y={y} radialScale={radialScale} />
-          <LinesAndLabels radialScale={radialScale} />
+          <LinesAndLabels radialScale={radialScale} x={x} y={y} />
           <DrawSkills skills={skills} radialScale={radialScale} />
         </svg>
         <div className="avg-user-skill-top-3">
           <h3>Top 3</h3>
-          <ul>
-            <li key={1}>{topSkills[0][0]}</li>
-            <li key={2}>{topSkills[1][0]}</li>
-            <li key={3}>{topSkills[2][0]}</li>
+          <ul className="text-sm flex gap-4">
+            <li className="w-32" key={1}>
+              {topSkills[0][0]}
+            </li>
+            <li className="w-32" key={2}>
+              {topSkills[1][0]}
+            </li>
+            <li className="w-32" key={3}>
+              {topSkills[2][0]}
+            </li>
           </ul>
         </div>
       </div>
