@@ -23,7 +23,7 @@ const Header = tw.header`
 `;
 
 const FlexContainer = tw.div`
-  flex w-full gap-4 max-w-[2000px] content-center m-4 px-4 h-full
+  flex w-full gap-4 xl:max-w-[80%] content-center m-4 px-4 h-full
 `;
 
 const FlexList = tw.div`
