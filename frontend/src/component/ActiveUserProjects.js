@@ -37,7 +37,7 @@ function cleaningData(dataObj) {
 // Function PieChart Plotting
 function PieChart({ projects, color, radius }) {
   const pie = d3.pie().value((d) => d["user_num"]);
-  const arc = d3.arc().innerRadius(0).outerRadius(radius);
+  const arc = d3.arc().innerRadius(0).outerRadius(radius * .9);
   return (
     <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
       {pie(projects).map((d, i) => {
@@ -76,7 +76,7 @@ function ChartLegends({ projects, color, size, height }) {
           <text
             className="text-sm"
             x="16"
-            y={legendMargin + i * (height / 18)}
+            y={legendMargin + 5 + i * (height / 18)}
             style={{ fill: "#f3f4f6" }}
           >
             {project}
@@ -116,7 +116,7 @@ export default function ActiveUserProjects(props) {
     <Card className={props.className} ref={ref}>
       <H1Style>Active User Projects</H1Style>
       <svg
-        className="pie-chart-svg border-4	border-white"
+        className="pie-chart-svg"
         width={dimension.width}
         height={(dimension.width / 16) * 9}
       >
