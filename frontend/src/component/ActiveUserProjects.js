@@ -42,7 +42,7 @@ function PieChart({ projects, color, radius }) {
     <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
       {pie(projects).map((d, i) => {
         return (
-          <g className="arc">
+          <g className="arc" key={i}>
             <path fill={color(i)} d={arc(d)}></path>
             <text
               className="chart-text"
@@ -65,7 +65,7 @@ function ChartLegends({ projects, color, size, height }) {
   return (
     <g transform={`translate(${size * .9},${(height / 16) })`}>
       {projects.map(({ project, user_num }, i) => (
-        <>
+        <g key={i}>
           <circle
             className="legend-dots"
             cx="0"
@@ -81,7 +81,7 @@ function ChartLegends({ projects, color, size, height }) {
           >
             {project}
           </text>
-        </>
+        </g>
       ))}
     </g>
   );

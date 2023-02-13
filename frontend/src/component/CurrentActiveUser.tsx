@@ -108,9 +108,9 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
     return () => clearInterval(intervalId);
   }, [users]);
 
-  const userGallery = users.map((singleUser) => {
+  const userGallery = users.map((singleUser, i) => {
     return (
-      <UserStyle>
+      <UserStyle key={i}>
         <img src={singleUser.image} width={32} height={32} alt="" />
         <p>{singleUser.login}</p>
       </UserStyle>

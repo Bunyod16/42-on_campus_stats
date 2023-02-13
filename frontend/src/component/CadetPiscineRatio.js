@@ -4,47 +4,81 @@ import "../styles/ratio.css";
 import { useDimensions } from "../hooks/useDimension";
 import axios from "axios";
 // Ratio Bar for Cadets vs Pisciners
-export default function CadetPiscineRatio(props) {
-  const [barWidth, setBarWidth] = useState({cadet:0,pisciner:0});
-  const cardRef = useRef();
-  const dimension = useDimensions(cardRef);
 
-  useEffect( () =>{
-    let fetchRatio = async () =>{
-      await axios.get("/on-campus/cadet-pisciner-ratio")
-            .then( res => {
-              let data = res.data
-              let parseData = {cadets : parseInt(data["cadets"]), pisciners: parseInt(data["pisciners"])};
-              let total = parseInt(parseData["cadets"]) + parseInt(parseData["pisciners"]);
-              let widthCadet = (parseData["cadets"] / total) * (dimension.width * .8);
-              let widthPiscine = (parseData["pisciners"] / total) * (dimension.width * .8);
-              setBarWidth({cadet: widthCadet, pisciner: widthPiscine});
-            })
-            .catch ( err => {
-              // set default width to 50/50 if api request fail
-              let widthCadet = (50 / 100) * (dimension.width * .8);
-              let widthPiscine = (50 / 100) * (dimension.width * .8);
-              setBarWidth({cadet: widthCadet, pisciner: widthPiscine});
-              console.log(err);
-            })
-    }
+function getRatio(cadets, pisciners, width) {
+  let total = cadets + pisciners;
+  let widthCadets = (cadets / total) * (width * 0.8);
+  let widthPisciners = (pisciners / total) * (width * 0.8);
+  return { cadets: widthCadets, pisciners: widthPisciners };
+}
+export default function CadetPiscineRatio(props) {
+  const cardRef = useRef(null);
+  const dimension = useDimensions(cardRef);
+  const [students, setStudents] = useState({ cadets: 50, pisciners: 50 });
+  useEffect(() => {
+    const fetchRatio = async () => {
+      await axios
+        .get("/on-campus/cadet-pisciner-ratio")
+        .then((res) => {
+          let data = res.data;
+          setStudents({
+            cadets: parseInt(data["cadets"]),
+            pisciners: parseInt(data["pisciners"]),
+          });
+        })
+        .catch((err) => {
+          console.log("here");
+          console.log(err);
+        });
+    };
     fetchRatio();
     const interval = setInterval(fetchRatio, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
+  let barWidth = getRatio(students.cadets, students.pisciners, dimension.width);
   return (
     <Card ref={cardRef}>
-        <H1Style><span className="h1-cadets">Cadets</span> to <span className="h1-piscine">Piscine</span> ratio</H1Style>
-        <svg width={(dimension.width * .8) + 5} height="20px" className="cadet-piscine-ratio-svg">
-            <g>
-                <rect className="cadet-rect" width={barWidth["cadet"]} height="20px" rx="5"></rect>
-                <text x={(barWidth["cadet"] / 2) - 21} y="15" className="cadet-piscine-ratio-text">Cadet</text>
-            </g>
-            <g>
-                <rect className="piscine-rect"  width={barWidth["pisciner"]} x={barWidth["cadet"] + 5} height="20px" rx="5"  ></rect>
-                <text x={barWidth["cadet"] + 5 + (barWidth["pisciner"] / 2) - 26} y="15" className="cadet-piscine-ratio-text">Piscine</text>
-            </g>
-        </svg>
+      <H1Style>
+        <span className="h1-cadets">Cadets</span> to{" "}
+        <span className="h1-piscine">Piscine</span> ratio
+      </H1Style>
+      <svg
+        width={dimension.width * 0.8 + 5}
+        height="1.25rem"
+        className="cadet-piscine-ratio-svg"
+      >
+        <g>
+          <rect
+            className="cadet-rect"
+            width={barWidth["cadets"]}
+            height="100%"
+            rx="5"
+          ></rect>
+          <text
+            x={barWidth["cadets"] / 2 - 21}
+            y="70%"
+            className="cadet-piscine-ratio-text"
+          >
+            Cadet
+          </text>
+        </g>
+        <g>
+          <rect
+            className="piscine-rect"
+            width={barWidth["pisciners"]}
+            x={barWidth["cadets"] + 5}
+            height="100%"
+            rx="5"
+          ></rect>
+          <text
+            x={barWidth["cadets"] + 5 + barWidth["pisciners"] / 2 - 26}
+            y="70%"
+            className="cadet-piscine-ratio-text"
+          >
+            Piscine
+          </text>
+        </g>
+      </svg>
     </Card>
-  )
+  );
 }

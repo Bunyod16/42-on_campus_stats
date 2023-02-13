@@ -81,14 +81,15 @@ function getPathCords(data_point, radialScale, x, y) {
 function ChartCircle({ ticks, x, y, radialScale }) {
   return (
     <>
-      {ticks.map((t) => (
+      {ticks.map((t, i) => (
         <circle
+          key={i}
           className="spider-circle"
           cx={x}
           cy={y}
           fill="none"
           stroke="#C0D0E0"
-          stroke-width="0.5"
+          strokeWidth="0.5"
           r={radialScale(t)}
         ></circle>
       ))}
@@ -127,15 +128,15 @@ function LinesAndLabels({ radialScale, x, y }) {
   }
   return (
     <>
-      {attributes.map(({ label, angle, line_cord, label_cord }) => (
-        <>
+      {attributes.map(({ label, angle, line_cord, label_cord }, i) => (
+        <g key={i}>
           <line
             x1={x}
             y1={y}
             x2={line_cord.x}
             y2={line_cord.y}
             stroke="#C0D0E0"
-            stroke-width={0.5}
+            strokeWidth={0.5}
           ></line>
           <text
             className="text-[0.6rem]"
@@ -147,21 +148,21 @@ function LinesAndLabels({ radialScale, x, y }) {
             {label.map((x, i) => {
               if (i > 0)
                 return (
-                  <tspan dy={12} x={label_cord.x}>
+                  <tspan dy={12} x={label_cord.x} key={i}>
                     {x}
                   </tspan>
                 );
-              else return <tspan>{x}</tspan>;
+              else return <tspan key={i}>{x}</tspan>;
             })}
           </text>
-        </>
+        </g>
       ))}
     </>
   );
 }
 
 // Draw Butterfly on Radar
-function DrawSkills({ skills, radialScale, x, y}) {
+function DrawSkills({ skills, radialScale, x, y }) {
   let color = "#00BABC";
   let coordinates = getPathCords(skills, radialScale, x, y);
   let line = d3
@@ -172,7 +173,7 @@ function DrawSkills({ skills, radialScale, x, y}) {
     <path
       d={line(coordinates) + " Z"}
       stroke={color}
-      stroke-width={3}
+      strokeWidth={3}
       fill={color}
       opacity={0.5}
     ></path>
@@ -184,7 +185,7 @@ export default function AverageActiveUserSkill(props) {
   const dimension = useDimensions(ref);
   const size = dimension.width - 100,
     x = size / 2,
-    y = (((dimension.width - 50) / 16) * 9 )/ 2, // todo  this one need to adjust
+    y = (((dimension.width - 50) / 16) * 9) / 2, // todo  this one need to adjust
     radius = size / 4,
     radialScale = d3.scaleLinear().domain([0, 20]).range([0, radius]),
     ticks = [5, 10, 15, 20];
