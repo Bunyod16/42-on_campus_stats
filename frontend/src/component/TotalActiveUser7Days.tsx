@@ -91,7 +91,7 @@ const BarChart = ({ data, dimension }: IBarChartProps) => {
   const margin = { top: 16, right: 16, bottom: 24, left: 32 };
 
   const width = dimension.width - margin.left - margin.right;
-  const height = (dimension.width / 3) * 2 - margin.top - margin.bottom;
+  const height = dimension.width / 3 - margin.top - margin.bottom;
 
   const scaleX = scaleBand()
     .domain(data.map(({ label }) => label))
@@ -154,10 +154,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
   return (
     // the container for the svg
-    <Card
-      className={className + " flex flex-col 2xl:max-h-[20vh]"}
-      ref={containerRef}
-    >
+    <Card className={className + " flex flex-col"} ref={containerRef}>
       <H1Style>Total active users last 7 days</H1Style>
       {data ? (
         // <div ref={containerRef} className="w-full">
@@ -168,7 +165,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
           className="bg-gray-500 rounded animate-pulse"
           style={{
             width: `${dimension.width}px`,
-            height: `${(dimension.width / 3) * 2}px`,
+            height: `${dimension.width / 3}px`,
           }}
         />
       )}
