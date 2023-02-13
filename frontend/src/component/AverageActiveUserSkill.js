@@ -118,6 +118,7 @@ function LinesAndLabels({ radialScale, x, y }) {
     }
     if (i === 15) label_cord.y += 5;
     if (i === 13) label_cord.y -= 5;
+    if (i === 0) label_cord.y += 8;
     objs["label"] = label;
     objs["angle"] = angle;
     objs["line_cord"] = line_cord;
