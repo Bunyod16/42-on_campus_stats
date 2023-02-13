@@ -11,6 +11,7 @@ function getRatio(cadets, pisciners, width) {
   let widthPisciners = (pisciners / total) * (width * 0.8);
   return { cadets: widthCadets, pisciners: widthPisciners };
 }
+
 export default function CadetPiscineRatio(props) {
   const cardRef = useRef(null);
   const dimension = useDimensions(cardRef);

@@ -185,7 +185,7 @@ export default function AverageActiveUserSkill(props) {
   const dimension = useDimensions(ref);
   const size = dimension.width - 100,
     x = size / 2,
-    y = (((dimension.width - 50) / 16) * 9) / 2, // todo  this one need to adjust
+    y = (((dimension.width - 50) / 16) * 9) / 2,
     radius = size / 4,
     radialScale = d3.scaleLinear().domain([0, 20]).range([0, radius]),
     ticks = [5, 10, 15, 20];
@@ -197,6 +197,10 @@ export default function AverageActiveUserSkill(props) {
         .get("/on-campus/active-user-skills")
         .then((res) => {
           let data = res.data;
+          if ("Algorithms & AI" in data) {
+            data["Algos & AI"] = data["Algorithms & AI"];
+            delete data["Algorithms & AI"];
+          }
           let finalObj = { ...defaultData };
           for (const key in data) finalObj[key] = data[key];
           setSkills(finalObj);
