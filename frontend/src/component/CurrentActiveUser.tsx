@@ -117,13 +117,11 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
           height={32}
           alt=""
           className={
-            "border-2 " +
+            "border-[3px] " +
             (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
           }
         />
-        <p
-          className={singleUser.is_cadet ? "text-[#009596]" : "text-[#f1b245]"}
-        >
+        <p>
           {singleUser.login}
         </p>
       </UserStyle>
