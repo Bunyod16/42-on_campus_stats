@@ -255,7 +255,7 @@ class Token():
                                 f"https://api.intra.42.fr/v2/users?filter[login]={user['login']}&access_token={self.get_token()}"
                             ).json()[0]['image']['link']
             if not _temp['image']:
-                _temp['image'] = "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs2/143743992/original/8e2aa89710331eb6413a3383f63e49a987b4d575/make-you-into-a-lego-star-wars-character-profile-pic.png"
+                _temp['image'] = "https://i.imgur.com/F0zhHes.jpg"
             users.append(_temp)
         
         project = most_recent_user['project']['name']
@@ -363,17 +363,18 @@ class Token():
         dates = {}
 
         _now = datetime.now()
-        _tmr = datetime.now() + timedelta(days=1)
-        while (_now.day != (_now - timedelta(days=8)).day):
+        _tmr = _now + timedelta(days=1)
+        _start = _now
+        while (_now.day != (_start - timedelta(days=8)).day):
                 day_xp = []
 
                 for page in range(0, 10000):
-                    url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/experiences?per_page=100&filter[cursus_id]=21&page={page}&range[created_at]={_tmr.year}-{_tmr.month}-{_tmr.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&access_token={self.get_token()}'
+                    url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/experiences?per_page=100&filter[cursus_id]=21&page={page}&range[created_at]={_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z,{_tmr.year}-{_tmr.month}-{_tmr.day}T00%3A00%3A00.000Z&access_token={self.get_token()}'
                     response = requests.get(url)
+                    print(response.json())
                     day_xp += response.json()
                     if (len(response.json()) < 100):
                         break
-                print(day_xp)
                 dates[_now.isoformat()] = sum(int(user['experience']) for user in day_xp)
 
                 _tmr = _now
