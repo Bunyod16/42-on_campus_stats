@@ -74,7 +74,7 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
           if (res.data.length !== 0) setUsers(res.data);
           else {
             console.log("CurrentActiveUser get successful but data empty.");
-            setUsers(tmp);
+            // setUsers(tmp);
           }
         })
         .catch((error) => {
@@ -104,15 +104,28 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
         // div.scrollTop = 0;
       } else div.scrollTo(0, scrollInt);
     }
-    const intervalId = setInterval(updateScroll, 100);
+    const intervalId = setInterval(updateScroll, 200);
     return () => clearInterval(intervalId);
   }, [users]);
 
   const userGallery = users?.map((singleUser, i) => {
     return (
       <UserStyle key={i}>
-        <img src={singleUser.image} width={32} height={32} alt="" />
-        <p>{singleUser.login}</p>
+        <img
+          src={singleUser.image}
+          width={32}
+          height={32}
+          alt=""
+          className={
+            "border-2 " +
+            (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
+          }
+        />
+        <p
+          className={singleUser.is_cadet ? "text-[#009596]" : "text-[#f1b245]"}
+        >
+          {singleUser.login}
+        </p>
       </UserStyle>
     );
   });
