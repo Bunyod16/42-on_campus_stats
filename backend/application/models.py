@@ -310,18 +310,13 @@ class Token():
         response = None
         week_sessions = []
         _now = datetime.now() + timedelta(days=1)
-        _week_ago = _now - timedelta(days=6)
+        _week_ago = _now - timedelta(days=7)
         for page in range(0, 1000):
                 url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?per_page=100&page={page}&range[begin_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&access_token={self.get_token()}'
                 response = requests.get(url)
                 
                 for session in response.json():
                     week_sessions.append(session)
-                    # session_start = datetime.strptime(session['begin_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-                    # if (session_start < _week_ago):
-                    #     break
-                # if (session_start < _week_ago):
-                #         break
                 if (len(response.json()) < 100):
                     break
                 
