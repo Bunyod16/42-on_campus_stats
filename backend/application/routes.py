@@ -56,5 +56,5 @@ def daily_total_active_users():
     return (jsonify(token.get_daily_active_users()))
 
 @app.route('/api/on-campus/daily-cadet-xp', methods=['GET'])
-def daily_total_active_users():
+def daily_cadet_xp():
     return (jsonify(token.get_daily_cadet_xp()))
