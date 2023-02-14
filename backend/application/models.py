@@ -107,8 +107,8 @@ class Token():
         self._token_expiration = datetime.now()
         
 
-        self.daily_cadet_xp = self.load_daily_cadet_xp()
-        self.daily_cadet_xp_timeout = datetime.now() + timedelta(minutes=30)
+        # self.daily_cadet_xp = self.load_daily_cadet_xp()
+        # self.daily_cadet_xp_timeout = datetime.now() + timedelta(minutes=30)
 
         self.week_active_users = {}
         self.active_users = None
