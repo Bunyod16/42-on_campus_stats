@@ -317,11 +317,6 @@ class Token():
                 
                 for session in response.json():
                     week_sessions.append(session)
-                    # session_start = datetime.strptime(session['begin_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-                    # if (session_start < _week_ago):
-                    #     break
-                # if (session_start < _week_ago):
-                #         break
                 if (len(response.json()) < 100):
                     break
                 
