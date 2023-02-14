@@ -148,7 +148,7 @@ function LinesAndLabels({ radialScale, x, y }) {
             {label.map((x, i) => {
               if (i > 0)
                 return (
-                  <tspan dy={12} x={label_cord.x} key={i}>
+                  <tspan dy={16} x={label_cord.x} key={i}>
                     {x}
                   </tspan>
                 );

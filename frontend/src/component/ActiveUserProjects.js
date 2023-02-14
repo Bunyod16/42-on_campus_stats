@@ -77,7 +77,7 @@ function ChartLegends({ projects, color, size, height }) {
             fill={color(i)}
           ></circle>
           <text
-            className="text-sm"
+            className="text-base"
             x="16"
             y={legendMargin + 5 + i * (height / 18)}
             style={{ fill: "#f3f4f6" }}
