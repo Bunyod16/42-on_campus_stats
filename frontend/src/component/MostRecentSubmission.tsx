@@ -28,6 +28,7 @@ interface User {
 interface RecentSubmission {
   project: string;
   score: number;
+  time: string;
   skills: string[];
   users: User[];
 }
@@ -74,6 +75,8 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
           />
           <p className="text-lg">{data.users[0]?.login}</p>
           <p className="text-lg">{data?.project}</p>
+          <p className="text-lg">Final mark: {data?.score}</p>
+          <p className="text-lg">{data?.time}</p>
         </Container>
       ) : (
         <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
