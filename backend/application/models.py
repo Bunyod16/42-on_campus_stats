@@ -109,7 +109,6 @@ class Token():
 
         # self.daily_cadet_xp = self.load_daily_cadet_xp()
         # self.daily_cadet_xp_timeout = datetime.now() + timedelta(minutes=30)
-
         self.week_active_users = {}
         self.active_users = None
         self.active_user_info = self.get_active_user_info()
@@ -230,25 +229,23 @@ class Token():
             dict: {"users":users, "skills":skills, "project":project, "score":score}
         """
 
-        most_recent_user = None
-
         _now = datetime.now() + timedelta(days=7) #just make it into the future to get everything
-        _week_ago = datetime.now() - timedelta(days=7)
-        url = f"https://api.intra.42.fr/v2/projects_users?filter[campus]={self.campus_id}&filter[marked]=true&range[marked_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&per_page=100&page=0&access_token={self.get_token()}"
+        _week_ago = datetime.now() - timedelta(days=1)
+        logging.debug(f"Querry for most recent submission, with time between {_now}, {_week_ago}")
+        url = f"https://api.intra.42.fr/v2/projects_users?range[final_mark]=50,200&filter[campus]={self.campus_id}&filter[marked]=true&range[marked_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&per_page=100&page=0&access_token={self.get_token()}"
         response = requests.get(url)
+
+        def convert_time(date_string):
+            return datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+        newlist = sorted(response.json(), key=lambda d: convert_time(d['updated_at'])) 
+
         if (not response.ok):
             logging.error("Intra returned not ok for most_recent")
             return {}
 
-        for submission in response.json():
-            submission_time = datetime.strptime(submission['marked_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-
-            if (not most_recent_user or submission_time > most_recent_user['datetime']):
-                    most_recent_user = submission
-                    most_recent_user['datetime'] = submission_time
-
         users = []
-        for user in most_recent_user['teams'][-1]['users']:
+        for user in newlist[-1]['teams'][-1]['users']:
             _temp = {}
             _temp['login'] = user['login']
             _temp['image'] = requests.get(
@@ -258,9 +255,8 @@ class Token():
                 _temp['image'] = "https://i.imgur.com/F0zhHes.jpg"
             users.append(_temp)
         
-        project = most_recent_user['project']['name']
-        score = most_recent_user['final_mark']
-
+        project = newlist[-1]['project']['name']
+        score = newlist[-1]['final_mark']
         # skills = []
         # skill_ids = requests.get(f"https://api.intra.42.fr/v2/project_sessions/{most_recent_user['teams'][-1]['project_session_id']}/project_sessions_skills?access_token={self.get_token()}").json()
         # for skill_id in skill_ids:
@@ -269,7 +265,12 @@ class Token():
 
         
         # return ({"users":users, "skills":skills, "project":project, "score":score})
-        return ({"users":users, "project":project, "score":score})
+        seconds_since_submission = (datetime.now() - datetime.strptime(newlist[-1]['updated_at'], "%Y-%m-%dT%H:%M:%S.%fZ")).total_seconds()
+        if seconds_since_submission <= 3600:
+            time_string = f"{int(seconds_since_submission / 60)} minutes ago"
+        else:
+            time_string = f"{int(seconds_since_submission / 60 / 60)} hours ago"
+        return ({"users":users, "project":project, "score":score, "time":time_string})
     
 
     def cadet_pisciner_ratio(self) -> dict:

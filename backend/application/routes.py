@@ -32,12 +32,12 @@ def feature():
     return (jsonify(token.average_user_level()))
 
 @app.route('/api/on-campus/average-session-hours', methods=['GET'])
-@cache.cached(timeout=160)
+@cache.cached(timeout=240)
 def average_session_hours():
     return (jsonify(token.average_session_hours()))
 
 @app.route('/api/most-recent-submission', methods=['GET'])
-@cache.cached(timeout=180)
+@cache.cached(timeout=300)
 def most_recent_submission():
     return (jsonify(token.most_recent_submission()))
 
