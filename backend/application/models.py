@@ -103,12 +103,13 @@ class Token():
         self.secret = secret
         self.campus_id = campus_id
 
+        
         self._token = None
         self._token_expiration = datetime.now()
         
-
-        # self.daily_cadet_xp = self.load_daily_cadet_xp()
-        # self.daily_cadet_xp_timeout = datetime.now() + timedelta(minutes=30)
+        self.daily_cadet_xp = self.load_daily_cadet_xp()
+        self.daily_cadet_xp_timeout = datetime.now() + timedelta(minutes=30)
+        
         self.week_active_users = {}
         self.active_users = None
         self.active_user_info = self.get_active_user_info()
@@ -361,37 +362,31 @@ class Token():
     def load_daily_cadet_xp(self):
         logging.debug("Loading daily weekly cadet xp")
         response = None
-        week_xp = []
         dates = {}
 
         _now = datetime.now()
-        _tmr = _now + timedelta(days=1)
         _start = _now
-        while (_now.day != (_start - timedelta(days=8)).day):
+        while (_now.day != (_start - timedelta(days=7)).day):
+                
                 day_xp = []
-
                 for page in range(0, 10000):
-                    url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/experiences?per_page=100&filter[cursus_id]=21&page={page}&range[created_at]={_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z,{_tmr.year}-{_tmr.month}-{_tmr.day}T00%3A00%3A00.000Z&access_token={self.get_token()}'
+                    url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/experiences?per_page=100&filter[cursus_id]=21&page={page}&range[created_at]={_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T23%3A59%3A00.000Z&access_token={self.get_token()}'
                     response = requests.get(url)
-                    print(response.json())
                     day_xp += response.json()
                     if (len(response.json()) < 100):
                         break
                 dates[_now.isoformat()] = sum(int(user['experience']) for user in day_xp)
-
-                _tmr = _now
                 _now = _now - timedelta(days=1)
-                week_xp.append(day_xp)
 
         with open("daily_cadet_xp.json", "w") as _f:
-            _f.write(json.dumps(week_xp))
-        return week_xp
+            _f.write(json.dumps(dates))
+        return dates
 
     def get_daily_cadet_xp(self):
         with open("daily_cadet_xp.json", "r") as _f:
             self.daily_cadet_xp = json.loads(_f.read())
-        if (datetime.now() + timedelta(minutes=30) > self.daily_cadet_xp_timeout):
-            thread = threading.Thread(target=self.daily_cadet_xp)
+        if (datetime.now() > self.daily_cadet_xp_timeout):
+            thread = threading.Thread(target=self.load_daily_cadet_xp)
             thread.start()
             self.daily_cadet_xp_timeout = datetime.now() + timedelta(minutes=30)
         return (self.daily_cadet_xp)
