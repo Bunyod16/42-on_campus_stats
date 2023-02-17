@@ -366,7 +366,7 @@ class Token():
 
         _now = datetime.now()
         days_since_monday = date.today().weekday() 
-        for x in range(8):
+        for x in range(7):
                 
                 day_xp = []
                 for page in range(0, 10000):
