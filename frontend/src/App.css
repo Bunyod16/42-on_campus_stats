@@ -1,0 +1,12 @@
+@keyframes fade-in-out {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  .fade-in-out {
+    animation-name: fade-in-out;
+    animation-duration: 21s;
+    animation-fill-mode: forwards;
+  }
