@@ -1,5 +1,5 @@
-import React from "react";
-// import './App.css';
+import React, { useState, useEffect } from "react";
+import './App.css';
 import tw from "twin.macro";
 import CurrentActiveUser from "./component/CurrentActiveUser";
 import AverageLevel from "./component/AverageLevel";
@@ -9,6 +9,7 @@ import TotalActiveUser7Days from "./component/TotalActiveUser7Days";
 import ActiveUserProjects from "./component/ActiveUserProjects";
 import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
+import WeeklyCadetXp from "./component/WeeklyCadetXp";
 
 const StyledApp = tw.div`
   text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[1200px] text-base
@@ -31,7 +32,19 @@ const FlexList = tw.div`
 `;
 
 function App() {
+  const [currentComponent, setCurrentComponent] = useState("WeeklyCadetXp");
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentComponent(currentComponent =>
+        currentComponent === "WeeklyCadetXp" ? "TotalActiveUser7Days" : "WeeklyCadetXp"
+      );
+    }, 20000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
+    
     <StyledApp>
       <Header>
         <h1>Live Stat: 42 Kuala Lumpur</h1>
@@ -43,7 +56,11 @@ function App() {
         </FlexList>
         <FlexList className="flex-[2]">
           <AverageActiveUserSkill className="" />
-          <TotalActiveUser7Days className="" />
+          {currentComponent === "WeeklyCadetXp" ? (
+            <WeeklyCadetXp className="component-wrapper fade-in-out"/>
+          ) : (
+            <TotalActiveUser7Days className="component-wrapper fade-in-out" />
+          )}
           <CadetPiscineRatio className="h-full" />
         </FlexList>
         <FlexList className="flex-1">
