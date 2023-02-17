@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import requests
 from dotenv import load_dotenv
 import logging
@@ -107,8 +107,8 @@ class Token():
         self._token = None
         self._token_expiration = datetime.now()
         
-        self.daily_cadet_xp = self.load_daily_cadet_xp()
-        self.daily_cadet_xp_timeout = datetime.now() + timedelta(minutes=30)
+        self.weekly_cadet_xp = self.load_weekly_cadet_xp()
+        self.weekly_cadet_xp_timeout = datetime.now() + timedelta(hours=6)
         
         self.week_active_users = {}
         self.active_users = None
@@ -359,35 +359,38 @@ class Token():
             self.daily_users_timeout = datetime.now() + timedelta(minutes=30)
         return (self.daily_active_users)
     
-    def load_daily_cadet_xp(self):
+    def load_weekly_cadet_xp(self):
         logging.debug("Loading daily weekly cadet xp")
         response = None
         dates = {}
 
         _now = datetime.now()
-        _start = _now
-        while (_now.day != (_start - timedelta(days=7)).day):
+        days_since_monday = date.today().weekday() 
+        for x in range(8):
                 
                 day_xp = []
                 for page in range(0, 10000):
-                    url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/experiences?per_page=100&filter[cursus_id]=21&page={page}&range[created_at]={_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T23%3A59%3A00.000Z&access_token={self.get_token()}'
+                    print(f"NOW {_now}")
+                    _week_start = _now - timedelta(days=days_since_monday)
+                    url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/experiences?per_page=100&filter[cursus_id]=21&page={page}&range[created_at]={_week_start.year}-{_week_start.month}-{_week_start.day}T23%3A59%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T23%3A59%3A00.000Z&access_token={self.get_token()}'
                     response = requests.get(url)
                     day_xp += response.json()
                     if (len(response.json()) < 100):
                         break
                 dates[_now.isoformat()] = sum(int(user['experience']) for user in day_xp)
-                _now = _now - timedelta(days=1)
+                _now = _now - timedelta(days=days_since_monday)
+                days_since_monday = 7
 
-        with open("daily_cadet_xp.json", "w") as _f:
+        with open("weekly_cadet_xp.json", "w") as _f:
             _f.write(json.dumps(dates))
         return dates
 
-    def get_daily_cadet_xp(self):
-        with open("daily_cadet_xp.json", "r") as _f:
-            self.daily_cadet_xp = json.loads(_f.read())
-        if (datetime.now() > self.daily_cadet_xp_timeout):
-            thread = threading.Thread(target=self.load_daily_cadet_xp)
+    def get_weekly_cadet_xp(self):
+        with open("weekly_cadet_xp.json", "r") as _f:
+            self.weekly_cadet_xp = json.loads(_f.read())
+        if (datetime.now() > self.weekly_cadet_xp_timeout):
+            thread = threading.Thread(target=self.load_weekly_cadet_xp)
             thread.start()
-            self.daily_cadet_xp_timeout = datetime.now() + timedelta(minutes=30)
-        return (self.daily_cadet_xp)
+            self.weekly_cadet_xp_timeout = datetime.now() + timedelta(hours=6)
+        return (self.weekly_cadet_xp)
         

@@ -55,6 +55,6 @@ def active_user_skills():
 def daily_total_active_users():
     return (jsonify(token.get_daily_active_users()))
 
-@app.route('/api/on-campus/daily-cadet-xp', methods=['GET'])
-def daily_cadet_xp():
-    return (jsonify(token.get_daily_cadet_xp()))
+@app.route('/api/on-campus/weekly-cadet-xp', methods=['GET'])
+def weekly_cadet_xp():
+    return (jsonify(token.get_weekly_cadet_xp()))
