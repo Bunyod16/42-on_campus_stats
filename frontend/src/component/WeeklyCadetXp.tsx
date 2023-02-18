@@ -67,7 +67,7 @@ function AxisLeft({ scale }: AxisLeftProps) {
     }
   }, [scale]);
 
-  return <g ref={ref} style={{ fontSize: "0.7rem" }} />;
+  return <g ref={ref} style={{ fontSize: "0.5rem" }} />;
 }
 
 function Bars({ data, height, scaleX, scaleY }: BarsProps) {

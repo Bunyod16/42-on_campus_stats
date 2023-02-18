@@ -32,6 +32,7 @@ const FlexList = tw.div`
 `;
 
 function App() {
+  const transitionTime = 10000;
   const [currentComponent, setCurrentComponent] = useState("WeeklyCadetXp");
 
   useEffect(() => {
@@ -39,10 +40,31 @@ function App() {
       setCurrentComponent(currentComponent =>
         currentComponent === "WeeklyCadetXp" ? "TotalActiveUser7Days" : "WeeklyCadetXp"
       );
-    }, 20000);
+    }, transitionTime);
     return () => clearInterval(intervalId);
   }, []);
+  
+  const [className1, setClassName1] = useState("transition-opacity duration-500 delay-300 opacity-100");
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setClassName1(currentComponent === "WeeklyCadetXp" 
+        ? "transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0"
+        : "transition-opacity duration-500 delay-200 opacity-100");
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [currentComponent]);
+
+  const [className2, setClassName2] = useState("transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0");
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setClassName2(currentComponent === "WeeklyCadetXp" 
+        ? "transition-opacity duration-500 delay-200 opacity-100"
+        : "transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0");
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [currentComponent]);
   return (
     
     <StyledApp>
@@ -56,11 +78,8 @@ function App() {
         </FlexList>
         <FlexList className="flex-[2]">
           <AverageActiveUserSkill className="" />
-          {currentComponent === "WeeklyCadetXp" ? (
-            <WeeklyCadetXp className="component-wrapper fade-in-out"/>
-          ) : (
-            <TotalActiveUser7Days className="component-wrapper fade-in-out" />
-          )}
+          <TotalActiveUser7Days className={className1} />
+          <WeeklyCadetXp className={className2} />
           <CadetPiscineRatio className="h-full" />
         </FlexList>
         <FlexList className="flex-1">
