@@ -32,7 +32,7 @@ const FlexList = tw.div`
 `;
 
 function App() {
-  const transitionTime = 10000;
+  const transitionTime = 20000;
   const [currentComponent, setCurrentComponent] = useState("WeeklyCadetXp");
 
   useEffect(() => {
