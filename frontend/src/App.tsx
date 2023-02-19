@@ -1,5 +1,5 @@
-import React from "react";
-// import './App.css';
+import React, { useState, useEffect } from "react";
+import './App.css';
 import tw from "twin.macro";
 import CurrentActiveUser from "./component/CurrentActiveUser";
 import AverageLevel from "./component/AverageLevel";
@@ -9,6 +9,7 @@ import TotalActiveUser7Days from "./component/TotalActiveUser7Days";
 import ActiveUserProjects from "./component/ActiveUserProjects";
 import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
+import WeeklyCadetXp from "./component/WeeklyCadetXp";
 
 const StyledApp = tw.div`
   text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[1200px] text-base
@@ -31,7 +32,41 @@ const FlexList = tw.div`
 `;
 
 function App() {
+  const transitionTime = 10000;
+  const [currentComponent, setCurrentComponent] = useState("WeeklyCadetXp");
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentComponent(currentComponent =>
+        currentComponent === "WeeklyCadetXp" ? "TotalActiveUser7Days" : "WeeklyCadetXp"
+      );
+    }, transitionTime);
+    return () => clearInterval(intervalId);
+  }, []);
+  
+  const [className1, setClassName1] = useState("transition-opacity duration-500 delay-300 opacity-100");
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setClassName1(currentComponent === "WeeklyCadetXp" 
+        ? "transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0"
+        : "transition-opacity duration-500 delay-200 opacity-100");
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [currentComponent]);
+
+  const [className2, setClassName2] = useState("transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0");
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setClassName2(currentComponent === "WeeklyCadetXp" 
+        ? "transition-opacity duration-500 delay-200 opacity-100"
+        : "transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0");
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [currentComponent]);
   return (
+    
     <StyledApp>
       <Header>
         <h1>Live Stat: 42 Kuala Lumpur</h1>
@@ -43,7 +78,8 @@ function App() {
         </FlexList>
         <FlexList className="flex-[2]">
           <AverageActiveUserSkill className="" />
-          <TotalActiveUser7Days className="" />
+          <TotalActiveUser7Days className={className1} />
+          <WeeklyCadetXp className={className2} />
           <CadetPiscineRatio className="h-full" />
         </FlexList>
         <FlexList className="flex-1">

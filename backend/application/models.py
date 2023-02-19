@@ -323,7 +323,7 @@ class Token():
         _week_ago = _now - timedelta(days=7)
         logging.debug(f"Querry for daily active users between {_now} and {_week_ago}")
         for page in range(0, 1000):
-                url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?sort=begin_at&per_page=100&page={page}&range[begin_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&access_token={self.get_token()}'
+                url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/locations?sort=begin_at&per_page=100&page={page}&range[begin_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T23%3A59%3A00.000Z&access_token={self.get_token()}'
                 response = requests.get(url)
                 
                 for session in response.json():
@@ -354,9 +354,9 @@ class Token():
         with open("daily_active_users.json", "r") as _f:
             self.week_active_users = json.loads(_f.read())
         if (datetime.now() > self.daily_users_timeout):
+            self.daily_users_timeout = datetime.now() + timedelta(minutes=30)
             thread = threading.Thread(target=self.load_daily_active_users)
             thread.start()
-            self.daily_users_timeout = datetime.now() + timedelta(minutes=30)
         return (self.daily_active_users)
     
     def load_weekly_cadet_xp(self):
@@ -389,8 +389,8 @@ class Token():
         with open("weekly_cadet_xp.json", "r") as _f:
             self.weekly_cadet_xp = json.loads(_f.read())
         if (datetime.now() > self.weekly_cadet_xp_timeout):
+            self.weekly_cadet_xp_timeout = datetime.now() + timedelta(hours=6)
             thread = threading.Thread(target=self.load_weekly_cadet_xp)
             thread.start()
-            self.weekly_cadet_xp_timeout = datetime.now() + timedelta(hours=6)
         return (self.weekly_cadet_xp)
         
