@@ -1,22 +1,7 @@
-import {
-  axisBottom,
-  axisLeft,
-  ScaleBand,
-  scaleBand,
-  scaleLinear,
-  ScaleLinear,
-  select,
-} from "d3";
 import React from "react";
-import { useDimensions } from "../hooks/useDimension";
 import { Card, H1Style } from "../styles";
 import axios from "axios";
 import tw from "twin.macro";
-
-interface Data {
-  label: string;
-  value: number;
-}
 
 interface ColumnComponentProps {
   imageSrc: string;
@@ -24,19 +9,23 @@ interface ColumnComponentProps {
   hours: string;
 }
 
-const Container = tw.div`
-  flex flex-col items-center
+const UserContainer = tw.div`
+  flex flex-col items-center 
   [> img]:(rounded-full h-10 w-10 object-cover)
   [> p]:(text-lg text-[#FFFFF] font-medium)
 `;
 
+const Container = tw.div`
+grid grid-cols-5 gap-4 scroll-smooth h-full basis-0 grow shrink w-full
+`;
+//grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full
 function ColumnComponent({imageSrc, login, hours}: ColumnComponentProps) {
   return (
-    <Container>
+    <UserContainer>
       <img src={imageSrc}/>
         <p>{login}</p>
         <p>{hours}h</p>
-    </Container>
+    </UserContainer>
   );
 }
 
@@ -49,37 +38,32 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   // const [data, setData] = React.useState<any | undefined>(undefined);
 
-  const dimension = useDimensions(containerRef);
 
   // React.useEffect(() => {
   //   const fetchUsers = async () => {
   //     await axios
-  //       .get("/on-campus/daily-total-active-students")
+  //       .get("/weekly-most-active-users")
   //       .then((res) => {
   //         let data = res.data;
-  //         const newData = Object.keys(data).map((key) => {
-  //           const date = new Date(key).toDateString().split(" ");
-  //           return {
-  //             label: date[1] + " " + date[2],
-  //             value: data[key as keyof typeof data],
-  //           };
-  //         });
-  //         setData(newData);
+  //         if (JSON.stringify(data) !== "{}") setData(data);
+  //         else
+  //           console.log("MostRecentSubmission get successful but data empty.");
+            
   //       })
   //       .catch((err) => {
   //         console.log(err);
   //       });
   //   };
-    // fetchUsers();
+  //   fetchUsers();
 
-    // Call the API every 5 minutes
-    // const interval = setInterval(fetchUsers, 1000 * 60 * 5);
+  //   // Call the API every 5 minutes
+  //   const interval = setInterval(fetchUsers, 1000 * 60 * 5);
 
-    // Clean up the interval when the component unmounts
-    // return () => clearInterval(interval);
+  //   // Clean up the interval when the component unmounts
+  //   return () => clearInterval(interval);
   // }, []);
   let data = [{image: 'https://cdn.intra.42.fr/users/7707a27ecefed41b4c2b7a7d9e53c583/bshamsid.jpg', login: 'somebro', hours: '100'},{image: 'https://cdn.intra.42.fr/users/7707a27ecefed41b4c2b7a7d9e53c583/bshamsid.jpg', login: 'somebro', hours: '42'},{image: 'https://cdn.intra.42.fr/users/7707a27ecefed41b4c2b7a7d9e53c583/bshamsid.jpg', login: 'somebro', hours: '25'}];
-  console.log(data.length);
+  // console.log(data.length);
   return (
     // the container for the svg
     <Card className={className + " flex flex-col"} ref={containerRef}>
@@ -88,7 +72,9 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
       </H1Style>
       {data ? (
         <Container>
-          <ColumnComponent imageSrc="https://cdn.intra.42.fr/users/7707a27ecefed41b4c2b7a7d9e53c583/bshamsid.jpg" login="bshamsid" hours="140"/>
+          <ColumnComponent imageSrc={data[0].image} login={data[0].login} hours={data[0].hours} />
+          <ColumnComponent imageSrc={data[1].image} login={data[1].login} hours={data[1].hours} />
+          <ColumnComponent imageSrc={data[2].image} login={data[2].login} hours={data[2].hours} />
         </Container>
       ) : (
         <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
