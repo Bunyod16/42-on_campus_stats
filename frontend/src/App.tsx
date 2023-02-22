@@ -10,6 +10,7 @@ import ActiveUserProjects from "./component/ActiveUserProjects";
 import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
 import WeeklyCadetXp from "./component/WeeklyCadetXp";
+import MostActiveUsers from "./component/MostActiveUsers";
 
 const StyledApp = tw.div`
   text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[1200px] text-base
@@ -69,7 +70,7 @@ function App() {
     
     <StyledApp>
       <Header>
-        <h1>Live Stat: 42 Kuala Lumpur</h1>
+        <h1>Live Stats: 42 Kuala Lumpur</h1>
       </Header>
       <FlexContainer>
         <FlexList className="flex-[2]">
@@ -77,7 +78,7 @@ function App() {
           <CurrentActiveUser className="flex-1" />
         </FlexList>
         <FlexList className="flex-[2]">
-          <AverageActiveUserSkill className="" />
+          <MostActiveUsers/>
           <TotalActiveUser7Days className={className1} />
           <WeeklyCadetXp className={className2} />
           <CadetPiscineRatio className="h-full" />
