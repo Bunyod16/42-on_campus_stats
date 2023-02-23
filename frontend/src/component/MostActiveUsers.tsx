@@ -12,7 +12,7 @@ interface ColumnComponentProps {
 const UserContainer = tw.div`
   flex flex-col items-center 
   [> img]:(rounded-full h-10 w-10 object-cover)
-  [> p]:(text-lg text-[#FFFFF] font-medium)
+  [> p]:(text-sm text-[#FFFFF] font-medium)
 `;
 
 const Container = tw.div`
