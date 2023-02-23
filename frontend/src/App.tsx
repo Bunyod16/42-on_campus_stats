@@ -11,6 +11,7 @@ import AverageActiveUserSkill from "./component/AverageActiveUserSkill";
 import CadetPiscineRatio from "./component/CadetPiscineRatio";
 import WeeklyCadetXp from "./component/WeeklyCadetXp";
 import MostActiveUsers from "./component/MostActiveUsers";
+import TopFarmers from "./component/TopFarmers";
 
 const StyledApp = tw.div`
   text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[1200px] text-base
@@ -50,7 +51,7 @@ function App() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setClassName1(currentComponent === "WeeklyCadetXp" 
-        ? "transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0"
+        ? "transition-opacity opacity-0 hidden duration-600 !p-0 !border-0 !mt-0"
         : "transition-opacity duration-500 delay-200 opacity-100");
     }, 1000);
     return () => clearTimeout(timeoutId);
@@ -62,7 +63,7 @@ function App() {
     const timeoutId = setTimeout(() => {
       setClassName2(currentComponent === "WeeklyCadetXp" 
         ? "transition-opacity duration-500 delay-200 opacity-100"
-        : "transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0");
+        : "transition-opacity duration-600 opacity-0 hidden !p-0 !border-0 !mt-0");
     }, 1000);
     return () => clearTimeout(timeoutId);
   }, [currentComponent]);
@@ -79,6 +80,7 @@ function App() {
         </FlexList>
         <FlexList className="flex-[2]">
           <MostActiveUsers/>
+          <TopFarmers/>
           <TotalActiveUser7Days className={className1} />
           <WeeklyCadetXp className={className2} />
           <CadetPiscineRatio className="h-full" />
