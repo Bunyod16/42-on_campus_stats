@@ -118,11 +118,6 @@ class Token():
         self.daily_active_users = self.load_daily_active_users()
         self.daily_users_timeout = datetime.now() + timedelta(minutes=30)
 
-        
-        
-        #start requerry users thread
-        
-
     def get_active_users(self):
         
         #return info in a pretty format
@@ -331,6 +326,8 @@ class Token():
                 if (len(response.json()) < 100):
                     break
                 
+        with open("week_sessions.json", "w") as _f:
+            _f.write(json.dumps(week_sessions))
 
         dates = {}
 
@@ -365,7 +362,8 @@ class Token():
         dates = {}
 
         _now = datetime.now()
-        days_since_monday = date.today().weekday() 
+        days_since_monday = date.today().weekday()
+        _temp_save = []
         for x in range(7):
                 
                 day_xp = []
@@ -375,12 +373,16 @@ class Token():
                     url = f'https://api.intra.42.fr/v2/campus/{self.campus_id}/experiences?per_page=100&filter[cursus_id]=21&page={page}&range[created_at]={_week_start.year}-{_week_start.month}-{_week_start.day}T23%3A59%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T23%3A59%3A00.000Z&access_token={self.get_token()}'
                     response = requests.get(url)
                     day_xp += response.json()
+                    _temp_save += response.json()
                     if (len(response.json()) < 100):
                         break
                 dates[_now.isoformat()] = sum(int(user['experience']) for user in day_xp)
                 _now = _now - timedelta(days=days_since_monday)
                 days_since_monday = 7
 
+        with open("total_xp.json", "w") as _f:
+            _f.write(json.dumps(_temp_save))
+    
         with open("weekly_cadet_xp.json", "w") as _f:
             _f.write(json.dumps(dates))
         return dates
@@ -394,3 +396,69 @@ class Token():
             thread.start()
         return (self.weekly_cadet_xp)
         
+    def weekly_most_active_users(self):
+        logging.debug("Loading weekly top 5 logged hour users")
+
+        try:
+            with open("week_sessions.json", "r") as _f:
+                sessions = json.loads(_f.read())
+        except:
+            return {}
+
+        users = {}
+        for session in sessions:
+            login = session['user']['login']
+            begin_at = datetime.strptime(session['begin_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+            if (not session['end_at']):
+                end_at = datetime.now()
+            else:
+                end_at = datetime.strptime(session['end_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+            
+            difference = (end_at - begin_at).total_seconds() / 3600 #difference in hours
+            if (login not in users.keys()):
+                users[login] = {'login':login, 'hours':0, 'image':session['user']['image']['link']}
+            users[login]['hours'] += int(difference) 
+
+        users = dict(sorted(users.items(), key=lambda item: item[1]['hours'], reverse=True))
+        top_five = []
+        for key, value in users.items():
+            if len(top_five) == 5:
+                break
+            top_five.append(value)
+
+        return top_five
+    
+    def weekly_most_gained_xp(self):
+        logging.debug("Loading weekly top 5 gained xp users")
+
+        try:
+            with open("total_xp.json", "r") as _f:
+                total_xp = json.loads(_f.read())
+        except:
+            return {}
+
+        def get_image(token, user_id):
+            url = f"https://api.intra.42.fr/v2/users/{user_id}?access_token={token}"
+            response = requests.get(url)
+            user = User(response.json())
+            return user.image['link']
+
+
+        users = {}
+        for session in total_xp:
+            login = session['user']['login']
+            xp = int(session['experience'])
+            
+            if (login not in users.keys()):
+                users[login] = {'login':login, 'xp':0, 'id': session['user']['id']}
+            users[login]['xp'] += int(xp) 
+
+        users = dict(sorted(users.items(), key=lambda item: item[1]['xp'], reverse=True))
+        top_five = []
+        for key, value in users.items():
+            if len(top_five) == 5:
+                break
+            value['image'] = get_image(self.get_token(), value['id'])
+            top_five.append(value)
+
+        return top_five
