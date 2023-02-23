@@ -16,7 +16,7 @@ const UserContainer = tw.div`
 `;
 
 const Container = tw.div`
-grid grid-cols-5 gap-4 scroll-smooth h-full basis-0 grow shrink w-full
+grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full
 `;
 //grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full
 function ColumnComponent({imageSrc, login, hours}: ColumnComponentProps) {
@@ -36,33 +36,38 @@ interface IMostActiveUsers {
 }
 const MostActiveUsers = ({ className }: IMostActiveUsers) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
-  // const [data, setData] = React.useState<any | undefined>(undefined);
+  const [data, setData] = React.useState<any | undefined>(undefined);
 
-
-  // React.useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     await axios
-  //       .get("/weekly-most-active-users")
-  //       .then((res) => {
-  //         let data = res.data;
-  //         if (JSON.stringify(data) !== "{}") setData(data);
-  //         else
-  //           console.log("MostRecentSubmission get successful but data empty.");
+  React.useEffect(() => {
+    const fetchUsers = async () => {
+      await axios
+        .get("/weekly-most-active-users")
+        .then((res) => {
+          let data = res.data;
+          if (JSON.stringify(data) !== "{}") 
+          {
+            setData(data);
+            console.log("MostRecentSubmission get successful");
+          }
+          else
+          {
+            setData([{login:'notworking',hours:0, image:""},{login:'notworking',hours:0, image:""},{login:'notworking',hours:0, image:""},{login:'notworking',hours:0, image:""},{login:'notworking',hours:0, image:""}])
+            console.log("MostRecentSubmission get successful but data empty.");
+          }
             
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   };
-  //   fetchUsers();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    fetchUsers();
 
-  //   // Call the API every 5 minutes
-  //   const interval = setInterval(fetchUsers, 1000 * 60 * 5);
+    // Call the API every 5 minutes
+    const interval = setInterval(fetchUsers, 1000 * 60 * 5);
 
-  //   // Clean up the interval when the component unmounts
-  //   return () => clearInterval(interval);
-  // }, []);
-  let data = [{image: 'https://cdn.intra.42.fr/users/7707a27ecefed41b4c2b7a7d9e53c583/bshamsid.jpg', login: 'somebro', hours: '100'},{image: 'https://cdn.intra.42.fr/users/7707a27ecefed41b4c2b7a7d9e53c583/bshamsid.jpg', login: 'somebro', hours: '42'},{image: 'https://cdn.intra.42.fr/users/7707a27ecefed41b4c2b7a7d9e53c583/bshamsid.jpg', login: 'somebro', hours: '25'}];
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []);
   // console.log(data.length);
   return (
     // the container for the svg
@@ -75,6 +80,8 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
           <ColumnComponent imageSrc={data[0].image} login={data[0].login} hours={data[0].hours} />
           <ColumnComponent imageSrc={data[1].image} login={data[1].login} hours={data[1].hours} />
           <ColumnComponent imageSrc={data[2].image} login={data[2].login} hours={data[2].hours} />
+          <ColumnComponent imageSrc={data[3].image} login={data[3].login} hours={data[3].hours} />
+          <ColumnComponent imageSrc={data[4].image} login={data[4].login} hours={data[4].hours} />
         </Container>
       ) : (
         <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
