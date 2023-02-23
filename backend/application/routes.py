@@ -58,3 +58,13 @@ def daily_total_active_users():
 @app.route('/api/on-campus/weekly-cadet-xp', methods=['GET'])
 def weekly_cadet_xp():
     return (jsonify(token.get_weekly_cadet_xp()))
+
+@app.route('/api/weekly-most-active-users', methods=['GET'])
+@cache.cached(timeout=1800)
+def weekly_most_active_users():
+    return (jsonify(token.weekly_most_active_users()))
+
+@app.route('/api/weekly-most-gained-xp', methods=['GET'])
+@cache.cached(timeout=1800)
+def weekly_most_gained_xp():
+    return (jsonify(token.weekly_most_gained_xp()))
