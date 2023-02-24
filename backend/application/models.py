@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import logging
 import threading
 import json
+from zoneinfo import ZoneInfo
 load_dotenv()
 
 class User():
@@ -408,13 +409,22 @@ class Token():
         users = {}
         for session in sessions:
             login = session['user']['login']
+            # if (login == "melee"):
+            #     print(session['begin_at'], session['end_at'])
             begin_at = datetime.strptime(session['begin_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
             if (not session['end_at']):
-                end_at = datetime.now()
+                end_at = datetime.now(ZoneInfo("Europe/Amsterdam"))
+                end_at = end_at.replace(tzinfo=None)
+
             else:
                 end_at = datetime.strptime(session['end_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
             
             difference = (end_at - begin_at).total_seconds() / 3600 #difference in hours
+            if (difference >= 24):
+                difference = 12
+            # if (login == "melee"):
+            #     print(print(difference))
+            #     print()
             if (login not in users.keys()):
                 users[login] = {'login':login, 'hours':0, 'image':session['user']['image']['link']}
             users[login]['hours'] += int(difference) 
