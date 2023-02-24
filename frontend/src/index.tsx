@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import GlobalStyles from "./styles/GlobalStyles";
 import axios from "axios";
 
-axios.defaults.baseURL = 'https://backend-flask.onrender.com/api';
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_API_URL;
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
