@@ -47,7 +47,7 @@ export default function CadetPiscineRatio(props) {
       {students ? (
         <svg
           width={dimension.width * 0.8 + 5}
-          height="1.25rem"
+          height="2rem"
           className="cadet-piscine-ratio-svg"
         >
           <g>

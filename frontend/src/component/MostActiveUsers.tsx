@@ -11,8 +11,9 @@ interface ColumnComponentProps {
 
 const UserContainer = tw.div`
   flex flex-col items-center 
-  [> img]:(rounded-full h-10 w-10 object-cover)
+  [> img]:(rounded-full h-16 w-16 object-cover)
   [> p]:(text-sm text-[#FFFFF] font-medium)
+  [> b]:(text-lg text-[#FFFFF] font-medium)
 `;
 
 const Container = tw.div`
@@ -24,7 +25,7 @@ function ColumnComponent({imageSrc, login, hours}: ColumnComponentProps) {
     <UserContainer>
       <img src={imageSrc}/>
         <p>{login}</p>
-        <p>{hours}h</p>
+        <b>{hours}h</b>
     </UserContainer>
   );
 }
