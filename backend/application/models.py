@@ -241,33 +241,30 @@ class Token():
             logging.error("Intra returned not ok for most_recent")
             return {}
 
-        users = []
-        for user in newlist[-1]['teams'][-1]['users']:
-            _temp = {}
-            _temp['login'] = user['login']
-            _temp['image'] = requests.get(
-                                f"https://api.intra.42.fr/v2/users?filter[login]={user['login']}&access_token={self.get_token()}"
-                            ).json()[0]['image']['link']
-            if not _temp['image']:
-                _temp['image'] = "https://i.imgur.com/F0zhHes.jpg"
-            users.append(_temp)
+        submissions = []
+        i = -1
+        while (i >= -3):
+            users = []
+            for user in newlist[i]['teams'][0]['users']:
+                _temp = {}
+                _temp['login'] = user['login']
+                _temp['image'] = requests.get(
+                                    f"https://api.intra.42.fr/v2/users?filter[login]={user['login']}&access_token={self.get_token()}"
+                                ).json()[0]['image']['link']
+                if not _temp['image']:
+                    _temp['image'] = "https://i.imgur.com/F0zhHes.jpg"
+                users.append(_temp)
+            project = newlist[i]['project']['name']
+            score = newlist[i]['final_mark']
+            seconds_since_submission = (datetime.now() - datetime.strptime(newlist[i]['updated_at'], "%Y-%m-%dT%H:%M:%S.%fZ")).total_seconds()
+            if seconds_since_submission <= 3600:
+                time_string = f"{int(seconds_since_submission / 60)} minutes ago"
+            else:
+                time_string = f"{int(seconds_since_submission / 60 / 60)} hours ago"
+            submissions.append({"users":users, "project":project, "score":score, "time":time_string})
+            i -= 1
         
-        project = newlist[-1]['project']['name']
-        score = newlist[-1]['final_mark']
-        # skills = []
-        # skill_ids = requests.get(f"https://api.intra.42.fr/v2/project_sessions/{most_recent_user['teams'][-1]['project_session_id']}/project_sessions_skills?access_token={self.get_token()}").json()
-        # for skill_id in skill_ids:
-        #     skill_str = requests.get(f"https://api.intra.42.fr/v2/skills/{skill_id['skill_id']}?access_token={self.get_token()}").json()['slug']
-        #     skills.append(skill_str)
-
-        
-        # return ({"users":users, "skills":skills, "project":project, "score":score})
-        seconds_since_submission = (datetime.now() - datetime.strptime(newlist[-1]['updated_at'], "%Y-%m-%dT%H:%M:%S.%fZ")).total_seconds()
-        if seconds_since_submission <= 3600:
-            time_string = f"{int(seconds_since_submission / 60)} minutes ago"
-        else:
-            time_string = f"{int(seconds_since_submission / 60 / 60)} hours ago"
-        return ({"users":users, "project":project, "score":score, "time":time_string})
+        return (submissions)
     
 
     def cadet_pisciner_ratio(self) -> dict:
