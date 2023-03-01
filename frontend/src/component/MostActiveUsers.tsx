@@ -6,18 +6,17 @@ import tw from "twin.macro";
 interface ColumnComponentProps {
   imageSrc: string;
   login: string;
-  hours: string;
+  hours: number;
 }
 
 const UserContainer = tw.div`
   flex flex-col items-center 
   [> img]:(rounded-full h-16 w-16 object-cover)
   [> p]:(text-sm text-[#FFFFF] font-medium)
-  [> b]:(text-lg text-[#FFFFF] font-medium)
 `;
 
 const Container = tw.div`
-grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full
+grid grid-cols-5 gap-5 h-full basis-0 grow shrink w-full
 `;
 //grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full
 function ColumnComponent({imageSrc, login, hours}: ColumnComponentProps) {
@@ -25,7 +24,8 @@ function ColumnComponent({imageSrc, login, hours}: ColumnComponentProps) {
     <UserContainer>
       <img src={imageSrc}/>
         <p>{login}</p>
-        <b>{hours}h</b>
+        <p><span className="font-bold text-xl">{hours}</span>h</p>
+        <p><span className="text-gray-400 text-xs">avg. {Math.round(hours / 7)}h</span></p>
     </UserContainer>
   );
 }

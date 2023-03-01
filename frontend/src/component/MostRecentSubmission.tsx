@@ -62,7 +62,7 @@ function ProjectContainer({name, time_string, score, users}: ProjectContainerPro
       ))}
       </Row>
           <p className="text-lg">{name}</p>
-          <p className="text-sm">score: <span className="text-xl text-green-500">{score}</span>/100</p>
+          <p className="text-sm">score: <span className="text-xl text-green-500 font-bold">{score}</span>/100</p>
           <p className="text-sm text-gray-400">{time_string}</p>
     </Project>
   );
@@ -106,7 +106,7 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
   // let data = [{users: [{login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'},{login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'},{login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}], project: 'testproj', score: 125, time: 'now'}, {users: [{login: 'ksshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}], project: 'testproj', score: 25, time: 'later'}, ]
   return (
     <Card className={className + " flex flex-col"}>
-      <H1Style>Most recent submission</H1Style>
+      <H1Style>Recent Submissions</H1Style>
       {data ? (
         <Container>
           <ProjectContainer name={data[0].project} time_string={data[0].time} score={data[0].score} users={data[0].users} />

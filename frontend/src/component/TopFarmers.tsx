@@ -23,20 +23,21 @@ function formatNumber(num: number) {
   if (num >= 1000 && num < 1000000) {
     let numString = (num / 1000).toFixed(1);
     if (numString.endsWith('.0')) {
-      return numString.slice(0, -2) + 'k';
+      return numString.slice(0, -2);
     } else {
-      return numString + 'k';
+      return numString;
     }
   } else {
     return num.toString();
   }
 }
+
 function ColumnComponent({imageSrc, login, xp}: ColumnComponentProps) {
   return (
     <UserContainer>
       <img src={imageSrc}/>
         <p>{login}</p>
-        <b>{formatNumber(xp)}</b>
+        <p><span className="font-bold text-xl">{formatNumber(xp)}</span>k</p>
     </UserContainer>
   );
 }
