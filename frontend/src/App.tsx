@@ -88,7 +88,7 @@ function App() {
         <FlexList className="flex-1">
           <AverageLevel className="" />
           <AverageSessionTime className="" />
-          <MostRecentSubmission className="flex-1" />
+          <MostRecentSubmission className="" />
         </FlexList>
       </FlexContainer>
     </StyledApp>
