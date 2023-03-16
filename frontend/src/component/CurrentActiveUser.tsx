@@ -1,68 +1,10 @@
 import React from "react";
-import { Card, H1Style } from "../styles";
 import { User } from "../../types";
-import tw from "twin.macro";
 import axios from "axios";
-// import { getAllCurrentActiveUsers } from "../utils/service";
-interface ICurrentActiveUserProps {
-  className?: string;
-}
+import CardTitle from "./CardTitle";
+import Card from "./Card";
 
-const UserStyle = tw.div`
-  flex flex-col items-center
-  [> img]:(rounded-full h-10 w-10 object-cover)
-  [> p]:(text-sm)
-`;
-
-const UserGalleryStyle = tw.div`
-  grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full
-`;
-
-const tmp = [
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-  { image: "", login: "random" },
-];
-
-function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
+function CurrentActiveUser({ className }: { className: string }) {
   const [users, setUsers] = React.useState<User[] | undefined>(undefined);
   const divRef = React.useRef(null);
 
@@ -110,34 +52,34 @@ function CurrentActiveUser({ className }: ICurrentActiveUserProps) {
 
   const userGallery = users?.map((singleUser, i) => {
     return (
-      <UserStyle key={i}>
+      <div key={i} className="flex flex-col items-center">
         <img
           src={singleUser.image}
-          width={32}
-          height={32}
-          alt=""
+          alt="user image"
           className={
-            "border-4 " +
+            "rounded-full h-16 w-16 object-cover border-4 " +
             (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
           }
         />
-        <p>
-          {singleUser.login}
-        </p>
-      </UserStyle>
+        <p className="text-sm">{singleUser.login}</p>
+      </div>
     );
   });
 
   return (
     <Card className={className + " flex flex-col max-h-[50vh]"}>
-      <H1Style>Current Active Users ({users?.length})</H1Style>
-      <UserGalleryStyle ref={divRef} id="user-gallery">
+      <CardTitle>Current Active Users ({users?.length})</CardTitle>
+      <div
+        className="grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full"
+        ref={divRef}
+        id="user-gallery"
+      >
         {users ? (
           userGallery
         ) : (
           <div className="col-span-5 h-full rounded bg-gray-500 animate-pulse"></div>
         )}
-      </UserGalleryStyle>
+      </div>
     </Card>
   );
 }

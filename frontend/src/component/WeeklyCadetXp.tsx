@@ -9,8 +9,10 @@ import {
 } from "d3";
 import React from "react";
 import { useDimensions } from "../hooks/useDimension";
-import { Card, H1Style } from "../styles";
 import axios from "axios";
+import Card from "./Card";
+import CardTitle from "./CardTitle";
+
 interface Data {
   label: string;
   value: number;
@@ -155,7 +157,7 @@ const WeeklyCadetXp = ({ className }: IWeeklyCadetXp) => {
   return (
     // the container for the svg
     <Card className={className + " flex flex-col"} ref={containerRef}>
-      <H1Style>Weekly cadet gained xp</H1Style>
+      <CardTitle>Weekly cadet gained xp</CardTitle>
       {data ? (
         // <div ref={containerRef} className="w-full">
         <BarChart data={data} dimension={dimension} />

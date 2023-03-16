@@ -1,18 +1,11 @@
-import { Card, H1Style } from "../styles";
-import tw from "twin.macro";
 import React from "react";
 import axios from "axios";
+import Card from "./Card";
+import CardTitle from "./CardTitle";
+
 interface IAverageSessionTimeProps {
   className?: string;
 }
-
-const NumberDisplay = tw.div`
-    text-6xl h-full align-middle flex flex-col justify-center items-center
-`;
-
-const SubText = tw.p`
-    text-lg
-`;
 
 const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
   const [averageSessionTime, setAverageSessionTime] = React.useState(0);
@@ -39,9 +32,11 @@ const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
 
   return (
     <Card className={className + " flex flex-col"}>
-      <H1Style>Average session time</H1Style>
+      <CardTitle>Average session time</CardTitle>
       {averageSessionTime ? (
-        <NumberDisplay>{averageSessionTime}hr</NumberDisplay>
+        <div className="text-6xl h-full align-middle flex flex-col justify-center items-center">
+          {averageSessionTime}hr
+        </div>
       ) : (
         <div className="bg-gray-500 rounded animate-pulse w-full h-16" />
       )}

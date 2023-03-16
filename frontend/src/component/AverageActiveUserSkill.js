@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { Card, H1Style } from "../styles";
+import { Card, CardTitle } from "../styles";
 import "../styles/radar.css";
 import axios from "axios";
 import { useDimensions } from "../hooks/useDimension";
@@ -216,7 +216,7 @@ export default function AverageActiveUserSkill(props) {
   }, []);
   return (
     <Card className={props.className} ref={ref}>
-      <H1Style>Average Active User Skills</H1Style>
+      <CardTitle>Average Active User Skills</CardTitle>
       {skills ? (
         <div className="avg-user-skill">
           <svg
