@@ -1,24 +1,12 @@
-import { Card, H1Style } from "../styles";
-import tw from "twin.macro";
 import React from "react";
 import axios from "axios";
+import Card from "./Card";
+import CardTitle from "./CardTitle";
+import UserContainer from "./UserContainer";
 
 interface IMostRecentSubmissionProps {
   className?: string;
 }
-
-const Container = tw.div`
-    text-6xl align-middle flex flex-col justify-center items-center gap-5
-`;
-
-const Project = tw.div`
-  flex flex-col items-center 
-`;
-
-const Row = tw.div`
-  flex flex-row items-center m-auto space-x-1
-  [> p]:(text-xs text-[#FFFFF])
-`;
 
 interface User {
   image: string;
@@ -37,34 +25,29 @@ interface ColumnComponentProps {
   login: string;
 }
 
-const UserContainer = tw.div`
-  flex flex-col items-center 
-  [> img]:(rounded-full h-16 w-16 object-cover)
-  [> p]:(text-sm text-[#FFFFF] font-medium)
-  [> b]:(text-lg text-[#FFFFF] font-medium)
-`;
-
-function ColumnComponent({imageSrc, login}: ColumnComponentProps) {
-  return (
-    <UserContainer>
-      <img src={imageSrc}/>
-        <p>{login}</p>
-    </UserContainer>
-  );
+function ColumnComponent({ imageSrc, login }: ColumnComponentProps) {
+  return <UserContainer imgSrc={imageSrc} login={login} />;
 }
 
-function ProjectContainer({name, time_string, score, users}: ProjectContainerProps) {
+function ProjectContainer({
+  name,
+  time_string,
+  score,
+  users,
+}: ProjectContainerProps) {
   return (
-    <Project>
-      <Row>
-      {users.map((user) => (
-        <ColumnComponent imageSrc={user.image} login={user.login}/>
-      ))}
-      </Row>
-          <p className="text-lg">{name}</p>
-          <p className="text-sm">score: <span className="text-xl text-green-500">{score}</span>/100</p>
-          <p className="text-sm text-gray-400">{time_string}</p>
-    </Project>
+    <div className="flex flex-col items-center">
+      <div className="flex flex-row items-center m-auto space-x-1">
+        {users.map((user) => (
+          <ColumnComponent imageSrc={user.image} login={user.login} />
+        ))}
+      </div>
+      <p className="text-lg">{name}</p>
+      <p className="text-sm">
+        score: <span className="text-xl text-green-500">{score}</span>/100
+      </p>
+      <p className="text-sm text-gray-400">{time_string}</p>
+    </div>
   );
 }
 
@@ -106,13 +89,28 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
   // let data = [{users: [{login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'},{login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'},{login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}], project: 'testproj', score: 125, time: 'now'}, {users: [{login: 'ksshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}], project: 'testproj', score: 25, time: 'later'}, ]
   return (
     <Card className={className + " flex flex-col"}>
-      <H1Style>Most recent submission</H1Style>
+      <CardTitle>Most recent submission</CardTitle>
       {data ? (
-        <Container>
-          <ProjectContainer name={data[0].project} time_string={data[0].time} score={data[0].score} users={data[0].users} />
-          <ProjectContainer name={data[1].project} time_string={data[1].time} score={data[1].score} users={data[1].users} />
-          <ProjectContainer name={data[2].project} time_string={data[2].time} score={data[2].score} users={data[2].users} />
-        </Container>
+        <div className="text-6xl align-middle flex flex-col justify-center items-center gap-5">
+          <ProjectContainer
+            name={data[0].project}
+            time_string={data[0].time}
+            score={data[0].score}
+            users={data[0].users}
+          />
+          <ProjectContainer
+            name={data[1].project}
+            time_string={data[1].time}
+            score={data[1].score}
+            users={data[1].users}
+          />
+          <ProjectContainer
+            name={data[2].project}
+            time_string={data[2].time}
+            score={data[2].score}
+            users={data[2].users}
+          />
+        </div>
       ) : (
         <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
       )}

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import GlobalStyles from "./styles/GlobalStyles";
+// import GlobalStyles from "./styles/GlobalStyles";
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_API_URL;
@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <GlobalStyles />
+    {/* <GlobalStyles /> */}
     <App />
   </React.StrictMode>
 );

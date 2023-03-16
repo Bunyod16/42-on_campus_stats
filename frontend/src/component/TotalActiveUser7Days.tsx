@@ -9,7 +9,8 @@ import {
 } from "d3";
 import React from "react";
 import { useDimensions } from "../hooks/useDimension";
-import { Card, H1Style } from "../styles";
+import Card from "./Card";
+import CardTitle from "./CardTitle";
 import axios from "axios";
 interface Data {
   label: string;
@@ -155,7 +156,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
   return (
     // the container for the svg
     <Card className={className + " flex flex-col"} ref={containerRef}>
-      <H1Style>Total active users last 7 days</H1Style>
+      <CardTitle>Total active users last 7 days</CardTitle>
       {data ? (
         // <div ref={containerRef} className="w-full">
         <BarChart data={data} dimension={dimension} />

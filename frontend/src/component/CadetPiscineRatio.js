@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { Card, H1Style } from "../styles";
+import Card from "./Card";
+import CardTitle from "./CardTitle";
 import "../styles/ratio.css";
 import { useDimensions } from "../hooks/useDimension";
 import axios from "axios";
@@ -35,20 +36,39 @@ export default function CadetPiscineRatio(props) {
     const interval = setInterval(fetchRatio, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
-  let barWidth = students && getRatio(students.cadets, students.pisciners, dimension.width);
+  let barWidth =
+    students && getRatio(students.cadets, students.pisciners, dimension.width);
   return (
     <Card ref={cardRef}>
-      <H1Style>
-        <span className="h1-cadets">Cadets</span> to <span className="h1-piscine">Piscine</span> ratio
-      </H1Style>
+      <CardTitle>
+        <span className="h1-cadets">Cadets</span> to{" "}
+        <span className="h1-piscine">Piscine</span> ratio
+      </CardTitle>
       {students ? (
-        <svg width={dimension.width * 0.8 + 5} height="2rem" className="cadet-piscine-ratio-svg">
+        <svg
+          width={dimension.width * 0.8 + 5}
+          height="2rem"
+          className="cadet-piscine-ratio-svg"
+        >
           <g>
-            <rect className="cadet-rect" width={barWidth["cadets"]} height="100%" rx="5"></rect>
+            <rect
+              className="cadet-rect"
+              width={barWidth["cadets"]}
+              height="100%"
+              rx="5"
+            ></rect>
             {barWidth["cadets"] < barWidth["pisciners"] * 0.1 ? (
-              <text x={barWidth["cadets"] / 2 - 21} y="70%" className="cadet-piscine-ratio-text"></text>
+              <text
+                x={barWidth["cadets"] / 2 - 21}
+                y="70%"
+                className="cadet-piscine-ratio-text"
+              ></text>
             ) : (
-              <text x={barWidth["cadets"] / 2 - 21} y="70%" className="cadet-piscine-ratio-text">
+              <text
+                x={barWidth["cadets"] / 2 - 21}
+                y="70%"
+                className="cadet-piscine-ratio-text"
+              >
                 Cadet
               </text>
             )}
