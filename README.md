@@ -7,7 +7,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/42_Logo.svg/2048px-42_Logo.svg.png" alt="Logo" width="80" height="80">
+    <img src="https://i.imgur.com/hyM3NoY.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Campus Statistics Dashboard</h3>
