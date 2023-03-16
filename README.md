@@ -51,8 +51,9 @@ It gives useful insights about who is on campus, what projects are they doing/fi
 ## Installation & Usage
 
 <details>
-<summary style="font-size: 1.25em;font-weight: bold;">Frontend</summary>
-
+<summary>Click for Frontend</summary>
+<br/>
+   
 -   Navigate /frontend
 
 ```bash
@@ -72,8 +73,10 @@ pnpm start
 ```
 
 </details>
+<br/>
 <details>
-<summary style="font-size: 1.25em;font-weight: bold;">Backend</summary>
+<summary>Click for Backend</summary>
+<br/>
 
 -   Navigate /backend
 
@@ -150,37 +153,6 @@ See the [open issues](https://github.com/Bunyod16/42-on_campus_stats/issues) for
 -   [Jaclyn](https://github.com/Jachokoreto) for the frontend and UI/UX
 -   [Jason](https://github.com/jasonkwm) for frontend
 -   [Kevin](https://github.com/locorocorolling) for helping with Bug Fixes
-
-<!-- LICENSE -->
-
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/Bunyod16/42-on_campus_stats/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-shield]: https://img.shields.io/badge/ISSUES-OPEN-yellow?style=for-the-badge&logo=googlecloud
-[issues-url]: https://github.com/Bunyod16/42-on_campus_stats/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://www.mit.edu/~amini/LICENSE.md
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: https://i.imgur.com/Rr8fehO.png
-[flask]: https://img.shields.io/badge/flask-000000?style=for-the-badge&logo=flask&logoColor=white
-[flask-url]: https://flask.palletsprojects.com/en/2.2.x/
-[django]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=django&logoColor=61DAFB
-[react-url]: https://reactjs.org/
-[react]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[vercel-url]: https://vercel.com/
-[vercel]: https://img.shields.io/badge/vercel-20232A?style=for-the-badge&logo=vercel&logoColor=61DAFB
-[render-url]: https://render.com/
-[render]: https://img.shields.io/badge/render-20232A?style=for-the-badge&logo=render&logoColor=61DAFB
 
 <!-- LICENSE -->
 
