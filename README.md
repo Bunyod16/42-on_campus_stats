@@ -35,11 +35,12 @@ Due to the structure of the campus building in Kuala Lumpur, it was hard for boc
 It gives useful insights about who is on campus, what projects are they doing/finished aswell as give a little morale boost to the Cadets.
 <br/>
 <b>Please keep in mind that its best to view it on a TV.</b>
-
 ### Built with
+#### Frontend
+<img title="Typescript, Javascript, React, Tailwind, D3.js & Axios" src="https://skillicons.dev/icons?i=ts,js,react,tailwind,d3"/>
 
-[![React][react]][react-url]
-[![Flask][flask]][flask-url]
+#### Backend
+<img title="Python, Flask" src="https://skillicons.dev/icons?i=python,flask"/>
 
 ### Deployed on
 
