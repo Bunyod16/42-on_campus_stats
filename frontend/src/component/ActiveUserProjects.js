@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Card, H1Style } from "../styles";
+// import { Card, CardTitle } from "../styles";
+import Card from "./Card";
+import CardTitle from "./CardTitle";
 import * as d3 from "d3";
 import "../styles/chart.css";
 import { useDimensions } from "../hooks/useDimension";
@@ -117,7 +119,7 @@ export default function ActiveUserProjects(props) {
 
   return (
     <Card className={props.className} ref={ref}>
-      <H1Style>Active User Projects</H1Style>
+      <CardTitle>Active User Projects</CardTitle>
       {projects ? (
         <svg
           className="pie-chart-svg"

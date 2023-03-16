@@ -1,16 +1,9 @@
-import { Card, H1Style } from "../styles";
-import tw from "twin.macro";
 import React from "react";
 import axios from "axios";
-interface IAverageLevelProps {
-  className?: string;
-}
+import Card from "./Card";
+import CardTitle from "./CardTitle";
 
-const NumberDisplay = tw.div`
-    text-6xl h-full align-middle flex justify-center items-center
-`;
-
-const AverageLevel = ({ className }: IAverageLevelProps) => {
+const AverageLevel = ({ className }: { className: string }) => {
   const [averageLvl, setAverageLvl] = React.useState(undefined);
 
   React.useEffect(() => {
@@ -35,9 +28,11 @@ const AverageLevel = ({ className }: IAverageLevelProps) => {
   }, []);
   return (
     <Card className={className + " flex flex-col"}>
-      <H1Style>Average level</H1Style>
+      <CardTitle>Average level</CardTitle>
       {averageLvl ? (
-        <NumberDisplay>{averageLvl}</NumberDisplay>
+        <div className="text-6xl h-full align-middle flex justify-center items-center">
+          {averageLvl}
+        </div>
       ) : (
         <div className="bg-gray-500 rounded animate-pulse w-full h-16" />
       )}
