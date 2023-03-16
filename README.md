@@ -132,6 +132,7 @@ flask run
     -   [x] Add Top 5 most online users per week
     -   [x] Add Top 5 most experienced gained per week
 -   [x] Convert Styled Components to use Tailwind CSS
+-   [x] Convert existing component files written in .js to .tsx
 -   [ ] Auto refresh TV when new deployment happen
 -   [ ] Refactor Code
 -   [ ] Update User Interface
