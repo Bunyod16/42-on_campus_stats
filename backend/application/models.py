@@ -244,7 +244,7 @@ class Token():
         submissions = []
         i = -1
         last = -3
-        while (i >= -3):
+        while (i >= last):
             users = []
             for user in newlist[i]['teams'][0]['users']:
                 _temp = {}
