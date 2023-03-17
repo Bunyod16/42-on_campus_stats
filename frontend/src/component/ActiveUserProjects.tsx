@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import { Card, CardTitle } from "../styles";
 import Card from "./Card";
 import CardTitle from "./CardTitle";
@@ -22,11 +22,22 @@ dataset = [
   }
 ]
 */
-function cleaningData(dataObj) {
-  let dataset = [];
+
+type TDataType = {
+  project: string,
+  user_num: number,
+  percentage: string
+}
+
+type TApiDataType = {
+  [key: string]: number;
+}
+
+function cleaningData(dataObj:TApiDataType) {
+  let dataset:TDataType[] = [];
   let tots = 0;
   for (let d in dataObj) {
-    dataset = [...dataset, { project: d, user_num: dataObj[d] }];
+    dataset = [...dataset, { project: d, user_num: dataObj[d], percentage:"" }];
   }
   dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
   tots = d3.sum(dataset, (d) => d["user_num"]);
@@ -37,18 +48,18 @@ function cleaningData(dataObj) {
 }
 
 // Function PieChart Plotting
-function PieChart({ projects, color, radius }) {
-  const pie = d3.pie().value((d) => d["user_num"]);
+function PieChart({ projects, color, radius }:{projects: any, color: Function, radius: number}) {
+  const pie = d3.pie().value((d:any) => d["user_num"]);
   const arc = d3
     .arc()
     .innerRadius(0)
     .outerRadius(radius * 0.9);
   return (
     <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
-      {pie(projects).map((d, i) => {
+      {pie(projects).map((d:any, i) => {
         return (
           <g className="arc" key={i}>
-            <path fill={color(i)} d={arc(d)}></path>
+            <path fill={color(i)} d={arc(d)!}></path>
             <text
               className="chart-text"
               transform={`translate(${arc.centroid(d)[0]}, ${
@@ -65,11 +76,11 @@ function PieChart({ projects, color, radius }) {
 }
 
 // Plot Chart Legends
-function ChartLegends({ projects, color, size, height }) {
+function ChartLegends({ projects, color, size, height } : { projects:TDataType[], color: Function, size:number, height:number }) {
   let legendMargin = (height - (height / 16) * 10) / 2;
   return (
     <g transform={`translate(${size * 0.9},${height / 16})`}>
-      {projects.map(({ project, user_num }, i) => (
+      {projects.map(({ project, user_num } : {project: string, user_num: number}, i:number) => (
         <g key={i}>
           <circle
             className="legend-dots"
@@ -92,11 +103,15 @@ function ChartLegends({ projects, color, size, height }) {
   );
 }
 
+type TPropsType = {
+  className: string;
+}
+
 // Component for Active User Projects in Campus
-export default function ActiveUserProjects(props) {
-  const [projects, setProjects] = useState(undefined);
+export default function ActiveUserProjects(props:TPropsType) {
+  const [projects, setProjects] = React.useState<TDataType[] | undefined>(undefined);
   const color = d3.scaleOrdinal(d3.schemeTableau10);
-  const ref = useRef();
+  const ref = React.useRef<HTMLDivElement>(null);
   const dimension = useDimensions(ref);
   const size = dimension.width - 200,
     radius = size / Math.PI;

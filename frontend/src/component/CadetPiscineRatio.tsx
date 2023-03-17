@@ -1,22 +1,32 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Card from "./Card";
 import CardTitle from "./CardTitle";
 import "../styles/ratio.css";
 import { useDimensions } from "../hooks/useDimension";
 import axios from "axios";
+import { TranspileOutput } from "typescript";
 // Ratio Bar for Cadets vs Pisciners
 
-function getRatio(cadets, pisciners, width) {
+type TStudentType = {
+  cadets: number,
+  pisciners: number
+}
+
+type TPropsType = {
+  [key: string]: any;
+}
+
+function getRatio(cadets:number, pisciners:number, width:number) {
   let total = cadets + pisciners;
   let widthCadets = (cadets / total) * (width * 0.8);
   let widthPisciners = (pisciners / total) * (width * 0.8);
   return { cadets: widthCadets, pisciners: widthPisciners };
 }
 
-export default function CadetPiscineRatio(props) {
-  const cardRef = useRef(null);
+export default function CadetPiscineRatio(props:TPropsType) {
+  const cardRef = React.useRef<HTMLDivElement>(null);
   const dimension = useDimensions(cardRef);
-  const [students, setStudents] = useState(undefined);
+  const [students, setStudents] = useState<TStudentType | undefined>(undefined);
   useEffect(() => {
     const fetchRatio = async () => {
       await axios
@@ -36,10 +46,13 @@ export default function CadetPiscineRatio(props) {
     const interval = setInterval(fetchRatio, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
-  let barWidth =
-    students && getRatio(students.cadets, students.pisciners, dimension.width);
+  
+  let barWidth:TStudentType = {cadets: 0, pisciners: 0};
+  if (students){
+    getRatio(students.cadets, students.pisciners, dimension.width);
+  }
   return (
-    <Card ref={cardRef}>
+    <Card ref={cardRef} className="">
       <CardTitle>
         <span className="h1-cadets">Cadets</span> to{" "}
         <span className="h1-piscine">Piscine</span> ratio
