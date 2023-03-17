@@ -170,9 +170,6 @@ See the [open issues](https://github.com/Bunyod16/42-on_campus_stats/issues) for
 
 <!-- LICENSE -->
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
