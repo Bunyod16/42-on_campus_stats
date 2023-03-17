@@ -50,36 +50,12 @@ It gives useful insights about who is on campus, what projects are they doing/fi
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Installation & Usage
-
+#### note: install backend first
 <details>
-<summary>Click for Frontend</summary>
-<br/>
-   
--   Navigate /frontend
-
-```bash
-cd frontend
-```
-
--   Install dependencies
-
-```bash
-pnpm install
-```
-
--   Run frontend
-
-```bash
-pnpm start
-```
-
-</details>
-<br/>
-<details>
-<summary>Click for Backend</summary>
+<summary style="font-size: 1.25em;font-weight: bold;">Click for Backend</summary>
 <br/>
 
--   Navigate /backend
+- Navigate to `/backend`
 
 ```bash
 cd backend
@@ -106,9 +82,10 @@ touch .env
 -   .env file example
 
 ```python
-CAMPUS_UID = "YOUR_UID_HERE"
-CAMPUS_SECRET = "YOUR_SECRET_HERE"
-CAMPUS_ID = "YOUR_CAMPUS_ID_HERE"
+FT_API_UID = "YOUR_UID_HERE"
+FT_API_SECRET = "YOUR_SECRET_HERE"
+FT_CAMPUS_ID = "YOUR_FT_CAMPUS_ID_HERE"
+#tip: [How to find your campus id](https://google.com)
 ```
 
 -   Run the backend
@@ -119,8 +96,43 @@ flask run
 
 </details>
 
-<!-- ## Usage -->
-<!-- ROADMAP -->
+
+<details>
+<summary style="font-size: 1.25em;font-weight: bold;">Click for Frontend</summary>
+
+- Navigate /frontend
+
+```bash
+cd frontend
+```
+
+- Install dependencies
+
+```bash
+pnpm install
+```
+
+- Create .env file with the backend url
+
+```bash
+touch .env
+```
+
+- .env file example
+
+```python
+REACT_APP_BACKEND_API_URL="your_backend_url_here" #if run locally, usually http://localhost:5000/api
+```
+
+- Run frontend
+
+```bash
+pnpm start
+```
+
+</details>
+
+## Usage
 
 ## Roadmap
 
@@ -157,6 +169,9 @@ See the [open issues](https://github.com/Bunyod16/42-on_campus_stats/issues) for
 -   [Kevin](https://github.com/locorocorolling) for helping with Bug Fixes
 
 <!-- LICENSE -->
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 ## License
 
