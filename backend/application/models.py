@@ -243,6 +243,7 @@ class Token():
 
         submissions = []
         i = -1
+        last = -3
         while (i >= -3):
             users = []
             for user in newlist[i]['teams'][0]['users']:
@@ -262,6 +263,9 @@ class Token():
             else:
                 time_string = f"{int(seconds_since_submission / 60 / 60)} hours ago"
             submissions.append({"users":users, "project":project, "score":score, "time":time_string})
+            if (len(submissions) > 1 and submissions[0]["score"] == submissions[1]["score"] and submissions[0]["time"] == submissions[1]["time"]):
+                submissions.pop() #TODO: this is so bad but i had to do it fast
+                last -= 1
             i -= 1
         
         return (submissions)
