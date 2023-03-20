@@ -108,15 +108,15 @@ class Token():
         self._token = None
         self._token_expiration = datetime.now()
         
-        # self.weekly_cadet_xp = self.load_weekly_cadet_xp()
+        self.weekly_cadet_xp = self.load_weekly_cadet_xp()
         self.weekly_cadet_xp_timeout = datetime.now() + timedelta(hours=6)
         
         self.week_active_users = {}
         self.active_users = None
-        # self.active_user_info = self.get_active_user_info()
+        self.active_user_info = self.get_active_user_info()
         self.user_info_timeout = datetime.now() + timedelta(minutes=30)
     
-        # self.daily_active_users = self.load_daily_active_users()
+        self.daily_active_users = self.load_daily_active_users()
         self.daily_users_timeout = datetime.now() + timedelta(minutes=30)
 
     def get_active_users(self):
