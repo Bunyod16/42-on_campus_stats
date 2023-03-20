@@ -46,11 +46,8 @@ export default function CadetPiscineRatio(props:TPropsType) {
     const interval = setInterval(fetchRatio, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
-  
-  let barWidth:TStudentType = {cadets: 0, pisciners: 0};
-  if (students){
-    getRatio(students.cadets, students.pisciners, dimension.width);
-  }
+  let barWidth:any =
+    students && getRatio(students.cadets, students.pisciners, dimension.width);
   return (
     <Card ref={cardRef} className="">
       <CardTitle>
