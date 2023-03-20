@@ -108,15 +108,15 @@ class Token():
         self._token = None
         self._token_expiration = datetime.now()
         
-        self.weekly_cadet_xp = self.load_weekly_cadet_xp()
+        # self.weekly_cadet_xp = self.load_weekly_cadet_xp()
         self.weekly_cadet_xp_timeout = datetime.now() + timedelta(hours=6)
         
         self.week_active_users = {}
         self.active_users = None
-        self.active_user_info = self.get_active_user_info()
+        # self.active_user_info = self.get_active_user_info()
         self.user_info_timeout = datetime.now() + timedelta(minutes=30)
     
-        self.daily_active_users = self.load_daily_active_users()
+        # self.daily_active_users = self.load_daily_active_users()
         self.daily_users_timeout = datetime.now() + timedelta(minutes=30)
 
     def get_active_users(self):
@@ -227,7 +227,7 @@ class Token():
         """
 
         _now = datetime.now() + timedelta(days=7) #just make it into the future to get everything
-        _week_ago = datetime.now() - timedelta(days=1)
+        _week_ago = datetime.now() - timedelta(days=7)
         logging.debug(f"Querry for most recent submission, with time between {_now}, {_week_ago}")
         url = f"https://api.intra.42.fr/v2/projects_users?range[final_mark]=50,200&filter[campus]={self.campus_id}&filter[marked]=true&range[marked_at]={_week_ago.year}-{_week_ago.month}-{_week_ago.day}T00%3A00%3A00.000Z,{_now.year}-{_now.month}-{_now.day}T00%3A00%3A00.000Z&per_page=100&page=0&access_token={self.get_token()}"
         response = requests.get(url)
@@ -242,14 +242,12 @@ class Token():
         newlist = sorted(response.json(), key=lambda d: convert_time(d['updated_at'])) 
         seen_teams = set()
         latest_submissions = [d for d in newlist if d['current_team_id'] not in seen_teams and not seen_teams.add(d['current_team_id'])]
-        
+        latest_submissions = latest_submissions[-3:]
 
         submissions = []
-        i = -1
-        while (i >= -3): 
-            print(latest_submissions[i])
+        for submission in latest_submissions:
             users = []
-            for user in latest_submissions[i]['teams'][0]['users']:
+            for user in submission['teams'][0]['users']:
                 _temp = {}
                 _temp['login'] = user['login']
                 _temp['image'] = requests.get(
@@ -258,15 +256,14 @@ class Token():
                 if not _temp['image']:
                     _temp['image'] = "https://i.imgur.com/F0zhHes.jpg"
                 users.append(_temp)
-            project = latest_submissions[i]['project']['name']
-            score = latest_submissions[i]['final_mark']
-            seconds_since_submission = (datetime.now() - datetime.strptime(latest_submissions[i]['updated_at'], "%Y-%m-%dT%H:%M:%S.%fZ")).total_seconds()
+            project = submission['project']['name']
+            score = submission['final_mark']
+            seconds_since_submission = (datetime.now() - datetime.strptime(submission['updated_at'], "%Y-%m-%dT%H:%M:%S.%fZ")).total_seconds()
             if seconds_since_submission <= 3600:
                 time_string = f"{int(seconds_since_submission / 60)} minutes ago"
             else:
                 time_string = f"{int(seconds_since_submission / 60 / 60)} hours ago"
             submissions.append({"users":users, "project":project, "score":score, "time":time_string})
-            i -= 1
         
         return (submissions)
     
