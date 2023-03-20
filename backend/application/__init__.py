@@ -12,8 +12,8 @@ config = {
 }
 
 app = Flask(__name__)
+cache = Cache(app)
 CORS(app)
 app.config.from_mapping(config)
-cache = Cache(app)
 
 from application import routes
