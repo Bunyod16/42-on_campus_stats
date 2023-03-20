@@ -3,10 +3,14 @@ from flask import jsonify
 from .models import Token
 import os
 from dotenv import load_dotenv
+from flask_cors import CORS, cross_origin
 
 load_dotenv()
 
 token = Token(int(os.getenv("FT_CAMPUS_ID")), os.getenv("FT_API_UID"), os.getenv("FT_API_SECRET"))
+
+
+CORS(app)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -66,5 +70,6 @@ def weekly_most_active_users():
 
 @app.route('/api/weekly-most-gained-xp', methods=['GET'])
 @cache.cached(timeout=1800)
+@cross_origin(send_wildcard=True)
 def weekly_most_gained_xp():
     return (jsonify(token.weekly_most_gained_xp()))
