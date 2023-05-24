@@ -38,8 +38,8 @@ function ProjectContainer({
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-row items-center m-auto space-x-1">
-        {users.map((user) => (
-          <ColumnComponent imageSrc={user.image} login={user.login} />
+        {users.map((user, i) => (
+          <ColumnComponent key={i} imageSrc={user.image} login={user.login} />
         ))}
       </div>
       <p className="text-lg">{name}</p>
@@ -68,7 +68,7 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
       await axios
         .get("/most-recent-submission")
         .then((res) => {
-          let data = res.data;
+          const data = res.data;
           if (JSON.stringify(data) !== "{}") setData(data);
           else
             console.log("MostRecentSubmission get successful but data empty.");

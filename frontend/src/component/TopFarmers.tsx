@@ -12,7 +12,7 @@ interface ColumnComponentProps {
 
 function formatNumber(num: number) {
   if (num >= 1000 && num < 1000000) {
-    let numString = (num / 1000).toFixed(1);
+    const numString = (num / 1000).toFixed(1);
     if (numString.endsWith(".0")) {
       return numString.slice(0, -2) + "k";
     } else {
@@ -40,7 +40,7 @@ const TopFarmers = ({ className }: ITopFarmers) => {
       await axios
         .get("/weekly-most-gained-xp")
         .then((res) => {
-          let data = res.data;
+          const data = res.data;
           if (JSON.stringify(data) !== "{}") {
             setData(data);
             console.log("TopFarmers get successful");

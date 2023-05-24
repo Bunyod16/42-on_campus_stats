@@ -130,7 +130,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
       await axios
         .get("/on-campus/daily-total-active-students")
         .then((res) => {
-          let data = res.data;
+          const data = res.data;
           const newData = Object.keys(data).map((key) => {
             const date = new Date(key).toDateString().split(" ");
             return {

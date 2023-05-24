@@ -26,7 +26,7 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
       await axios
         .get("/weekly-most-active-users")
         .then((res) => {
-          let data = res.data;
+          const data = res.data;
           if (JSON.stringify(data) !== "{}") {
             setData(data);
             console.log("MostRecentSubmission get successful");

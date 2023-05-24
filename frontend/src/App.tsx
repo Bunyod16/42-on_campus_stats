@@ -11,7 +11,7 @@ import WeeklyCadetXp from "./component/WeeklyCadetXp";
 import MostActiveUsers from "./component/MostActiveUsers";
 import TopFarmers from "./component/TopFarmers";
 
-// todo dynamic width/height based on whichever is narrower on screen
+// TODO: dynamic width/height based on whichever is narrower on screen
 
 function App() {
   const transitionTime = 20000;
@@ -57,8 +57,13 @@ function App() {
     }, 1000);
     return () => clearTimeout(timeoutId);
   }, [currentComponent]);
+
   return (
-    <div className="text-center h-screen flex flex-col items-center bg-gray-800  min-w-[1200px] min-h-[1200px] text-base">
+    <div
+      className={
+        "text-center h-screen w-screen flex flex-col items-center bg-gray-800  min-w-[1200px]  text-base overflow-hidden "
+      }
+    >
       <div className="bg-gray-900 text-3xl flex flex-col items-center justify-center text-white py-4 w-full">
         <h1>Live Stats: 42 Kuala Lumpur</h1>
       </div>

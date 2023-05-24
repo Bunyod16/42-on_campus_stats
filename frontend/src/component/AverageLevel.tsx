@@ -11,7 +11,7 @@ const AverageLevel = ({ className }: { className: string }) => {
       await axios
         .get("/on-campus/average-user-level")
         .then((res) => {
-          let data = res.data;
+          const data = res.data;
           setAverageLvl(data["average_level"]);
         })
         .catch((err) => {

@@ -1,12 +1,12 @@
 import React from "react";
 
-export const useDimensions = (myRef: React.RefObject<any>) => {
+export const useDimensions = (myRef: React.RefObject<HTMLDivElement>) => {
   const [dimension, setDimension] = React.useState({ width: 0, height: 0 });
 
   React.useEffect(() => {
     const getDimensions = () => ({
-      width: (myRef && myRef.current.offsetWidth) || 0,
-      height: (myRef && myRef.current.offsetHeight) || 0,
+      width: (myRef && myRef.current && myRef.current.offsetWidth) || 0,
+      height: (myRef && myRef.current && myRef.current.offsetHeight) || 0,
     });
 
     const handleResize = () => {

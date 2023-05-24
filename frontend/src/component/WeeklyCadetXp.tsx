@@ -131,7 +131,7 @@ const WeeklyCadetXp = ({ className }: IWeeklyCadetXp) => {
       await axios
         .get("/on-campus/weekly-cadet-xp")
         .then((res) => {
-          let data = res.data;
+          const data = res.data;
           const newData = Object.keys(data).map((key) => {
             const date = new Date(key).toDateString().split(" ");
             return {
