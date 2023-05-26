@@ -3,8 +3,10 @@ import Card from "./Card";
 import CardTitle from "./CardTitle";
 import * as d3 from "d3";
 import "../styles/chart.css";
-import { useDimensions } from "../hooks/useDimension";
+// import { useDimensions } from "../hooks/useDimension";
 import axios from "axios";
+import { UPDATE_TIME } from "../constant/global";
+import useChartDimensions from "../hooks/useChartDimension";
 // turn data object into array of objects
 /*
 Example :
@@ -65,7 +67,8 @@ function PieChart({
     .innerRadius(0)
     .outerRadius(radius * 0.9);
   return (
-    <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
+    // transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}
+    <g transform={`translate(${radius + 40}, ${radius})`}>
       {pie(projects).map((d: any, i) => {
         return (
           <g className="arc" key={i}>
@@ -97,51 +100,47 @@ function ChartLegends({
   size: number;
   height: number;
 }): JSX.Element {
-  const legendMargin = (height - (height / 16) * 10) / 2;
+  // const legendMargin = (height - (height / 16) * 10) / 2;
+  const legendMargin = 12;
   return (
-    <g transform={`translate(${size * 0.9},${height / 16})`}>
-      {projects.map(
-        (
-          { project, user_num }: { project: string; user_num: number },
-          i: number
-        ) => (
-          <g key={i}>
-            <circle
-              className="legend-dots"
-              cx="0"
-              cy={legendMargin + i * (height / 18)}
-              r="7"
-              fill={color(i)}
-            ></circle>
-            <text
-              className="text-base"
-              x="16"
-              y={legendMargin + 5 + i * (height / 18)}
-              style={{ fill: "#f3f4f6" }}
-            >
-              {project}
-            </text>
-          </g>
-        )
-      )}
+    <g transform={`translate(${size * 2.3 + legendMargin},${height * 0.25})`}>
+      {projects.map(({ project }: { project: string }, i: number) => (
+        <g key={i}>
+          <circle
+            className="legend-dots"
+            cx="0"
+            cy={legendMargin + i * (height / 18)}
+            r="7"
+            fill={color(i)}
+          ></circle>
+          <text
+            className="text-base"
+            x="16"
+            y={legendMargin + 5 + i * (height / 18)}
+            style={{ fill: "#f3f4f6" }}
+          >
+            {project}
+          </text>
+        </g>
+      ))}
     </g>
   );
 }
 
-type TPropsType = {
-  className: string;
-};
-
 // Component for Active User Projects in Campus
-export default function ActiveUserProjects(props: TPropsType) {
+export default function ActiveUserProjects() {
   const [projects, setProjects] = React.useState<TDataType[] | undefined>(
     undefined
   );
   const color = d3.scaleOrdinal(d3.schemeTableau10);
-  const ref = React.useRef<HTMLDivElement>(null);
-  const dimension = useDimensions(ref);
-  const size = dimension.width - 200,
-    radius = size / Math.PI;
+  const [ref, dimension] = useChartDimensions({
+    marginLeft: 16,
+    marginRight: 16,
+  });
+  const size = dimension.width * 0.9;
+  // const size = (dimension.width / 3) * 2;
+  const radius = size / Math.PI;
+
   // This is TO FETCH DATA FROM API
   useEffect(() => {
     const fetchProjects = async () => {
@@ -155,12 +154,12 @@ export default function ActiveUserProjects(props: TPropsType) {
         });
     };
     fetchProjects();
-    const interval = setInterval(fetchProjects, 1000 * 60 * 1);
+    const interval = setInterval(fetchProjects, UPDATE_TIME);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <Card className={props.className} ref={ref}>
+    <Card ref={ref}>
       <CardTitle>Active User Projects</CardTitle>
       {projects ? (
         <svg
@@ -172,19 +171,20 @@ export default function ActiveUserProjects(props: TPropsType) {
           <ChartLegends
             projects={projects}
             color={color}
-            size={size}
+            size={radius}
             height={(dimension.width / 16) * 9}
           />
-          <p>banana</p>
         </svg>
       ) : (
         <div
-          className="bg-gray-500 rounded animate-pulse"
+          className={`bg-gray-500 rounded animate-pulse w-[${dimension.width}rem] h-[${dimension.width}rem] `}
           style={{
             width: `${dimension.width}px`,
             height: `${(dimension.width / 16) * 9}px`,
           }}
-        />
+        >
+          something
+        </div>
       )}
     </Card>
   );
