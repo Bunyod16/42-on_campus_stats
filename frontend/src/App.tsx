@@ -16,7 +16,6 @@ import TopFarmers from "./component/TopFarmers";
 function App() {
   const transitionTime = 20000;
   const [currentComponent, setCurrentComponent] = useState("WeeklyCadetXp");
-
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentComponent((currentComponent) =>
@@ -61,28 +60,31 @@ function App() {
   return (
     <div
       className={
-        "text-center h-screen w-screen flex flex-col items-center bg-gray-800  min-w-[1200px]  text-base overflow-hidden "
+        "text-center h-screen w-screen flex flex-col items-center bg-gray-800    text-base "
       }
     >
-      <div className="bg-gray-900 text-3xl flex flex-col items-center justify-center text-white py-4 w-full">
-        <h1>Live Stats: 42 Kuala Lumpur</h1>
+      {/* Top Title Bar*/}
+      <div className="bg-gray-900  flex  items-center justify-center text-white py-3 w-full">
+        <h1 className="text-xl md:text-2xl">Live Stats: 42 Kuala Lumpur</h1>
       </div>
-      <div className="flex w-full gap-4 xl:max-w-[80%] content-center m-4 px-4 h-full">
-        <div className="flex-col inline-flex gap-4 max-h-full flex-[2]">
-          <ActiveUserProjects className="" />
-          <CurrentActiveUser className="flex-1" />
+
+      {/* Dashboard Layout */}
+      <div className="flex flex-col md:flex-row w-full gap-4 xl:max-w-[80%] content-center m-4 px-4 h-full">
+        <div className="flex flex-col  gap-4 h-full flex-[2]">
+          <ActiveUserProjects />
+          {/* <CurrentActiveUser className="flex-1" /> */}
         </div>
-        <div className="flex-col inline-flex gap-4 max-h-full flex-[2]">
-          <MostActiveUsers />
-          <TopFarmers />
-          <TotalActiveUser7Days className={className1} />
-          <WeeklyCadetXp className={className2} />
-          <CadetPiscineRatio className="h-full" />
+        <div className="flex flex-col  gap-4 h-full flex-[2]">
+          {/* <MostActiveUsers /> */}
+          {/* <TopFarmers /> */}
+          {/* <TotalActiveUser7Days className={className1} /> */}
+          {/* <WeeklyCadetXp className={className2} /> */}
+          {/* <CadetPiscineRatio className="h-full" /> */}
         </div>
-        <div className="flex-col inline-flex gap-4 max-h-full flex-1">
-          <AverageLevel className="" />
-          <AverageSessionTime className="" />
-          <MostRecentSubmission className="" />
+        <div className="flex flex-col  gap-4 h-full flex-1">
+          {/* <AverageLevel /> */}
+          {/* <AverageSessionTime /> */}
+          {/* <MostRecentSubmission /> */}
         </div>
       </div>
     </div>

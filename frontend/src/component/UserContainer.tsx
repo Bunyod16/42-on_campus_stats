@@ -7,9 +7,9 @@ const UserContainer = ({
   login: string;
   extra?: string;
 }) => (
-  <div className="flex flex-col items-center text-[#FFFFF] font-medium">
+  <div className="flex flex-col items-center  ">
     <img
-      className="rounded-full h-16 w-16 object-cover"
+      className="rounded-full h-12 w-12 xl:h-16 xl:w-16 object-cover"
       src={imgSrc}
       alt="user image"
     />
