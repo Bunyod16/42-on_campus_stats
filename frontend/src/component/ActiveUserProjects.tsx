@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import CardTitle from "./CardTitle";
 import * as d3 from "d3";
 import "../styles/chart.css";
-// import { useDimensions } from "../hooks/useDimension";
 import axios from "axios";
 import { UPDATE_TIME } from "../constant/global";
 import useChartDimensions from "../hooks/useChartDimension";
+import clsx from "clsx";
 // turn data object into array of objects
 /*
 Example :
@@ -74,12 +74,13 @@ function PieChart({
           <g className="arc" key={i}>
             <path fill={color(i)} d={arc(d)!}></path>
             <text
-              className="chart-text"
+              className={clsx("text-xs fill-white")}
+              style={{ textAnchor: "middle" }}
               transform={`translate(${arc.centroid(d)[0]}, ${
                 arc.centroid(d)[1]
               })`}
             >
-              {d.data.percentage}
+              {d.data.user_num}
             </text>
           </g>
         );
@@ -100,23 +101,22 @@ function ChartLegends({
   size: number;
   height: number;
 }): JSX.Element {
-  // const legendMargin = (height - (height / 16) * 10) / 2;
-  const legendMargin = 12;
+  // const legendMargin = 16 + 4;
   return (
-    <g transform={`translate(${size * 2.3 + legendMargin},${height * 0.25})`}>
+    <g transform={`translate(${size * 2.2},${height * 0.25})`}>
       {projects.map(({ project }: { project: string }, i: number) => (
         <g key={i}>
           <circle
-            className="legend-dots"
-            cx="0"
-            cy={legendMargin + i * (height / 18)}
-            r="7"
+            // className="legend-dots "
+            cx="2rem"
+            cy={`${1.25 * i}rem`}
+            r="5"
             fill={color(i)}
           ></circle>
           <text
-            className="text-base"
-            x="16"
-            y={legendMargin + 5 + i * (height / 18)}
+            className="text-sm"
+            x="2.75rem"
+            y={`${1.25 * i + 0.25}rem`}
             style={{ fill: "#f3f4f6" }}
           >
             {project}
@@ -182,9 +182,7 @@ export default function ActiveUserProjects() {
             width: `${dimension.width}px`,
             height: `${(dimension.width / 16) * 9}px`,
           }}
-        >
-          something
-        </div>
+        ></div>
       )}
     </Card>
   );

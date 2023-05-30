@@ -14,7 +14,7 @@ const Card = forwardRef<HTMLDivElement, ICardProps>(function Card(
   return (
     <div
       className={
-        "text-center align-middle bg-gray-700 rounded-md text-gray-200 p-4 w-full h-full " +
+        "text-center align-middle bg-gray-700 rounded-md text-gray-200 p-2 w-full  " +
         className
       }
       ref={ref}

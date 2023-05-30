@@ -3,6 +3,7 @@ import axios from "axios";
 import Card from "./Card";
 import CardTitle from "./CardTitle";
 import UserContainer from "./UserContainer";
+import { UPDATE_TIME } from "../constant/global";
 
 interface IMostRecentSubmissionProps {
   className?: string;
@@ -37,16 +38,16 @@ function ProjectContainer({
 }: ProjectContainerProps) {
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-row items-center m-auto space-x-1">
+      <div className="flex flex-row items-center gap-1">
         {users.map((user, i) => (
           <ColumnComponent key={i} imageSrc={user.image} login={user.login} />
         ))}
       </div>
       <p className="text-lg">{name}</p>
-      <p className="text-sm">
-        score: <span className="text-xl text-green-500">{score}</span>/100
+      <p className="">
+        <span className="text-xl text-green-500">{score}</span>/100
       </p>
-      <p className="text-sm text-gray-400">{time_string}</p>
+      <span className="text-sm text-gray-400">{time_string}</span>
     </div>
   );
 }
@@ -81,17 +82,17 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
     fetchData();
 
     // Call the API every 5 minutes
-    const interval = setInterval(fetchData, 1000 * 60 * 1);
+    const interval = setInterval(fetchData, UPDATE_TIME);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
   // let data = [{users: [{login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'},{login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'},{login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}], project: 'testproj', score: 125, time: 'now'}, {users: [{login: 'ksshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}], project: 'testproj', score: 25, time: 'later'}, ]
   return (
-    <Card className={className + " flex flex-col"}>
+    <Card className={className + " flex flex-col flex-1 overflow-hidden"}>
       <CardTitle>Most recent submission</CardTitle>
       {data ? (
-        <div className="text-6xl align-middle flex flex-col justify-center items-center gap-5">
+        <div className=" align-middle flex flex-col justify-center items-center gap-3 h-full">
           <ProjectContainer
             name={data[0].project}
             time_string={data[0].time}

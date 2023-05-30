@@ -7,14 +7,14 @@ const UserContainer = ({
   login: string;
   extra?: string;
 }) => (
-  <div className="flex flex-col items-center  ">
+  <div className="flex flex-col items-center justify-center max-h-[84px] 2xl:h-[108px] ">
     <img
-      className="rounded-full h-12 w-12 xl:h-16 xl:w-16 object-cover"
+      className="rounded-full h-10 w-10 2xl:h-16 2xl:w-16 object-cover"
       src={imgSrc}
       alt="user image"
     />
     <p className="text-sm">{login}</p>
-    <b className="text-lg">{extra}</b>
+    {extra && <b className="2xl:text-lg">{extra}</b>}
   </div>
 );
 
