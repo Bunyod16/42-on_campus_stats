@@ -1,0 +1,29 @@
+.img-wrapper {
+  max-width: 150px;
+  position: relative;
+}
+
+.img-wrapper img {  
+  border-radius: 60%;
+}
+
+.img-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 4px solid #33333300;
+  border-top-color: rgb(255, 255, 255);
+  border-bottom-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  z-index: 1;
+  animation: spin 3s linear infinite;
+}
+
+.img-wrapper:hover::before {
+  animation: spin 0.5s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

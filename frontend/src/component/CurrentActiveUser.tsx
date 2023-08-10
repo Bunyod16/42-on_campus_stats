@@ -3,6 +3,7 @@ import { User } from "../../types";
 import axios from "axios";
 import CardTitle from "./CardTitle";
 import Card from "./Card";
+import "../styles/border.css"
 
 function CurrentActiveUser({ className }: { className: string }) {
   const [users, setUsers] = React.useState<User[] | undefined>(undefined);
@@ -53,6 +54,7 @@ function CurrentActiveUser({ className }: { className: string }) {
   const userGallery = users?.map((singleUser, i) => {
     return (
       <div key={i} className="flex flex-col items-center">
+        <div className={(singleUser.login == "kecheong" ? "img-wrapper" : "")}>
         <img
           src={singleUser.image}
           alt="user image"
@@ -61,6 +63,7 @@ function CurrentActiveUser({ className }: { className: string }) {
             (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
           }
         />
+        </div>
         <p className="text-sm">{singleUser.login}</p>
       </div>
     );
@@ -70,7 +73,7 @@ function CurrentActiveUser({ className }: { className: string }) {
     <Card className={className + " flex flex-col max-h-[50vh]"}>
       <CardTitle>Current Active Users ({users?.length})</CardTitle>
       <div
-        className="grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full"
+        className="grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full pt-2"
         ref={divRef}
         id="user-gallery"
       >
