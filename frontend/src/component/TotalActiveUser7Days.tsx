@@ -12,6 +12,8 @@ import { useDimensions } from "../hooks/useDimension";
 import Card from "./Card";
 import CardTitle from "./CardTitle";
 import axios from "axios";
+import useChartDimensions from "../hooks/useChartDimension";
+import { UPDATE_TIME } from "../constant/global";
 interface Data {
   label: string;
   value: number;
@@ -120,17 +122,21 @@ interface ITotalActiveUser7Days {
   className?: string;
 }
 const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  // const containerRef = React.useRef<HTMLDivElement>(null);
   const [data, setData] = React.useState<any | undefined>(undefined);
 
-  const dimension = useDimensions(containerRef);
+  // const dimension = useDimensions(containerRef);
+  const [ref, dimension] = useChartDimensions({
+    marginLeft: 16,
+    marginRight: 16,
+  });
 
   React.useEffect(() => {
     const fetchUsers = async () => {
       await axios
         .get("/on-campus/daily-total-active-students")
         .then((res) => {
-          let data = res.data;
+          const data = res.data;
           const newData = Object.keys(data).map((key) => {
             const date = new Date(key).toDateString().split(" ");
             return {
@@ -147,7 +153,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
     fetchUsers();
 
     // Call the API every 5 minutes
-    const interval = setInterval(fetchUsers, 1000 * 60 * 5);
+    const interval = setInterval(fetchUsers, UPDATE_TIME);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
@@ -155,7 +161,7 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
   return (
     // the container for the svg
-    <Card className={className + " flex flex-col"} ref={containerRef}>
+    <Card className={className + " flex flex-col"} ref={ref}>
       <CardTitle>Total active users last 7 days</CardTitle>
       {data ? (
         // <div ref={containerRef} className="w-full">
