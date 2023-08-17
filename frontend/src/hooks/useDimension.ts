@@ -10,10 +10,14 @@ export const useDimensions = (myRef: React.RefObject<any>) => {
     });
 
     const handleResize = () => {
-      setDimension(getDimensions());
+      const tempDimensions = getDimensions();
+      console.log("temp", tempDimensions);
+      if (dimension.width < tempDimensions.width && dimension.height < tempDimensions.height)
+        setDimension(tempDimensions);
     };
 
     if (myRef.current) {
+      console.log("current", getDimensions());
       setDimension(getDimensions());
     }
 
