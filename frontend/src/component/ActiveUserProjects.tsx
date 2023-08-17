@@ -42,7 +42,10 @@ function cleaningData(dataObj:TApiDataType) {
   dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
   tots = d3.sum(dataset, (d) => d["user_num"]);
   dataset.forEach(
-    (x) => (x.percentage = ((x.user_num / tots) * 100).toFixed(2) + "%")
+    (x) => {
+      const floatNum = (x.user_num / tots) * 100;
+      x.percentage = (floatNum.toFixed(2) + "%");
+    }
   );
   return dataset;
 }
@@ -66,7 +69,7 @@ function PieChart({ projects, color, radius }:{projects: any, color: Function, r
                 arc.centroid(d)[1]
               })`}
             >
-              {d.data.percentage}
+              {d.data.user_num}
             </text>
           </g>
         );
@@ -80,7 +83,7 @@ function ChartLegends({ projects, color, size, height } : { projects:TDataType[]
   let legendMargin = (height - (height / 16) * 10) / 2;
   return (
     <g transform={`translate(${size * 0.9},${height / 16})`}>
-      {projects.map(({ project, user_num } : {project: string, user_num: number}, i:number) => (
+      {projects.map(({ project, percentage } : {project: string, percentage: string}, i:number) => (
         <g key={i}>
           <circle
             className="legend-dots"
@@ -95,7 +98,7 @@ function ChartLegends({ projects, color, size, height } : { projects:TDataType[]
             y={legendMargin + 5 + i * (height / 18)}
             style={{ fill: "#f3f4f6" }}
           >
-            {project}
+            {project + " (" + percentage + ")"}
           </text>
         </g>
       ))}
@@ -148,7 +151,6 @@ export default function ActiveUserProjects(props:TPropsType) {
             size={size}
             height={(dimension.width / 16) * 9}
           />
-          <p>banana</p>
         </svg>
       ) : (
         <div
