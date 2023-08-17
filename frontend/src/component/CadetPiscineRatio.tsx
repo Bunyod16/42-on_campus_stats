@@ -17,9 +17,9 @@ type TPropsType = {
 };
 
 function getRatio(cadets: number, pisciners: number, width: number) {
-  const total = cadets + pisciners;
-  const widthCadets = (cadets / total) * (width * 0.8);
-  const widthPisciners = (pisciners / total) * (width * 0.8);
+  let total = cadets + pisciners;
+  let widthCadets = (cadets / total) * (width * 0.8);
+  let widthPisciners = (pisciners / total) * (width * 0.8);
   return { cadets: widthCadets, pisciners: widthPisciners };
 }
 
@@ -32,7 +32,7 @@ export default function CadetPiscineRatio(props: TPropsType) {
       await axios
         .get("/on-campus/cadet-pisciner-ratio")
         .then((res) => {
-          const data = res.data;
+          let data = res.data;
           setStudents({
             cadets: parseInt(data["cadets"]),
             pisciners: parseInt(data["pisciners"]),
