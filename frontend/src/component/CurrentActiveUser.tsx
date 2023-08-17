@@ -57,7 +57,7 @@ function CurrentActiveUser({ className }: { className: string }) {
           src={singleUser.image}
           alt="user image"
           className={
-            "rounded-full h-12 w-12 2xl:h-16 2xl:w-16 object-cover border-4" +
+            "rounded-full h-16 w-16 object-cover border-4 " +
             (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
           }
         />

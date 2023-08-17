@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+// import { Card, CardTitle } from "../styles";
 import Card from "./Card";
 import CardTitle from "./CardTitle";
 import * as d3 from "d3";
 import "../styles/chart.css";
+import { useDimensions } from "../hooks/useDimension";
 import axios from "axios";
-import { UPDATE_TIME } from "../constant/global";
-import useChartDimensions from "../hooks/useChartDimension";
-import clsx from "clsx";
 // turn data object into array of objects
 /*
 Example :
@@ -25,23 +24,20 @@ dataset = [
 */
 
 type TDataType = {
-  project: string;
-  user_num: number;
-  percentage: string;
-};
+  project: string,
+  user_num: number,
+  percentage: string
+}
 
 type TApiDataType = {
   [key: string]: number;
-};
+}
 
-function cleaningData(dataObj: TApiDataType) {
-  let dataset: TDataType[] = [];
+function cleaningData(dataObj:TApiDataType) {
+  let dataset:TDataType[] = [];
   let tots = 0;
-  for (const d in dataObj) {
-    dataset = [
-      ...dataset,
-      { project: d, user_num: dataObj[d], percentage: "" },
-    ];
+  for (let d in dataObj) {
+    dataset = [...dataset, { project: d, user_num: dataObj[d], percentage:"" }];
   }
   dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
   tots = d3.sum(dataset, (d) => d["user_num"]);
@@ -55,30 +51,20 @@ function cleaningData(dataObj: TApiDataType) {
 }
 
 // Function PieChart Plotting
-function PieChart({
-  projects,
-  color,
-  radius,
-}: {
-  projects: any;
-  color: any;
-  radius: number;
-}) {
-  const pie = d3.pie().value((d: any) => d["user_num"]);
+function PieChart({ projects, color, radius }:{projects: any, color: Function, radius: number}) {
+  const pie = d3.pie().value((d:any) => d["user_num"]);
   const arc = d3
     .arc()
     .innerRadius(0)
     .outerRadius(radius * 0.9);
   return (
-    // transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}
-    <g transform={`translate(${radius + 40}, ${radius})`}>
-      {pie(projects).map((d: any, i) => {
+    <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
+      {pie(projects).map((d:any, i) => {
         return (
           <g className="arc" key={i}>
             <path fill={color(i)} d={arc(d)!}></path>
             <text
-              className={clsx("text-xs fill-white")}
-              style={{ textAnchor: "middle" }}
+              className="chart-text"
               transform={`translate(${arc.centroid(d)[0]}, ${
                 arc.centroid(d)[1]
               })`}
@@ -93,33 +79,23 @@ function PieChart({
 }
 
 // Plot Chart Legends
-function ChartLegends({
-  projects,
-  color,
-  size,
-  height,
-}: {
-  projects: TDataType[];
-  color: any;
-  size: number;
-  height: number;
-}): JSX.Element {
-  // const legendMargin = 16 + 4;
+function ChartLegends({ projects, color, size, height } : { projects:TDataType[], color: Function, size:number, height:number }) {
+  let legendMargin = (height - (height / 16) * 10) / 2;
   return (
     <g transform={`translate(${size * 0.9},${height / 16})`}>
       {projects.map(({ project, percentage } : {project: string, percentage: string}, i:number) => (
         <g key={i}>
           <circle
-            // className="legend-dots "
-            cx="2rem"
-            cy={`${1.25 * i}rem`}
-            r="5"
+            className="legend-dots"
+            cx="0"
+            cy={legendMargin + i * (height / 18)}
+            r="7"
             fill={color(i)}
           ></circle>
           <text
-            className="text-sm"
-            x="2.75rem"
-            y={`${1.25 * i + 0.25}rem`}
+            className="text-base"
+            x="16"
+            y={legendMargin + 5 + i * (height / 18)}
             style={{ fill: "#f3f4f6" }}
           >
             {project + " (" + percentage + ")"}
@@ -130,20 +106,18 @@ function ChartLegends({
   );
 }
 
-// Component for Active User Projects in Campus
-export default function ActiveUserProjects() {
-  const [projects, setProjects] = React.useState<TDataType[] | undefined>(
-    undefined
-  );
-  const color = d3.scaleOrdinal(d3.schemeTableau10);
-  const [ref, dimension] = useChartDimensions({
-    marginLeft: 16,
-    marginRight: 16,
-  });
-  const size = dimension.width * 0.9;
-  // const size = (dimension.width / 3) * 2;
-  const radius = size / Math.PI;
+type TPropsType = {
+  className: string;
+}
 
+// Component for Active User Projects in Campus
+export default function ActiveUserProjects(props:TPropsType) {
+  const [projects, setProjects] = React.useState<TDataType[] | undefined>(undefined);
+  const color = d3.scaleOrdinal(d3.schemeTableau10);
+  const ref = React.useRef<HTMLDivElement>(null);
+  const dimension = useDimensions(ref);
+  const size = dimension.width - 200,
+    radius = size / Math.PI;
   // This is TO FETCH DATA FROM API
   useEffect(() => {
     const fetchProjects = async () => {
@@ -157,12 +131,12 @@ export default function ActiveUserProjects() {
         });
     };
     fetchProjects();
-    const interval = setInterval(fetchProjects, UPDATE_TIME);
+    const interval = setInterval(fetchProjects, 1000 * 60 * 1);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <Card ref={ref}>
+    <Card className={props.className} ref={ref}>
       <CardTitle>Active User Projects</CardTitle>
       {projects ? (
         <svg
@@ -174,18 +148,18 @@ export default function ActiveUserProjects() {
           <ChartLegends
             projects={projects}
             color={color}
-            size={radius}
+            size={size}
             height={(dimension.width / 16) * 9}
           />
         </svg>
       ) : (
         <div
-          className={`bg-gray-500 rounded animate-pulse w-[${dimension.width}rem] h-[${dimension.width}rem] `}
+          className="bg-gray-500 rounded animate-pulse"
           style={{
             width: `${dimension.width}px`,
             height: `${(dimension.width / 16) * 9}px`,
           }}
-        ></div>
+        />
       )}
     </Card>
   );

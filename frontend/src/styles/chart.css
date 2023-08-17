@@ -1,19 +1,20 @@
-.legend-text {
-  font-size: 12px;
-  fill: white;
+.legend-text{
+    font-size: 12px;
+    fill: white;
 }
 
-/* .chart-text{ */
-/*     font-size: 10px; */
-/*     fill: white; */
-/*     text-anchor: middle; */
-/* } */
+.chart-text{
+    font-size: 10px;
+    fill: white;
+    text-anchor: middle;
+}
 
-.pie-chart-svg {
-  display: block;
-  margin: auto;
+.pie-chart-svg
+{
+    display: block;
+    margin: auto; 
 }
 
 .box {
-  display: inline;
+    display: inline;
 }

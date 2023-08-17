@@ -12,8 +12,6 @@ import { useDimensions } from "../hooks/useDimension";
 import axios from "axios";
 import Card from "./Card";
 import CardTitle from "./CardTitle";
-import { UPDATE_TIME } from "../constant/global";
-import useChartDimensions from "../hooks/useChartDimension";
 
 interface Data {
   label: string;
@@ -123,20 +121,17 @@ interface IWeeklyCadetXp {
   className?: string;
 }
 const WeeklyCadetXp = ({ className }: IWeeklyCadetXp) => {
-  // const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const [data, setData] = React.useState<any | undefined>(undefined);
 
-  const [ref, dimension] = useChartDimensions({
-    marginLeft: 16,
-    marginRight: 16,
-  });
+  const dimension = useDimensions(containerRef);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
       await axios
         .get("/on-campus/weekly-cadet-xp")
         .then((res) => {
-          const data = res.data;
+          let data = res.data;
           const newData = Object.keys(data).map((key) => {
             const date = new Date(key).toDateString().split(" ");
             return {
@@ -153,7 +148,7 @@ const WeeklyCadetXp = ({ className }: IWeeklyCadetXp) => {
     fetchUsers();
 
     // Call the API every 5 minutes
-    const interval = setInterval(fetchUsers, UPDATE_TIME);
+    const interval = setInterval(fetchUsers, 1000 * 60 * 5);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
@@ -161,7 +156,7 @@ const WeeklyCadetXp = ({ className }: IWeeklyCadetXp) => {
 
   return (
     // the container for the svg
-    <Card className={className + " flex flex-col "} ref={ref}>
+    <Card className={className + " flex flex-col"} ref={containerRef}>
       <CardTitle>Weekly cadet gained xp</CardTitle>
       {data ? (
         // <div ref={containerRef} className="w-full">
