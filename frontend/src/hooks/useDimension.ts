@@ -10,7 +10,9 @@ export const useDimensions = (myRef: React.RefObject<HTMLDivElement>) => {
     });
 
     const handleResize = () => {
-      setDimension(getDimensions());
+      const tempDimensions = getDimensions();
+      if (dimension.width < tempDimensions.width && dimension.height < tempDimensions.height)
+        setDimension(tempDimensions);
     };
 
     if (myRef.current) {

@@ -46,7 +46,10 @@ function cleaningData(dataObj: TApiDataType) {
   dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
   tots = d3.sum(dataset, (d) => d["user_num"]);
   dataset.forEach(
-    (x) => (x.percentage = ((x.user_num / tots) * 100).toFixed(2) + "%")
+    (x) => {
+      const floatNum = (x.user_num / tots) * 100;
+      x.percentage = (floatNum.toFixed(2) + "%");
+    }
   );
   return dataset;
 }
@@ -103,8 +106,8 @@ function ChartLegends({
 }): JSX.Element {
   // const legendMargin = 16 + 4;
   return (
-    <g transform={`translate(${size * 2.2},${height * 0.25})`}>
-      {projects.map(({ project }: { project: string }, i: number) => (
+    <g transform={`translate(${size * 0.9},${height / 16})`}>
+      {projects.map(({ project, percentage } : {project: string, percentage: string}, i:number) => (
         <g key={i}>
           <circle
             // className="legend-dots "
@@ -119,7 +122,7 @@ function ChartLegends({
             y={`${1.25 * i + 0.25}rem`}
             style={{ fill: "#f3f4f6" }}
           >
-            {project}
+            {project + " (" + percentage + ")"}
           </text>
         </g>
       ))}
