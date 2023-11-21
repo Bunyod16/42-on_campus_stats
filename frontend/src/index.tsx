@@ -7,6 +7,9 @@ import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_API_URL;
+axios.defaults.headers.common["Cache-Control"] = "no-cache";
+axios.defaults.headers.common["Pragma"] = "no-cache";
+axios.defaults.headers.common["Expires"] = "0";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
