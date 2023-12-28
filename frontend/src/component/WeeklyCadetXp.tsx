@@ -127,6 +127,11 @@ const WeeklyCadetXp = ({ className }: IWeeklyCadetXp) => {
   const dimension = useDimensions(containerRef);
 
   React.useEffect(() => {
+    console.log("BRUH", data);
+    console.log("huh");
+  }, [data]);
+
+  React.useEffect(() => {
     const fetchUsers = async () => {
       await axios
         .get("/on-campus/weekly-cadet-xp")
@@ -159,7 +164,6 @@ const WeeklyCadetXp = ({ className }: IWeeklyCadetXp) => {
     <Card className={className + " flex flex-col"} ref={containerRef}>
       <CardTitle>Weekly cadet gained xp</CardTitle>
       {data ? (
-        // <div ref={containerRef} className="w-full">
         <BarChart data={data} dimension={dimension} />
       ) : (
         // </div>

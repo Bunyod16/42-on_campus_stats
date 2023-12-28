@@ -24,42 +24,51 @@ dataset = [
 */
 
 type TDataType = {
-  project: string,
-  user_num: number,
-  percentage: string
-}
+  project: string;
+  user_num: number;
+  percentage: string;
+};
 
 type TApiDataType = {
   [key: string]: number;
-}
+};
 
-function cleaningData(dataObj:TApiDataType) {
-  let dataset:TDataType[] = [];
+function cleaningData(dataObj: TApiDataType) {
+  let dataset: TDataType[] = [];
   let tots = 0;
   for (let d in dataObj) {
-    dataset = [...dataset, { project: d, user_num: dataObj[d], percentage:"" }];
+    dataset = [
+      ...dataset,
+      { project: d, user_num: dataObj[d], percentage: "" },
+    ];
   }
   dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
   tots = d3.sum(dataset, (d) => d["user_num"]);
-  dataset.forEach(
-    (x) => {
-      const floatNum = (x.user_num / tots) * 100;
-      x.percentage = (floatNum.toFixed(2) + "%");
-    }
-  );
+  dataset.forEach((x) => {
+    const floatNum = (x.user_num / tots) * 100;
+    x.percentage = floatNum.toFixed(2) + "%";
+  });
   return dataset;
 }
 
 // Function PieChart Plotting
-function PieChart({ projects, color, radius }:{projects: any, color: Function, radius: number}) {
-  const pie = d3.pie().value((d:any) => d["user_num"]);
+function PieChart({
+  projects,
+  color,
+  radius,
+}: {
+  projects: any;
+  color: Function;
+  radius: number;
+}) {
+  const pie = d3.pie().value((d: any) => d["user_num"]);
   const arc = d3
     .arc()
     .innerRadius(0)
     .outerRadius(radius * 0.9);
   return (
     <g transform={"translate(" + (radius + 40) + "," + (40 + radius) + ")"}>
-      {pie(projects).map((d:any, i) => {
+      {pie(projects).map((d: any, i) => {
         return (
           <g className="arc" key={i}>
             <path fill={color(i)} d={arc(d)!}></path>
@@ -79,40 +88,57 @@ function PieChart({ projects, color, radius }:{projects: any, color: Function, r
 }
 
 // Plot Chart Legends
-function ChartLegends({ projects, color, size, height } : { projects:TDataType[], color: Function, size:number, height:number }) {
+function ChartLegends({
+  projects,
+  color,
+  size,
+  height,
+}: {
+  projects: TDataType[];
+  color: Function;
+  size: number;
+  height: number;
+}) {
   let legendMargin = (height - (height / 16) * 10) / 2;
   return (
     <g transform={`translate(${size * 0.9},${height / 16})`}>
-      {projects.map(({ project, percentage } : {project: string, percentage: string}, i:number) => (
-        <g key={i}>
-          <circle
-            className="legend-dots"
-            cx="0"
-            cy={legendMargin + i * (height / 18)}
-            r="7"
-            fill={color(i)}
-          ></circle>
-          <text
-            className="text-base"
-            x="16"
-            y={legendMargin + 5 + i * (height / 18)}
-            style={{ fill: "#f3f4f6" }}
-          >
-            {project + " (" + percentage + ")"}
-          </text>
-        </g>
-      ))}
+      {projects.map(
+        (
+          { project, percentage }: { project: string; percentage: string },
+          i: number
+        ) => (
+          <g key={i}>
+            <circle
+              className="legend-dots"
+              cx="0"
+              cy={legendMargin + i * (height / 18)}
+              r="7"
+              fill={color(i)}
+            ></circle>
+            <text
+              className="text-base"
+              x="16"
+              y={legendMargin + 5 + i * (height / 18)}
+              style={{ fill: "#f3f4f6" }}
+            >
+              {project + " (" + percentage + ")"}
+            </text>
+          </g>
+        )
+      )}
     </g>
   );
 }
 
 type TPropsType = {
   className: string;
-}
+};
 
 // Component for Active User Projects in Campus
-export default function ActiveUserProjects(props:TPropsType) {
-  const [projects, setProjects] = React.useState<TDataType[] | undefined>(undefined);
+export default function ActiveUserProjects(props: TPropsType) {
+  const [projects, setProjects] = React.useState<TDataType[] | undefined>(
+    undefined
+  );
   const color = d3.scaleOrdinal(d3.schemeTableau10);
   const ref = React.useRef<HTMLDivElement>(null);
   const dimension = useDimensions(ref);
