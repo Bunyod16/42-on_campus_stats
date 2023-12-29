@@ -144,13 +144,13 @@ function App() {
 
   return (
     <div
-      className="w-screen h-fit xl:h-[100dvh] min-h-[720px] flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
+      className="w-screen h-fit xl:h-[100dvh] min-h-[860px] flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
       ref={divRef}
     >
       <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-3 text-3xl text-white">
         <h1>Live Stats: 42 Kuala Lumpur</h1>
       </div>
-      <div className="w-[90%] h-full min-h-[660px] flex flex-col md:grid md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(14,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-4 gap-3">
+      <div className="w-[90%] h-full min-h-[780px] flex flex-col md:grid md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(14,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-4 gap-3">
         <ActiveUserProjects className="xl:row-span-6 xl:col-span-2" />
         <CurrentActiveUser className="xl:row-span-6 xl:col-span-2" />
         <MostActiveUsers className="xl:row-span-3 xl:col-span-2" />

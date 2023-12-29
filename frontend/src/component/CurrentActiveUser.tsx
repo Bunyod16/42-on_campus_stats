@@ -6,7 +6,8 @@ import Card from "./Card";
 
 function CurrentActiveUser({ className }: { className: string }) {
   const [users, setUsers] = React.useState<User[] | undefined>(undefined);
-  const divRef = React.useRef(null);
+  const divRef = React.useRef<HTMLDivElement>(null);
+  const [imageSize, setImageSize] = React.useState(0);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
@@ -50,18 +51,27 @@ function CurrentActiveUser({ className }: { className: string }) {
     return () => clearInterval(intervalId);
   }, [users]);
 
+  // useEffect to set userGallery image size based on card width
+  React.useEffect(() => {
+    if (divRef.current) {
+      const width = divRef.current.clientWidth;
+      setImageSize(Math.round((width * 0.6) / 5));
+    }
+  }, [divRef]);
+
   const userGallery = users?.map((singleUser, i) => {
     return (
-      <div key={i} className="flex flex-col items-center">
+      <div key={i} className="flex flex-col items-center justify-center">
         <img
           src={singleUser.image}
-          alt="user image"
+          alt="current-active-user"
           className={
-            "rounded-full h-16 w-16 object-cover border-4 " +
+            "rounded-full object-cover border-4 " +
             (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
           }
+          style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
         />
-        <p className="text-sm">{singleUser.login}</p>
+        <p className="text-sm 2xl:text-base">{singleUser.login}</p>
       </div>
     );
   });
@@ -70,7 +80,7 @@ function CurrentActiveUser({ className }: { className: string }) {
     <Card className={className + " flex flex-col max-h-[50vh]"}>
       <CardTitle>Current Active Users ({users?.length})</CardTitle>
       <div
-        className="grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full"
+        className="grid grid-cols-4 md:grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full"
         ref={divRef}
         id="user-gallery"
       >
