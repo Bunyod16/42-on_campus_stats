@@ -77,7 +77,7 @@ function CurrentActiveUser({ className }: { className: string }) {
   });
 
   return (
-    <Card className={className + " flex flex-col max-h-[50vh]"}>
+    <Card className={className + " flex flex-col"}>
       <CardTitle>Current Active Users ({users?.length})</CardTitle>
       <div
         className="grid grid-cols-4 md:grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full"

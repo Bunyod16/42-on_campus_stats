@@ -82,31 +82,14 @@ const TopFarmers = ({ className }: ITopFarmers) => {
       <CardTitle>Top Xp Farmers (7 days)</CardTitle>
       {data ? (
         <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full">
-          <ColumnComponent
-            imageSrc={data[0].image}
-            login={data[0].login}
-            xp={data[0].xp}
-          />
-          <ColumnComponent
-            imageSrc={data[1].image}
-            login={data[1].login}
-            xp={data[1].xp}
-          />
-          <ColumnComponent
-            imageSrc={data[2].image}
-            login={data[2].login}
-            xp={data[2].xp}
-          />
-          <ColumnComponent
-            imageSrc={data[3].image}
-            login={data[3].login}
-            xp={data[3].xp}
-          />
-          <ColumnComponent
-            imageSrc={data[4].image}
-            login={data[4].login}
-            xp={data[4].xp}
-          />
+          {data.map((item: any, index: number) => (
+            <ColumnComponent
+              key={index}
+              imageSrc={item.image}
+              login={item.login}
+              xp={item.xp}
+            />
+          ))}
         </div>
       ) : (
         <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
