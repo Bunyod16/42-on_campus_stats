@@ -77,36 +77,15 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
           className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full"
           ref={childRef}
         >
-          <ColumnComponent
-            imageSrc={data[0].image}
-            login={data[0].login}
-            hours={data[0].hours}
-            imgSize={imageSize}
-          />
-          <ColumnComponent
-            imageSrc={data[1].image}
-            login={data[1].login}
-            hours={data[1].hours}
-            imgSize={imageSize}
-          />
-          <ColumnComponent
-            imageSrc={data[2].image}
-            login={data[2].login}
-            hours={data[2].hours}
-            imgSize={imageSize}
-          />
-          <ColumnComponent
-            imageSrc={data[3].image}
-            login={data[3].login}
-            hours={data[3].hours}
-            imgSize={imageSize}
-          />
-          <ColumnComponent
-            imageSrc={data[4].image}
-            login={data[4].login}
-            hours={data[4].hours}
-            imgSize={imageSize}
-          />
+          {data.map((item: any, index: number) => (
+            <ColumnComponent
+              key={index}
+              imageSrc={item.image}
+              login={item.login}
+              hours={item.hours}
+              imgSize={imageSize}
+            />
+          ))}
         </div>
       ) : (
         <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
