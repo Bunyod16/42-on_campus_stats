@@ -15,95 +15,12 @@ import { isMobile } from "react-device-detect";
 
 // todo dynamic width/height based on whichever is narrower on screen
 
-interface ViewProps {
-  cycleGraph: string;
-  compWidth?: number;
-}
-
-const DesktopView = ({ cycleGraph, compWidth }: ViewProps) => {
-  // const transitionTime = 20000;
-  // const [currentComponent, setCurrentComponent] = useState("WeeklyCadetXp");
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setCurrentComponent((currentComponent) =>
-  //       currentComponent === "WeeklyCadetXp"
-  //         ? "TotalActiveUser7Days"
-  //         : "WeeklyCadetXp"
-  //     );
-  //   }, transitionTime);
-  //   return () => clearInterval(intervalId);
-  // }, []);
-
-  // const [className1, setClassName1] = useState(
-  //   "transition-opacity duration-500 delay-300 opacity-100"
-  // );
-
-  // useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     setClassName1(
-  //       currentComponent === "WeeklyCadetXp"
-  //         ? "transition-opacity opacity-0 hidden duration-600 !p-0 !border-0 !mt-0"
-  //         : "transition-opacity duration-500 delay-200 opacity-100"
-  //     );
-  //   }, 1000);
-  //   return () => clearTimeout(timeoutId);
-  // }, [currentComponent]);
-
-  // const [className2, setClassName2] = useState(
-  //   "transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0"
-  // );
-
-  // useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     setClassName2(
-  //       currentComponent === "WeeklyCadetXp"
-  //         ? "transition-opacity duration-500 delay-200 opacity-100"
-  //         : "transition-opacity duration-600 opacity-0 hidden !p-0 !border-0 !mt-0"
-  //     );
-  //   }, 1000);
-  //   return () => clearTimeout(timeoutId);
-  // }, [currentComponent]);
-
-  return (
-    <div className="w-[90%] h-full flex content-center p-4 gap-4">
-      <div className="w-full flex flex-col xl:flex-row gap-4">
-        <div className="w-full flex flex-[4] gap-4">
-          <div className="inline-flex max-h-full flex-[2] flex-col gap-4">
-            <ActiveUserProjects className="" />
-            <CurrentActiveUser className="flex-[2]" />
-          </div>
-          <div className="inline-flex max-h-full flex-[2] flex-col gap-4">
-            <MostActiveUsers />
-            <TopFarmers />
-            <TotalActiveUser7Days
-              className={cycleGraph === "TAU7D" ? "block" : "hidden"}
-            />
-            <WeeklyCadetXp
-              className={cycleGraph === "WeeklyCadetXp" ? "block" : "hidden"}
-            />
-            <CadetPiscineRatio className="h-full" />
-          </div>
-        </div>
-
-        <div className="w-full flex flex-col flex-1 gap-4">
-          <div className="w-full flex flex-col gap-4">
-            <AverageLevel className="w-full flex-1" />
-            <AverageSessionTime className="w-full flex-1" />
-          </div>
-          <MostRecentSubmission className="w-full" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-type ViewType = "Desktop" | "Tablet" | "Mobile" | "";
 type GraphType = "TAU7D" | "WeeklyCadetXp";
 
 function App() {
   const divRef = useRef<HTMLDivElement | null>(null);
-  const [viewType, setViewType] = useState<ViewType>("");
+  const graphRef = useRef<HTMLDivElement | null>(null);
+  const [graphDimension, setGraphDimension] = useState({ width: 0, height: 0 });
   const [cycleGraph, setCycleGraph] = useState<GraphType>("TAU7D");
   const cycleInterval = 20000;
 
@@ -112,9 +29,6 @@ function App() {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
         console.log(`Width: ${width}px, Height: ${height}px`);
-        if (width >= 1280) setViewType("Desktop");
-        else if (width >= 768 && width < 1280) setViewType("Tablet");
-        else setViewType("Mobile");
       }
     });
     if (divRef.current) {
@@ -142,6 +56,18 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    if (graphRef.current) {
+      const padding = 16;
+      const width = Math.round(graphRef.current.clientWidth - 2 * padding);
+      const height = Math.round(
+        graphRef.current.clientHeight - 44 - 2 * padding
+      );
+      console.log("xd: width", width, "height", height);
+      setGraphDimension({ width: width, height: height });
+    }
+  }, [graphRef]);
+
   return (
     <div
       className="w-screen h-fit xl:h-[100dvh] min-h-[860px] flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
@@ -155,12 +81,14 @@ function App() {
         <CurrentActiveUser className="xl:row-span-6 xl:col-span-2" />
         <MostActiveUsers className="xl:row-span-3 xl:col-span-2" />
         <TopFarmers className="xl:row-span-3 xl:col-span-2" />
-        <div className="xl:row-span-4 xl:col-span-2">
+        <div className="xl:row-span-4 xl:col-span-2" ref={graphRef}>
           <TotalActiveUser7Days
             className={`${cycleGraph === "TAU7D" ? "block" : "hidden"}`}
+            dimension={graphDimension}
           />
           <WeeklyCadetXp
             className={`${cycleGraph === "WeeklyCadetXp" ? "block" : "hidden"}`}
+            dimension={graphDimension}
           />
         </div>
         <CadetPiscineRatio className="xl:row-span-2 xl:col-span-2" />

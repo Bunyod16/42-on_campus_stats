@@ -79,24 +79,24 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
     // TODO remove the column components (redundant)
     <Card className={className + " flex flex-col"}>
       <CardTitle>Top Sleepless Zombies (7 days)</CardTitle>
-      {data ? (
-        <div
-          className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full items-center justify-center"
-          ref={childRef}
-        >
-          {data.map((item: any, index: number) => (
-            <ColumnComponent
-              key={index}
-              imageSrc={item.image}
-              login={item.login}
-              hours={item.hours}
-              imgSize={imageSize}
-            />
+      <div className="w-full h-full" ref={childRef}>
+        {imageSize !== 0 &&
+          (data ? (
+            <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full items-center justify-center p-0 md:p-1 lg:p-2 xl:p-3">
+              {data.map((item: any, index: number) => (
+                <ColumnComponent
+                  key={index}
+                  imageSrc={item.image}
+                  login={item.login}
+                  hours={item.hours}
+                  imgSize={imageSize}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
           ))}
-        </div>
-      ) : (
-        <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
-      )}
+      </div>
     </Card>
   );
 };

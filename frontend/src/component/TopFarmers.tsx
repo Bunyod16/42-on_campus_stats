@@ -99,24 +99,24 @@ const TopFarmers = ({ className }: ITopFarmers) => {
     // TODO take away the column components
     <Card className={className + " flex flex-col"}>
       <CardTitle>Top Xp Farmers (7 days)</CardTitle>
-      {data ? (
-        <div
-          className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full"
-          ref={childRef}
-        >
-          {data.map((item: any, index: number) => (
-            <ColumnComponent
-              key={index}
-              imageSrc={item.image}
-              login={item.login}
-              xp={item.xp}
-              imgSize={imageSize}
-            />
+      <div className="w-full h-full" ref={childRef}>
+        {imageSize !== 0 &&
+          (data ? (
+            <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full items-center justify-center p-0 md:p-1 lg:p-2 xl:p-3">
+              {data.map((item: any, index: number) => (
+                <ColumnComponent
+                  key={index}
+                  imageSrc={item.image}
+                  login={item.login}
+                  xp={item.xp}
+                  imgSize={imageSize}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
           ))}
-        </div>
-      ) : (
-        <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
-      )}
+      </div>
     </Card>
   );
 };
