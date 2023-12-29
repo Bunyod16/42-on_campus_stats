@@ -165,10 +165,10 @@ const TotalActiveUser7Days = ({
           ) : (
             <div
               className="w-full h-full bg-gray-500 rounded animate-pulse"
-              style={{
-                width: `${dimension.width}px`,
-                height: `${dimension.height}px`,
-              }}
+              //   style={{
+              //     width: `${dimension.width}px`,
+              //     height: `${dimension.height}px`,
+              //   }}
             />
           ))}
       </div>
