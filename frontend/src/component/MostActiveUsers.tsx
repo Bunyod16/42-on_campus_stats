@@ -17,7 +17,14 @@ function ColumnComponent({
   hours,
   imgSize,
 }: ColumnComponentProps) {
-  return <UserContainer imgSrc={imageSrc} login={login} extra={hours + "h"} />;
+  return (
+    <UserContainer
+      imgSrc={imageSrc}
+      login={login}
+      extra={hours + "h"}
+      imgSize={imgSize}
+    />
+  );
 }
 
 interface IMostActiveUsers {
@@ -64,7 +71,7 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
   React.useEffect(() => {
     if (childRef.current) {
       const height = childRef.current.clientHeight;
-      setImageSize(height * 0.6);
+      setImageSize(Math.round(height * 0.5));
     }
   }, [childRef]);
 
@@ -74,7 +81,7 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
       <CardTitle>Top Sleepless Zombies (7 days)</CardTitle>
       {data ? (
         <div
-          className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full"
+          className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full items-center justify-center"
           ref={childRef}
         >
           {data.map((item: any, index: number) => (
