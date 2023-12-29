@@ -8,6 +8,7 @@ interface ColumnComponentProps {
   imageSrc: string;
   login: string;
   xp: number;
+  imgSize: number;
 }
 
 function formatNumber(num: number) {
@@ -22,9 +23,19 @@ function formatNumber(num: number) {
     return num.toString();
   }
 }
-function ColumnComponent({ imageSrc, login, xp }: ColumnComponentProps) {
+function ColumnComponent({
+  imageSrc,
+  login,
+  xp,
+  imgSize,
+}: ColumnComponentProps) {
   return (
-    <UserContainer imgSrc={imageSrc} login={login} extra={formatNumber(xp)} />
+    <UserContainer
+      imgSrc={imageSrc}
+      login={login}
+      extra={formatNumber(xp)}
+      imgSize={imgSize}
+    />
   );
 }
 
@@ -32,8 +43,9 @@ interface ITopFarmers {
   className?: string;
 }
 const TopFarmers = ({ className }: ITopFarmers) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
   const [data, setData] = React.useState<any | undefined>(undefined);
+  const childRef = React.useRef<HTMLDivElement>(null);
+  const [imageSize, setImageSize] = React.useState(0);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
@@ -74,20 +86,31 @@ const TopFarmers = ({ className }: ITopFarmers) => {
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
-  // console.log(data.length);
+
+  React.useEffect(() => {
+    if (childRef.current) {
+      const height = childRef.current.clientHeight;
+      setImageSize(Math.round(height * 0.5));
+    }
+  }, [childRef]);
+
   return (
     // the container for the svg
     // TODO take away the column components
-    <Card className={className + " flex flex-col"} ref={containerRef}>
+    <Card className={className + " flex flex-col"}>
       <CardTitle>Top Xp Farmers (7 days)</CardTitle>
       {data ? (
-        <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full">
+        <div
+          className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full"
+          ref={childRef}
+        >
           {data.map((item: any, index: number) => (
             <ColumnComponent
               key={index}
               imageSrc={item.image}
               login={item.login}
               xp={item.xp}
+              imgSize={imageSize}
             />
           ))}
         </div>
