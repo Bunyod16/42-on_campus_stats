@@ -18,15 +18,17 @@ interface ProjectContainerProps {
   time_string: string;
   score: number;
   users: User[];
+  imgSize: number;
 }
 
 interface ColumnComponentProps {
   imageSrc: string;
   login: string;
+  imgSize: number;
 }
 
-function ColumnComponent({ imageSrc, login }: ColumnComponentProps) {
-  return <UserContainer imgSrc={imageSrc} login={login} />;
+function ColumnComponent({ imageSrc, login, imgSize }: ColumnComponentProps) {
+  return <UserContainer imgSrc={imageSrc} login={login} imgSize={imgSize} />;
 }
 
 function ProjectContainer({
@@ -34,12 +36,17 @@ function ProjectContainer({
   time_string,
   score,
   users,
+  imgSize,
 }: ProjectContainerProps) {
   return (
     <div className="flex flex-col items-center">
       <div className="m-auto flex flex-row items-center space-x-1">
         {users.map((user) => (
-          <ColumnComponent imageSrc={user.image} login={user.login} />
+          <ColumnComponent
+            imageSrc={user.image}
+            login={user.login}
+            imgSize={imgSize}
+          />
         ))}
       </div>
       <p className="text-base">{name}</p>
@@ -63,6 +70,8 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
   const [data, setData] = React.useState<RecentSubmission[] | undefined>(
     undefined
   );
+  const childRef = React.useRef<HTMLDivElement | null>(null);
+  const [imageSize, setImageSize] = React.useState(0);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -89,33 +98,36 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
     return () => clearInterval(interval);
   }, []);
   // let data = [{users: [{login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'},{login: 'bshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'},{login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}, {login: 'nfernand', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}], project: 'testproj', score: 125, time: 'now'}, {users: [{login: 'ksshamsid', image: 'https://cdn.intra.42.fr/users/15dff9281140bdfe37fd150b61936695/bshamsid.jpeg'}], project: 'testproj', score: 25, time: 'later'}, ]
+
+  React.useEffect(() => {
+    if (childRef.current) {
+      const height = childRef.current.clientHeight;
+      setImageSize(Math.round(height * 0.12));
+    }
+  }, [childRef]);
+
   return (
     <Card className={className + " flex flex-col"}>
       <CardTitle>Most recent submission</CardTitle>
-      {data ? (
-        <div className="h-full flex flex-col items-center justify-center gap-5 align-middle text-6xl">
-          <ProjectContainer
-            name={data[0].project}
-            time_string={data[0].time}
-            score={data[0].score}
-            users={data[0].users}
-          />
-          <ProjectContainer
-            name={data[1].project}
-            time_string={data[1].time}
-            score={data[1].score}
-            users={data[1].users}
-          />
-          <ProjectContainer
-            name={data[2].project}
-            time_string={data[2].time}
-            score={data[2].score}
-            users={data[2].users}
-          />
-        </div>
-      ) : (
-        <div className="h-80 max-h-full w-full animate-pulse rounded bg-gray-500" />
-      )}
+      <div className="w-full h-full" ref={childRef}>
+        {imageSize !== 0 &&
+          (data ? (
+            <div className="h-full flex flex-col items-center justify-center gap-5 align-middle text-6xl">
+              {data.map((item: any, index: number) => (
+                <ProjectContainer
+                  key={index}
+                  name={item.project}
+                  time_string={item.time}
+                  score={item.score}
+                  users={item.users}
+                  imgSize={imageSize}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="w-full h-full animate-pulse rounded bg-gray-500" />
+          ))}
+      </div>
     </Card>
   );
 };
