@@ -50,10 +50,12 @@ function ProjectContainer({
         ))}
       </div>
       <p className="text-base">{name}</p>
-      <p className="text-sm inline-flex items-center">
-        <span className="text-lg font-semibold text-green-500">{score}</span>
+      <p className="text-sm 2xl:text-lg inline-flex items-center">
+        <span className="text-lg 2xl:text-2xl font-semibold text-green-500">
+          {score}
+        </span>
         /100
-        <p className="text-sm text-gray-400 ml-3">{time_string}</p>
+        <p className="text-sm 2xl:text-lg text-gray-400 ml-3">{time_string}</p>
       </p>
     </div>
   );
