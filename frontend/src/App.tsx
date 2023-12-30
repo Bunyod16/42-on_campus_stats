@@ -81,7 +81,7 @@ function App() {
 
   return (
     <div
-      className="w-screen h-fit md:h-[100dvh] flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
+      className="w-screen h-fit md:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
       ref={divRef}
     >
       <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-3 text-3xl text-white">
