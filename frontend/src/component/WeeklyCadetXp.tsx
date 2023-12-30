@@ -90,9 +90,10 @@ function Bars({ data, height, scaleX, scaleY }: BarsProps) {
 }
 
 const BarChart = ({ data, dimension }: IBarChartProps) => {
-  const margin = { top: 16, right: 16, bottom: 32, left: 40 };
+  const margin = { top: 16, right: 16, bottom: 32, left: 44 };
   const width = dimension.width - margin.left - margin.right;
-  const height = dimension.width / 3 - margin.top - margin.bottom;
+  //   const height = dimension.width / 3 - margin.top - margin.bottom;
+  const height = dimension.height - margin.top - margin.bottom;
 
   const scaleX = scaleBand()
     .domain(data.map(({ label }) => label))

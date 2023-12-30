@@ -70,8 +70,12 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
 
   React.useEffect(() => {
     if (childRef.current) {
-      const height = childRef.current.clientHeight;
-      setImageSize(Math.round(height * 0.5));
+      const width = childRef.current.clientWidth,
+        height = childRef.current.clientHeight;
+      const imgSizeOnWidth = Math.round((width / 5) * 0.8),
+        imgSizeOnHeight = Math.round(height * 0.5);
+      if (imgSizeOnWidth > imgSizeOnHeight) setImageSize(imgSizeOnHeight);
+      else setImageSize(imgSizeOnWidth);
     }
   }, [childRef]);
 

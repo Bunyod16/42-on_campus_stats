@@ -63,25 +63,27 @@ function App() {
       const height = Math.round(
         graphRef.current.clientHeight - 44 - 2 * padding
       );
-      console.log("xd: width", width, "height", height);
       setGraphDimension({ width: width, height: height });
     }
   }, [graphRef]);
 
   return (
     <div
-      className="w-screen h-fit xl:h-screen min-h-[860px] flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
+      className="w-screen h-fit xl:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
       ref={divRef}
     >
       <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-3 text-3xl text-white">
         <h1>Live Stats: 42 Kuala Lumpur</h1>
       </div>
-      <div className="w-[90%] h-full min-h-[780px] flex flex-col md:grid md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(14,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-4 md:p-5 2xl:p-6 gap-3 xl:gap-4 2xl:gap-5">
-        <ActiveUserProjects className="xl:row-span-6 xl:col-span-2" />
-        <CurrentActiveUser className="xl:row-span-6 xl:col-span-2" />
-        <MostActiveUsers className="xl:row-span-3 xl:col-span-2" />
-        <TopFarmers className="xl:row-span-3 xl:col-span-2" />
-        <div className="xl:row-span-4 xl:col-span-2" ref={graphRef}>
+      <div className="w-full lg:w-[95%] xl:w-[90%] h-[1560px] md:h-full md:min-h-[1280px] xl:min-h-[780px] flex flex-col md:grid md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(20,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-4 md:p-5 2xl:p-6 gap-3 xl:gap-4 2xl:gap-5">
+        <ActiveUserProjects className="md:row-span-6 md:col-span-1 xl:row-span-6 xl:col-span-2" />
+        <CurrentActiveUser className="md:row-span-6 md:col-span-1 xl:row-span-6 xl:col-span-2" />
+        <MostActiveUsers className="md:row-span-3 md:col-span-1 md:col-start-2 xl:row-span-3 xl:col-span-2" />
+        <TopFarmers className="md:row-span-3 md:col-span-1 md:col-start-2 xl:row-span-3 xl:col-span-2" />
+        <div
+          className="md:row-span-4 md:col-span-1 md:col-start-2 xl:row-span-4 xl:col-span-2"
+          ref={graphRef}
+        >
           <TotalActiveUser7Days
             className={`${cycleGraph === "TAU7D" ? "block" : "hidden"}`}
             dimension={graphDimension}
@@ -91,10 +93,10 @@ function App() {
             dimension={graphDimension}
           />
         </div>
-        <CadetPiscineRatio className="xl:row-span-2 xl:col-span-2" />
-        <AverageLevel className="xl:row-span-2 xl:col-span-1" />
-        <AverageSessionTime className="xl:row-span-2 xl:col-span-1" />
-        <MostRecentSubmission className="xl:row-[span_8_/_span_8] xl:col-span-1" />
+        <CadetPiscineRatio className="md:row-span-2 md:col-span-1 md:col-start-2 xl:row-span-2 xl:col-span-2" />
+        <AverageLevel className="md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[14] xl:row-span-2 xl:col-span-1" />
+        <AverageSessionTime className="md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[17] xl:row-span-2 xl:col-span-1" />
+        <MostRecentSubmission className="md:row-[span_8_/_span_8] md:col-span-1 md:col-start-2 md:row-start-[13] xl:row-[span_8_/_span_8] xl:col-span-1" />
       </div>
     </div>
   );

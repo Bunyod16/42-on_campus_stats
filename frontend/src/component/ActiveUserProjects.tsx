@@ -105,10 +105,8 @@ function ChartLegends({
   xOffset: number;
   projectCount: number;
 }) {
-  //   let legendMargin = (height - (height / 16) * 10) / 2;
   let legendMargin = 22;
   return (
-    // <g transform={`translate(${xOffset},${(height - 22 * projectCount) / 2})`}>
     <g
       transform={`translate(${xOffset},${
         (height - 22 * (projectCount - 1)) / 2
@@ -128,7 +126,7 @@ function ChartLegends({
               fill={color(i)}
             ></circle>
             <text
-              className={project.length > 35 ? "text-sm" : "text-base"}
+              className={project.length > 28 ? "text-sm" : "text-base"} // scale text smaller if project name is long
               x="16"
               //   y={legendMargin + 5 + i * (height / 18)}
               y={legendMargin * i}
