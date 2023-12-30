@@ -81,7 +81,6 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
         .get("/most-recent-submission")
         .then((res) => {
           let data = res.data;
-          console.log(data);
           if (JSON.stringify(data) !== "{}" && data.length > 0) setData(data);
           else
             console.log("MostRecentSubmission get successful but data empty.");
