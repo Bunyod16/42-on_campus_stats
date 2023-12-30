@@ -113,7 +113,7 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
       <div className="w-full h-full" ref={childRef}>
         {imageSize !== 0 &&
           (data ? (
-            <div className="h-full flex flex-col items-center justify-center gap-5 align-middle text-6xl">
+            <div className="h-full flex flex-col items-center justify-around gap-5 align-middle text-6xl">
               {data.map((item: any, index: number) => (
                 <ProjectContainer
                   key={index}

@@ -129,7 +129,9 @@ function ChartLegends({
             ></circle>
             <text
               className={
-                viewType === "Desktop"
+                viewType === "TV"
+                  ? "text-lg"
+                  : viewType === "Desktop"
                   ? project.length > 24
                     ? "text-sm"
                     : "text-base"

@@ -14,7 +14,7 @@ import TopFarmers from "./component/TopFarmers";
 // todo dynamic width/height based on whichever is narrower on screen
 
 type GraphType = "TAU7D" | "WeeklyCadetXp";
-type ViewType = "Desktop" | "Tablet" | "Mobile" | "";
+type ViewType = "TV" | "Desktop" | "Tablet" | "Mobile" | "";
 
 function App() {
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -43,7 +43,9 @@ function App() {
   useEffect(() => {
     if (divRef.current) {
       const width = divRef.current.clientWidth;
-      if (width >= 1280) setViewType("Desktop");
+      console.log("width", width);
+      if (width >= 2560) setViewType("TV");
+      else if (width >= 1280 && width < 2560) setViewType("Desktop");
       else if (width >= 736 && width < 1280) setViewType("Tablet");
       else setViewType("Mobile");
     }
