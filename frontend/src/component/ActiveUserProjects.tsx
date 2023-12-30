@@ -136,9 +136,8 @@ function ChartLegends({
                   : project.length > 24
                   ? "text-xs"
                   : "text-sm"
-              } // scale text smaller if project name is long
+              } // scale text if (1) larger on desktop devices; (2) project name is too long
               x="16"
-              //   y={legendMargin + 5 + i * (height / 18)}
               y={legendMargin * i}
               style={{ fill: "#f3f4f6" }}
             >
@@ -192,6 +191,7 @@ export default function ActiveUserProjects(props: TPropsType) {
     return () => clearInterval(interval);
   }, []);
 
+  // useEffect to determine number of project currently active, useful to translate chart legends
   useEffect(() => {
     if (projects && projects.length !== 0) setProjectCount(projects.length);
   }, [projects]);

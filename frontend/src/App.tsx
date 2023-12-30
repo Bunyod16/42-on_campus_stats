@@ -39,6 +39,7 @@ function App() {
   //     };
   //   }, []);
 
+  // useEffect to determine device type based on screen width
   useEffect(() => {
     if (divRef.current) {
       const width = divRef.current.clientWidth;
@@ -56,6 +57,7 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
+  // interval to cycle between TotalActiveUser7Days and WeeklyCadetXp graph
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCycleGraph((cycleGraph) =>
@@ -65,6 +67,7 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
+  // useEffect to determine graph size based on card width/height
   useEffect(() => {
     if (graphRef.current) {
       const padding = 16;
