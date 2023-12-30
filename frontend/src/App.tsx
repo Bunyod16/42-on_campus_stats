@@ -81,7 +81,7 @@ function App() {
 
   return (
     <div
-      className="w-screen h-fit md:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
+      className="w-screen h-fit md:h-[100dvh] flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
       ref={divRef}
     >
       <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-3 text-3xl text-white">
@@ -96,10 +96,10 @@ function App() {
           className="row-span-5 md:row-span-6 md:col-span-1 xl:col-span-2"
           viewType={viewType}
         />
-        <MostActiveUsers className="row-span-3 md:col-span-1 md:col-start-2 xl:col-span-2" />
-        <TopFarmers className="row-span-3 md:col-span-1 md:col-start-2 xl:col-span-2" />
+        <MostActiveUsers className="row-span-3 md:col-span-1 md:col-start-2 xl:col-start-3 xl:col-span-2" />
+        <TopFarmers className="row-span-3 md:col-span-1 md:col-start-2 xl:col-start-3 xl:col-span-2" />
         <div
-          className="row-span-4 md:col-span-1 md:col-start-2 xl:col-span-2"
+          className="row-span-4 md:col-span-1 md:col-start-2 xl:col-start-3 xl:col-span-2"
           ref={graphRef}
         >
           <TotalActiveUser7Days
@@ -111,10 +111,10 @@ function App() {
             dimension={graphDimension}
           />
         </div>
-        <CadetPiscineRatio className="row-span-2 md:col-span-1 md:col-start-2 xl:col-span-2" />
-        <AverageLevel className="row-span-2 md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[14] xl:row-span-2 xl:col-span-1" />
-        <AverageSessionTime className="row-span-2 md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[17] xl:row-span-2 xl:col-span-1" />
-        <MostRecentSubmission className="row-[span_8_/_span_8] md:col-span-1 md:col-start-2 md:row-start-[13] xl:col-span-1" />
+        <CadetPiscineRatio className="row-span-2 md:col-span-1 md:col-start-2 xl:col-start-3 xl:col-span-2" />
+        <AverageLevel className="row-span-2 md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[14] xl:col-start-5 xl:row-start-1 xl:row-span-2 xl:col-span-1" />
+        <AverageSessionTime className="row-span-2 md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[17] xl:col-start-5 xl:row-start-3 xl:row-span-2 xl:col-span-1" />
+        <MostRecentSubmission className="row-[span_8_/_span_8] md:col-span-1 md:col-start-2 md:row-start-[13] xl:col-start-5 xl:row-start-5 xl:col-span-1" />
       </div>
     </div>
   );
