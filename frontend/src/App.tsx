@@ -10,34 +10,43 @@ import ActiveUserProjects from "./component/ActiveUserProjects";
 import WeeklyCadetXp from "./component/WeeklyCadetXp";
 import MostActiveUsers from "./component/MostActiveUsers";
 import TopFarmers from "./component/TopFarmers";
-import { useDimensions } from "./hooks/useDimension";
-import { isMobile } from "react-device-detect";
 
 // todo dynamic width/height based on whichever is narrower on screen
 
 type GraphType = "TAU7D" | "WeeklyCadetXp";
+type ViewType = "Desktop" | "Tablet" | "Mobile" | "";
 
 function App() {
   const divRef = useRef<HTMLDivElement | null>(null);
   const graphRef = useRef<HTMLDivElement | null>(null);
+  const [viewType, setViewType] = useState<ViewType>("");
   const [graphDimension, setGraphDimension] = useState({ width: 0, height: 0 });
   const [cycleGraph, setCycleGraph] = useState<GraphType>("TAU7D");
   const cycleInterval = 20000;
 
+  //   useEffect(() => {
+  //     const resizeObserver = new ResizeObserver((entries) => {
+  //       for (const entry of entries) {
+  //         const { width, height } = entry.contentRect;
+  //         console.log(`Width: ${width}px, Height: ${height}px`);
+  //       }
+  //     });
+  //     if (divRef.current) {
+  //       resizeObserver.observe(divRef.current);
+  //     }
+  //     return () => {
+  //       resizeObserver.disconnect();
+  //     };
+  //   }, []);
+
   useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        console.log(`Width: ${width}px, Height: ${height}px`);
-      }
-    });
     if (divRef.current) {
-      resizeObserver.observe(divRef.current);
+      const width = divRef.current.clientWidth;
+      if (width >= 1280) setViewType("Desktop");
+      else if (width >= 736 && width < 1280) setViewType("Tablet");
+      else setViewType("Mobile");
     }
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
+  }, [divRef]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -69,19 +78,25 @@ function App() {
 
   return (
     <div
-      className="w-screen h-fit xl:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
+      className="w-screen h-fit md:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
       ref={divRef}
     >
       <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-3 text-3xl text-white">
         <h1>Live Stats: 42 Kuala Lumpur</h1>
       </div>
-      <div className="w-full lg:w-[95%] xl:w-[90%] h-[1560px] md:h-full md:min-h-[1280px] xl:min-h-[780px] flex flex-col md:grid md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(20,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-4 md:p-5 2xl:p-6 gap-3 xl:gap-4 2xl:gap-5">
-        <ActiveUserProjects className="md:row-span-6 md:col-span-1 xl:row-span-6 xl:col-span-2" />
-        <CurrentActiveUser className="md:row-span-6 md:col-span-1 xl:row-span-6 xl:col-span-2" />
-        <MostActiveUsers className="md:row-span-3 md:col-span-1 md:col-start-2 xl:row-span-3 xl:col-span-2" />
-        <TopFarmers className="md:row-span-3 md:col-span-1 md:col-start-2 xl:row-span-3 xl:col-span-2" />
+      <div className="w-full lg:w-[95%] xl:w-[90%] h-[2560px] md:h-full md:min-h-[1280px] xl:min-h-[780px] grid grid-flow-col grid-cols-1 grid-rows-[repeat(34,minmax(0,1fr))] md:grid-cols-2 md:grid-rows-[repeat(20,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-2 md:p-4 2xl:p-6 gap-3 xl:gap-4 2xl:gap-5">
+        <ActiveUserProjects
+          className="row-span-5 md:row-span-6 md:col-span-1 xl:col-span-2"
+          viewType={viewType}
+        />
+        <CurrentActiveUser
+          className="row-span-5 md:row-span-6 md:col-span-1 xl:col-span-2"
+          viewType={viewType}
+        />
+        <MostActiveUsers className="row-span-3 md:col-span-1 md:col-start-2 xl:col-span-2" />
+        <TopFarmers className="row-span-3 md:col-span-1 md:col-start-2 xl:col-span-2" />
         <div
-          className="md:row-span-4 md:col-span-1 md:col-start-2 xl:row-span-4 xl:col-span-2"
+          className="row-span-4 md:col-span-1 md:col-start-2 xl:col-span-2"
           ref={graphRef}
         >
           <TotalActiveUser7Days
@@ -93,10 +108,10 @@ function App() {
             dimension={graphDimension}
           />
         </div>
-        <CadetPiscineRatio className="md:row-span-2 md:col-span-1 md:col-start-2 xl:row-span-2 xl:col-span-2" />
-        <AverageLevel className="md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[14] xl:row-span-2 xl:col-span-1" />
-        <AverageSessionTime className="md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[17] xl:row-span-2 xl:col-span-1" />
-        <MostRecentSubmission className="md:row-[span_8_/_span_8] md:col-span-1 md:col-start-2 md:row-start-[13] xl:row-[span_8_/_span_8] xl:col-span-1" />
+        <CadetPiscineRatio className="row-span-2 md:col-span-1 md:col-start-2 xl:col-span-2" />
+        <AverageLevel className="row-span-2 md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[14] xl:row-span-2 xl:col-span-1" />
+        <AverageSessionTime className="row-span-2 md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[17] xl:row-span-2 xl:col-span-1" />
+        <MostRecentSubmission className="row-[span_8_/_span_8] md:col-span-1 md:col-start-2 md:row-start-[13] xl:col-span-1" />
       </div>
     </div>
   );

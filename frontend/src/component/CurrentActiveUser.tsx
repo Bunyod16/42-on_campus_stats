@@ -4,7 +4,13 @@ import axios from "axios";
 import CardTitle from "./CardTitle";
 import Card from "./Card";
 
-function CurrentActiveUser({ className }: { className: string }) {
+function CurrentActiveUser({
+  className,
+  viewType,
+}: {
+  className: string;
+  viewType: string;
+}) {
   const [users, setUsers] = React.useState<User[] | undefined>(undefined);
   const divRef = React.useRef<HTMLDivElement>(null);
   const [imageSize, setImageSize] = React.useState(0);
@@ -53,11 +59,12 @@ function CurrentActiveUser({ className }: { className: string }) {
 
   // useEffect to set userGallery image size based on card width
   React.useEffect(() => {
-    if (divRef.current) {
+    if (divRef.current && viewType !== "") {
       const width = divRef.current.clientWidth;
-      setImageSize(Math.round((width * 0.6) / 5));
+      if (viewType === "Mobile") setImageSize(Math.round((width * 0.6) / 4));
+      else setImageSize(Math.round((width * 0.6) / 5));
     }
-  }, [divRef]);
+  }, [divRef, viewType]);
 
   const userGallery = users?.map((singleUser, i) => {
     return (

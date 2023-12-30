@@ -87,11 +87,12 @@ const TopFarmers = ({ className }: ITopFarmers) => {
     return () => clearInterval(interval);
   }, []);
 
+  // useEffect to determine user img size based on card width/height
   React.useEffect(() => {
     if (childRef.current) {
       const width = childRef.current.clientWidth,
         height = childRef.current.clientHeight;
-      const imgSizeOnWidth = Math.round((width / 5) * 0.8),
+      const imgSizeOnWidth = Math.round((width / 5) * 0.7),
         imgSizeOnHeight = Math.round(height * 0.5);
       if (imgSizeOnWidth > imgSizeOnHeight) setImageSize(imgSizeOnHeight);
       else setImageSize(imgSizeOnWidth);

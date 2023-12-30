@@ -98,12 +98,14 @@ function ChartLegends({
   height,
   xOffset,
   projectCount,
+  viewType,
 }: {
   projects: TDataType[];
   color: Function;
   height: number;
   xOffset: number;
   projectCount: number;
+  viewType: string;
 }) {
   let legendMargin = 22;
   return (
@@ -126,7 +128,15 @@ function ChartLegends({
               fill={color(i)}
             ></circle>
             <text
-              className={project.length > 28 ? "text-sm" : "text-base"} // scale text smaller if project name is long
+              className={
+                viewType === "Desktop"
+                  ? project.length > 24
+                    ? "text-sm"
+                    : "text-base"
+                  : project.length > 24
+                  ? "text-xs"
+                  : "text-sm"
+              } // scale text smaller if project name is long
               x="16"
               //   y={legendMargin + 5 + i * (height / 18)}
               y={legendMargin * i}
@@ -143,6 +153,7 @@ function ChartLegends({
 
 type TPropsType = {
   className: string;
+  viewType: string;
 };
 
 // Component for Active User Projects in Campus
@@ -207,6 +218,7 @@ export default function ActiveUserProjects(props: TPropsType) {
       <CardTitle>Active User Projects</CardTitle>
       <div className="w-full h-full" ref={childRef}>
         {projects &&
+        props.viewType !== "" &&
         dimension.width !== 0 &&
         dimension.height !== 0 &&
         dimension.radius !== 0 &&
@@ -231,6 +243,7 @@ export default function ActiveUserProjects(props: TPropsType) {
               height={dimension.height}
               xOffset={dimension.legendOffset}
               projectCount={projectCount}
+              viewType={props.viewType}
             />
           </svg>
         ) : (
