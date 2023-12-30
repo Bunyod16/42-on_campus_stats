@@ -43,7 +43,6 @@ function App() {
   useEffect(() => {
     if (divRef.current) {
       const width = divRef.current.clientWidth;
-      console.log("width", width);
       if (width >= 2560) setViewType("TV");
       else if (width >= 1280 && width < 2560) setViewType("Desktop");
       else if (width >= 736 && width < 1280) setViewType("Tablet");
