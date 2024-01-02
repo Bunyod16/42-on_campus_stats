@@ -41,8 +41,9 @@ function ProjectContainer({
   return (
     <div className="flex flex-col items-center">
       <div className="m-auto flex flex-row items-center space-x-1">
-        {users.map((user) => (
+        {users.map((user, i) => (
           <ColumnComponent
+            key={i}
             imageSrc={user.image}
             login={user.login}
             imgSize={imgSize}
@@ -50,13 +51,13 @@ function ProjectContainer({
         ))}
       </div>
       <p className="text-base">{name}</p>
-      <p className="text-sm 2xl:text-lg inline-flex items-center">
-        <span className="text-lg 2xl:text-2xl font-semibold text-green-500">
+      <div className="text-sm 3xl:text-lg inline-flex items-center">
+        <span className="text-lg 3xl:text-2xl font-semibold text-green-500">
           {score}
         </span>
         /100
-        <p className="text-sm 2xl:text-lg text-gray-400 ml-3">{time_string}</p>
-      </p>
+        <p className="text-sm 3xl:text-lg text-gray-400 ml-3">{time_string}</p>
+      </div>
     </div>
   );
 }

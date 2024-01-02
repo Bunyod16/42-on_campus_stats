@@ -78,7 +78,7 @@ function CurrentActiveUser({
           }
           style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
         />
-        <p className="text-sm xl:text-base 2xl:text-lg">{singleUser.login}</p>
+        <p className="text-sm xl:text-base 3xl:text-lg">{singleUser.login}</p>
       </div>
     );
   });

@@ -4,7 +4,10 @@ module.exports = {
   theme: {
     extend: {
       keyframes: {},
-      animation: {}
+      animation: {},
+      screens: {
+        "3xl": "2560px",
+      },
     },
   },
   plugins: [],
