@@ -4,9 +4,16 @@ import axios from "axios";
 import CardTitle from "./CardTitle";
 import Card from "./Card";
 
-function CurrentActiveUser({ className }: { className: string }) {
+function CurrentActiveUser({
+  className,
+  viewType,
+}: {
+  className: string;
+  viewType: string;
+}) {
   const [users, setUsers] = React.useState<User[] | undefined>(undefined);
-  const divRef = React.useRef(null);
+  const divRef = React.useRef<HTMLDivElement>(null);
+  const [imageSize, setImageSize] = React.useState(0);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
@@ -50,27 +57,37 @@ function CurrentActiveUser({ className }: { className: string }) {
     return () => clearInterval(intervalId);
   }, [users]);
 
+  // useEffect to set userGallery image size based on card width
+  React.useEffect(() => {
+    if (divRef.current && viewType !== "") {
+      const width = divRef.current.clientWidth;
+      if (viewType === "Mobile") setImageSize(Math.round((width * 0.6) / 4));
+      else setImageSize(Math.round((width * 0.6) / 5));
+    }
+  }, [divRef, viewType]);
+
   const userGallery = users?.map((singleUser, i) => {
     return (
-      <div key={i} className="flex flex-col items-center">
+      <div key={i} className="flex flex-col items-center justify-center">
         <img
           src={singleUser.image}
-          alt="user image"
+          alt="current-active-user"
           className={
-            "rounded-full h-16 w-16 object-cover border-4 " +
+            "rounded-full object-cover border-4 " +
             (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
           }
+          style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
         />
-        <p className="text-sm">{singleUser.login}</p>
+        <p className="text-sm xl:text-base 3xl:text-lg">{singleUser.login}</p>
       </div>
     );
   });
 
   return (
-    <Card className={className + " flex flex-col max-h-[50vh]"}>
+    <Card className={className + " flex flex-col"}>
       <CardTitle>Current Active Users ({users?.length})</CardTitle>
       <div
-        className="grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full"
+        className="grid grid-cols-4 md:grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full"
         ref={divRef}
         id="user-gallery"
       >

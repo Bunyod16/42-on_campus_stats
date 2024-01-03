@@ -30,11 +30,11 @@ const AverageLevel = ({ className }: { className: string }) => {
     <Card className={className + " flex flex-col"}>
       <CardTitle>Average level</CardTitle>
       {averageLvl ? (
-        <div className="text-6xl h-full align-middle flex justify-center items-center">
+        <div className="text-5xl md:text-6xl h-full align-middle flex justify-center items-center">
           {averageLvl}
         </div>
       ) : (
-        <div className="bg-gray-500 rounded animate-pulse w-full h-16" />
+        <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
       )}
     </Card>
   );

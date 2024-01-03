@@ -7,19 +7,33 @@ interface ColumnComponentProps {
   imageSrc: string;
   login: string;
   hours: string;
+  imgSize: number;
 }
 
 //grid grid-cols-5 gap-4 overflow-hidden scroll-smooth h-full basis-0 grow shrink w-full
-function ColumnComponent({ imageSrc, login, hours }: ColumnComponentProps) {
-  return <UserContainer imgSrc={imageSrc} login={login} extra={hours + "h"} />;
+function ColumnComponent({
+  imageSrc,
+  login,
+  hours,
+  imgSize,
+}: ColumnComponentProps) {
+  return (
+    <UserContainer
+      imgSrc={imageSrc}
+      login={login}
+      extra={hours + "h"}
+      imgSize={imgSize}
+    />
+  );
 }
 
 interface IMostActiveUsers {
   className?: string;
 }
 const MostActiveUsers = ({ className }: IMostActiveUsers) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const childRef = React.useRef<HTMLDivElement>(null);
   const [data, setData] = React.useState<any | undefined>(undefined);
+  const [imageSize, setImageSize] = React.useState(0);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
@@ -53,42 +67,41 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
-  // console.log(data.length);
+
+  // useEffect to determine user img size based on card width/height
+  React.useEffect(() => {
+    if (childRef.current) {
+      const width = childRef.current.clientWidth,
+        height = childRef.current.clientHeight;
+      const imgSizeOnWidth = Math.round((width / 5) * 0.7),
+        imgSizeOnHeight = Math.round(height * 0.5);
+      if (imgSizeOnWidth > imgSizeOnHeight) setImageSize(imgSizeOnHeight);
+      else setImageSize(imgSizeOnWidth);
+    }
+  }, [childRef]);
+
   return (
     // TODO remove the column components (redundant)
-    <Card className={className + " flex flex-col"} ref={containerRef}>
+    <Card className={className + " flex flex-col"}>
       <CardTitle>Top Sleepless Zombies (7 days)</CardTitle>
-      {data ? (
-        <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full">
-          <ColumnComponent
-            imageSrc={data[0].image}
-            login={data[0].login}
-            hours={data[0].hours}
-          />
-          <ColumnComponent
-            imageSrc={data[1].image}
-            login={data[1].login}
-            hours={data[1].hours}
-          />
-          <ColumnComponent
-            imageSrc={data[2].image}
-            login={data[2].login}
-            hours={data[2].hours}
-          />
-          <ColumnComponent
-            imageSrc={data[3].image}
-            login={data[3].login}
-            hours={data[3].hours}
-          />
-          <ColumnComponent
-            imageSrc={data[4].image}
-            login={data[4].login}
-            hours={data[4].hours}
-          />
-        </div>
-      ) : (
-        <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
-      )}
+      <div className="w-full h-full" ref={childRef}>
+        {imageSize !== 0 &&
+          (data ? (
+            <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full items-center justify-center p-0 md:p-1 lg:p-2 xl:p-3">
+              {data.map((item: any, index: number) => (
+                <ColumnComponent
+                  key={index}
+                  imageSrc={item.image}
+                  login={item.login}
+                  hours={item.hours}
+                  imgSize={imageSize}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
+          ))}
+      </div>
     </Card>
   );
 };

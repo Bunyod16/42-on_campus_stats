@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import CurrentActiveUser from "./component/CurrentActiveUser";
 import AverageLevel from "./component/AverageLevel";
@@ -13,78 +13,112 @@ import TopFarmers from "./component/TopFarmers";
 
 // todo dynamic width/height based on whichever is narrower on screen
 
+type GraphType = "TAU7D" | "WeeklyCadetXp";
+type ViewType = "TV" | "Desktop" | "Tablet" | "Mobile" | "";
+
 function App() {
-    const transitionTime = 20000;
-    const [currentComponent, setCurrentComponent] = useState("WeeklyCadetXp");
+  const divRef = useRef<HTMLDivElement | null>(null);
+  const graphRef = useRef<HTMLDivElement | null>(null);
+  const [viewType, setViewType] = useState<ViewType>("");
+  const [graphDimension, setGraphDimension] = useState({ width: 0, height: 0 });
+  const [cycleGraph, setCycleGraph] = useState<GraphType>("TAU7D");
+  const cycleInterval = 20000;
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentComponent((currentComponent) =>
-                currentComponent === "WeeklyCadetXp" ? "TotalActiveUser7Days" : "WeeklyCadetXp"
-            );
-        }, transitionTime);
-        return () => clearInterval(intervalId);
-    }, []);
+  //   useEffect(() => {
+  //     const resizeObserver = new ResizeObserver((entries) => {
+  //       for (const entry of entries) {
+  //         const { width, height } = entry.contentRect;
+  //         console.log(`Width: ${width}px, Height: ${height}px`);
+  //       }
+  //     });
+  //     if (divRef.current) {
+  //       resizeObserver.observe(divRef.current);
+  //     }
+  //     return () => {
+  //       resizeObserver.disconnect();
+  //     };
+  //   }, []);
 
-    const [className1, setClassName1] = useState("transition-opacity duration-500 delay-300 opacity-100");
+  // useEffect to determine device type based on screen width
+  useEffect(() => {
+    if (divRef.current) {
+      const width = divRef.current.clientWidth;
+      if (width >= 2560) setViewType("TV");
+      else if (width >= 1280 && width < 2560) setViewType("Desktop");
+      else if (width >= 736 && width < 1280) setViewType("Tablet");
+      else setViewType("Mobile");
+    }
+  }, [divRef]);
 
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            setClassName1(
-                currentComponent === "WeeklyCadetXp"
-                    ? "transition-opacity opacity-0 hidden duration-600 !p-0 !border-0 !mt-0"
-                    : "transition-opacity duration-500 delay-200 opacity-100"
-            );
-        }, 1000);
-        return () => clearTimeout(timeoutId);
-    }, [currentComponent]);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      window.location.reload();
+      // reload page every hour
+    }, 1000 * 60 * 60 * 1);
+    return () => clearInterval(intervalId);
+  }, []);
 
-    const [className2, setClassName2] = useState("transition-opacity opacity-0 duration-600 h-0 !p-0 !border-0 !mt-0");
+  // interval to cycle between TotalActiveUser7Days and WeeklyCadetXp graph
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCycleGraph((cycleGraph) =>
+        cycleGraph === "TAU7D" ? "WeeklyCadetXp" : "TAU7D"
+      );
+    }, cycleInterval);
+    return () => clearInterval(intervalId);
+  }, []);
 
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            setClassName2(
-                currentComponent === "WeeklyCadetXp"
-                    ? "transition-opacity duration-500 delay-200 opacity-100"
-                    : "transition-opacity duration-600 opacity-0 hidden !p-0 !border-0 !mt-0"
-            );
-        }, 1000);
-        return () => clearTimeout(timeoutId);
-    }, [currentComponent]);
+  // useEffect to determine graph size based on card width/height
+  useEffect(() => {
+    if (graphRef.current) {
+      const padding = 16;
+      const width = Math.round(graphRef.current.clientWidth - 2 * padding);
+      const height = Math.round(
+        graphRef.current.clientHeight - 44 - 2 * padding
+      );
+      setGraphDimension({ width: width, height: height });
+    }
+  }, [graphRef]);
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            window.location.reload();
-            // reload page every hour
-        }, 1000 * 60 * 60 * 1);
-        return () => clearInterval(intervalId);
-    }, []);
-
-    return (
-        <div className="flex h-screen min-h-[1200px] min-w-[1200px] flex-col items-center  bg-gray-800 text-center text-base">
-            <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-4 text-3xl text-white">
-                <h1>Live Stats: 42 Kuala Lumpur</h1>
-            </div>
-            <div className="m-4 flex h-full w-full content-center gap-4 px-4 xl:max-w-[80%]">
-                <div className="inline-flex max-h-full flex-[2] flex-col gap-4">
-                    <ActiveUserProjects className="" />
-                    <CurrentActiveUser className="flex-1" />
-                </div>
-                <div className="inline-flex max-h-full flex-[2] flex-col gap-4">
-                    <MostActiveUsers />
-                    <TopFarmers />
-                    <TotalActiveUser7Days className={className1} />
-                    <WeeklyCadetXp className={className2} />
-                    <CadetPiscineRatio className="h-full" />
-                </div>
-                <div className="inline-flex max-h-full flex-1 flex-col gap-4">
-                    <AverageLevel className="" />
-                    <AverageSessionTime className="" />
-                    <MostRecentSubmission className="" />
-                </div>
-            </div>
+  return (
+    <div
+      className="w-screen h-fit md:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
+      ref={divRef}
+    >
+      <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-3 text-3xl text-white">
+        <h1>Live Stats: 42 Kuala Lumpur</h1>
+      </div>
+      <div className="w-full lg:w-[95%] xl:w-[90%] h-[2560px] md:h-full md:min-h-[1280px] xl:min-h-[780px] grid grid-flow-col grid-cols-1 grid-rows-[repeat(34,minmax(0,1fr))] md:grid-cols-2 md:grid-rows-[repeat(20,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-2 md:p-4 2xl:p-6 gap-3 xl:gap-4 2xl:gap-5">
+        <ActiveUserProjects
+          className="row-span-5 md:row-span-6 md:col-span-1 xl:col-span-2"
+          viewType={viewType}
+        />
+        <CurrentActiveUser
+          className="row-span-5 md:row-span-6 md:col-span-1 xl:col-span-2"
+          viewType={viewType}
+        />
+        <MostActiveUsers className="row-span-3 md:col-span-1 md:col-start-2 xl:col-start-3 xl:col-span-2" />
+        <TopFarmers className="row-span-3 md:col-span-1 md:col-start-2 xl:col-start-3 xl:col-span-2" />
+        <div
+          className="row-span-4 md:col-span-1 md:col-start-2 xl:col-start-3 xl:col-span-2"
+          ref={graphRef}
+        >
+          <TotalActiveUser7Days
+            className={`${cycleGraph === "TAU7D" ? "block" : "hidden"}`}
+            dimension={graphDimension}
+          />
+          <WeeklyCadetXp
+            className={`${cycleGraph === "WeeklyCadetXp" ? "block" : "hidden"}`}
+            dimension={graphDimension}
+          />
         </div>
-    );
+        <CadetPiscineRatio className="row-span-2 md:col-span-1 md:col-start-2 xl:col-start-3 xl:col-span-2" />
+        <AverageLevel className="row-span-2 md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[14] xl:col-start-5 xl:row-start-1 xl:row-span-2 xl:col-span-1" />
+        <AverageSessionTime className="row-span-2 md:row-span-3 md:col-span-1 md:col-start-1 md:row-start-[17] xl:col-start-5 xl:row-start-3 xl:row-span-2 xl:col-span-1" />
+        <MostRecentSubmission className="row-[span_8_/_span_8] md:col-span-1 md:col-start-2 md:row-start-[13] xl:col-start-5 xl:row-start-5 xl:col-span-1" />
+      </div>
+    </div>
+  );
 }
 
 export default App;

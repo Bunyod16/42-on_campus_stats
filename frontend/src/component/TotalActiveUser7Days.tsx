@@ -35,7 +35,7 @@ interface BarsProps {
 
 interface IBarChartProps {
   data: any[];
-  dimension: any;
+  dimension: { width: number; height: number };
 }
 
 const tmp = {
@@ -89,10 +89,10 @@ function Bars({ data, height, scaleX, scaleY }: BarsProps) {
 }
 
 const BarChart = ({ data, dimension }: IBarChartProps) => {
-  const margin = { top: 16, right: 16, bottom: 32, left: 40 };
-
+  const margin = { top: 16, right: 16, bottom: 32, left: 32 };
   const width = dimension.width - margin.left - margin.right;
-  const height = dimension.width / 3 - margin.top - margin.bottom;
+  //   const height = dimension.width / 3 - margin.top - margin.bottom;
+  const height = dimension.height - margin.top - margin.bottom;
 
   const scaleX = scaleBand()
     .domain(data.map(({ label }) => label))
@@ -103,10 +103,7 @@ const BarChart = ({ data, dimension }: IBarChartProps) => {
     .range([height, 0]);
 
   return (
-    <svg
-      width={width + margin.left + margin.right}
-      height={height + margin.top + margin.bottom}
-    >
+    <svg width={dimension.width} height={dimension.height}>
       <g transform={`translate(${margin.left}, ${margin.top})`}>
         <AxisBottom scale={scaleX} transform={`translate(0, ${height})`} />
         <AxisLeft scale={scaleY} />
@@ -118,12 +115,16 @@ const BarChart = ({ data, dimension }: IBarChartProps) => {
 
 interface ITotalActiveUser7Days {
   className?: string;
+  dimension: { width: number; height: number };
 }
-const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
+const TotalActiveUser7Days = ({
+  className,
+  dimension,
+}: ITotalActiveUser7Days) => {
+  //   const containerRef = React.useRef<HTMLDivElement>(null);
   const [data, setData] = React.useState<any | undefined>(undefined);
 
-  const dimension = useDimensions(containerRef);
+  //   const dimension = useDimensions(containerRef);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
@@ -155,21 +156,17 @@ const TotalActiveUser7Days = ({ className }: ITotalActiveUser7Days) => {
 
   return (
     // the container for the svg
-    <Card className={className + " flex flex-col"} ref={containerRef}>
+    <Card className={className + " flex flex-col h-full"}>
       <CardTitle>Total active users last 7 days</CardTitle>
-      {data ? (
-        // <div ref={containerRef} className="w-full">
-        <BarChart data={data} dimension={dimension} />
-      ) : (
-        // </div>
-        <div
-          className="bg-gray-500 rounded animate-pulse"
-          style={{
-            width: `${dimension.width}px`,
-            height: `${dimension.width / 3}px`,
-          }}
-        />
-      )}
+      <div className="w-full h-full flex items-center justify-center">
+        {dimension.width !== 0 &&
+          dimension.height !== 0 &&
+          (data ? (
+            <BarChart data={data} dimension={dimension} />
+          ) : (
+            <div className="w-full h-full bg-gray-500 rounded animate-pulse" />
+          ))}
+      </div>
     </Card>
   );
 };

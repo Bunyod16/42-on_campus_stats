@@ -8,6 +8,7 @@ interface ColumnComponentProps {
   imageSrc: string;
   login: string;
   xp: number;
+  imgSize: number;
 }
 
 function formatNumber(num: number) {
@@ -22,9 +23,19 @@ function formatNumber(num: number) {
     return num.toString();
   }
 }
-function ColumnComponent({ imageSrc, login, xp }: ColumnComponentProps) {
+function ColumnComponent({
+  imageSrc,
+  login,
+  xp,
+  imgSize,
+}: ColumnComponentProps) {
   return (
-    <UserContainer imgSrc={imageSrc} login={login} extra={formatNumber(xp)} />
+    <UserContainer
+      imgSrc={imageSrc}
+      login={login}
+      extra={formatNumber(xp)}
+      imgSize={imgSize}
+    />
   );
 }
 
@@ -32,8 +43,9 @@ interface ITopFarmers {
   className?: string;
 }
 const TopFarmers = ({ className }: ITopFarmers) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
   const [data, setData] = React.useState<any | undefined>(undefined);
+  const childRef = React.useRef<HTMLDivElement>(null);
+  const [imageSize, setImageSize] = React.useState(0);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
@@ -74,43 +86,42 @@ const TopFarmers = ({ className }: ITopFarmers) => {
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
-  // console.log(data.length);
+
+  // useEffect to determine user img size based on card width/height
+  React.useEffect(() => {
+    if (childRef.current) {
+      const width = childRef.current.clientWidth,
+        height = childRef.current.clientHeight;
+      const imgSizeOnWidth = Math.round((width / 5) * 0.7),
+        imgSizeOnHeight = Math.round(height * 0.5);
+      if (imgSizeOnWidth > imgSizeOnHeight) setImageSize(imgSizeOnHeight);
+      else setImageSize(imgSizeOnWidth);
+    }
+  }, [childRef]);
+
   return (
     // the container for the svg
     // TODO take away the column components
-    <Card className={className + " flex flex-col"} ref={containerRef}>
+    <Card className={className + " flex flex-col"}>
       <CardTitle>Top Xp Farmers (7 days)</CardTitle>
-      {data ? (
-        <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full">
-          <ColumnComponent
-            imageSrc={data[0].image}
-            login={data[0].login}
-            xp={data[0].xp}
-          />
-          <ColumnComponent
-            imageSrc={data[1].image}
-            login={data[1].login}
-            xp={data[1].xp}
-          />
-          <ColumnComponent
-            imageSrc={data[2].image}
-            login={data[2].login}
-            xp={data[2].xp}
-          />
-          <ColumnComponent
-            imageSrc={data[3].image}
-            login={data[3].login}
-            xp={data[3].xp}
-          />
-          <ColumnComponent
-            imageSrc={data[4].image}
-            login={data[4].login}
-            xp={data[4].xp}
-          />
-        </div>
-      ) : (
-        <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
-      )}
+      <div className="w-full h-full" ref={childRef}>
+        {imageSize !== 0 &&
+          (data ? (
+            <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full items-center justify-center p-0 md:p-1 lg:p-2 xl:p-3">
+              {data.map((item: any, index: number) => (
+                <ColumnComponent
+                  key={index}
+                  imageSrc={item.image}
+                  login={item.login}
+                  xp={item.xp}
+                  imgSize={imageSize}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
+          ))}
+      </div>
     </Card>
   );
 };
