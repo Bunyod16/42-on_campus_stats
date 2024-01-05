@@ -14,7 +14,7 @@ import TopFarmers from "./component/TopFarmers";
 // todo dynamic width/height based on whichever is narrower on screen
 
 type GraphType = "TAU7D" | "WeeklyCadetXp";
-type ViewType = "TV" | "Desktop" | "Tablet" | "Mobile" | "";
+type ViewType = "Desktop" | "Laptop" | "Tablet" | "Mobile" | "";
 
 function App() {
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -43,8 +43,8 @@ function App() {
   useEffect(() => {
     if (divRef.current) {
       const width = divRef.current.clientWidth;
-      if (width >= 2560) setViewType("TV");
-      else if (width >= 1280 && width < 2560) setViewType("Desktop");
+	  if (width >= 1900) setViewType("Desktop")
+      else if (width >= 1280 && width < 1900) setViewType("Laptop");
       else if (width >= 736 && width < 1280) setViewType("Tablet");
       else setViewType("Mobile");
     }
@@ -85,10 +85,10 @@ function App() {
       className="w-screen h-fit md:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
       ref={divRef}
     >
-      <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-3 text-3xl text-white">
+      <div className="flex w-full flex-col items-center justify-center bg-gray-900 py-3 text-xl 2xl:text-2xl 3xl:text-3xl font-semibold text-white">
         <h1>Live Stats: 42 Kuala Lumpur</h1>
       </div>
-      <div className="w-full lg:w-[95%] xl:w-[90%] h-[2560px] md:h-full md:min-h-[1280px] xl:min-h-[780px] grid grid-flow-col grid-cols-1 grid-rows-[repeat(34,minmax(0,1fr))] md:grid-cols-2 md:grid-rows-[repeat(20,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-2 md:p-4 2xl:p-6 gap-3 xl:gap-4 2xl:gap-5">
+      <div className="w-full lg:w-[95%] 2xl:w-[90%] h-[2560px] md:h-full md:min-h-[1280px] xl:min-h-[668px] grid grid-flow-col grid-cols-1 grid-rows-[repeat(34,minmax(0,1fr))] md:grid-cols-2 md:grid-rows-[repeat(20,minmax(0,1fr))] xl:grid-cols-5 xl:grid-rows-[repeat(12,minmax(0,1fr))] p-2 md:p-4 2xl:p-6 3xl:p-10 gap-3 2xl:gap-4 3xl:gap-5">
         <ActiveUserProjects
           className="row-span-5 md:row-span-6 md:col-span-1 xl:col-span-2"
           viewType={viewType}

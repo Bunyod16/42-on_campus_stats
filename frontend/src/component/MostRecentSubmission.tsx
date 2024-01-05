@@ -52,11 +52,11 @@ function ProjectContainer({
       </div>
       <p className="text-base">{name}</p>
       <div className="text-sm 3xl:text-lg inline-flex items-center">
-        <span className="text-lg 3xl:text-2xl font-semibold text-green-500">
+        <span className="text-base 2xl:text-lg 3xl:text-2xl font-semibold text-green-500">
           {score}
         </span>
         /100
-        <p className="text-sm 3xl:text-lg text-gray-400 ml-3">{time_string}</p>
+        <p className="text-xs 2xl:text-sm 3xl:text-lg text-gray-400 ml-3">{time_string}</p>
       </div>
     </div>
   );
@@ -114,7 +114,7 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
       <div className="w-full h-full" ref={childRef}>
         {imageSize !== 0 &&
           (data ? (
-            <div className="h-full flex flex-col items-center justify-around gap-5 align-middle text-6xl">
+            <div className="h-full flex flex-col items-center justify-around text-6xl">
               {data.map((item: any, index: number) => (
                 <ProjectContainer
                   key={index}

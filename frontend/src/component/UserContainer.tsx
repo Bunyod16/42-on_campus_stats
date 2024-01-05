@@ -20,8 +20,8 @@ const UserContainer = ({
         src={imgSrc}
         alt="user"
       />
-      <p className="text-sm xl:text-base 3xl:text-lg">{login}</p>
-      <b className="text-base xl:text-lg 3xl:text-2xl">{extra}</b>
+      <p className="text-sm 2xl:text-base 3xl:text-lg">{login}</p>
+      <b className="text-base 2xl:text-lg 3xl:text-2xl">{extra}</b>
     </div>
   );
 };

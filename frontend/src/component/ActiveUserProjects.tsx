@@ -129,16 +129,10 @@ function ChartLegends({
             ></circle>
             <text
               className={
-                viewType === "TV"
-                  ? "text-lg"
-                  : viewType === "Desktop"
-                  ? project.length > 24
-                    ? "text-sm"
-                    : "text-base"
-                  : project.length > 24
-                  ? "text-xs"
-                  : "text-sm"
-              } // scale text if (1) larger on desktop devices; (2) project name is too long
+				viewType === "Desktop" ? (
+					project.length > 32 ? "text-sm" : "text-base"
+				) : (project.length > 32 ? "text-xs" : "text-sm")
+              } // scale text if project name is too long
               x="16"
               y={legendMargin * i}
               style={{ fill: "#f3f4f6" }}
@@ -202,7 +196,7 @@ export default function ActiveUserProjects(props: TPropsType) {
     if (childRef.current) {
       const width = childRef.current.clientWidth;
       const height = childRef.current.clientHeight;
-      const radius = Math.round(width * 0.18);
+      const radius = Math.round(width * 0.175);
       const pieOffset = Math.round(radius * 1.1); // pie chart offset along the x-axis
       const legendOffset = Math.round(pieOffset * 2.1); // pie legend offset along the x-axis
       setDimension({
