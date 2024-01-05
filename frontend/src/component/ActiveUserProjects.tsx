@@ -130,14 +130,14 @@ function ChartLegends({
             <text
               className={
 				viewType === "Desktop" ? (
-					project.length > 32 ? "text-sm" : "text-base"
-				) : (project.length > 32 ? "text-xs" : "text-sm")
+					project.length > 28 ? "text-sm" : "text-base"
+				) : (project.length > 28 ? "text-xs" : "text-sm")
               } // scale text if project name is too long
               x="16"
               y={legendMargin * i}
               style={{ fill: "#f3f4f6" }}
             >
-              {project + " (" + percentage + ")"}
+              {project + " (" + parseFloat(percentage).toFixed(1) + "%)"}
             </text>
           </g>
         )
