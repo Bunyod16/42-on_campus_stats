@@ -34,7 +34,7 @@ const AverageSessionTime = ({ className }: IAverageSessionTimeProps) => {
     <Card className={className + " flex flex-col"}>
       <CardTitle>Average session time</CardTitle>
       {averageSessionTime ? (
-        <div className="text-5xl md:text-6xl h-full align-middle flex flex-col justify-center items-center">
+        <div className="text-5xl xl:text-4xl 2xl:text-6xl h-full align-middle flex flex-col justify-center items-center">
           {averageSessionTime}hr
         </div>
       ) : (
