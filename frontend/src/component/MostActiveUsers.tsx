@@ -87,7 +87,7 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
       <div className="w-full h-full" ref={childRef}>
         {imageSize !== 0 &&
           (data ? (
-            <div className="grid grid-cols-5 gap-6 h-full basis-0 grow shrink w-full items-center justify-center">
+            <div className="grid grid-cols-5 h-full basis-0 grow shrink w-full items-center justify-around">
               {data.map((item: any, index: number) => (
                 <ColumnComponent
                   key={index}
