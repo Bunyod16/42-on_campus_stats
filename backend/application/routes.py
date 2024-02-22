@@ -15,13 +15,6 @@ token.get_token()
 CORS(app)
 
 
-@app.errorhandler(301)
-def moved_permanently(e):
-    html = r'<img src="https://api.intra.42.fr/assets/8-sorry.gif" alt="Girl in a jacket" width="100%" height="100%">'
-    print(e)
-    return html, 404
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     html = r'<img src="https://api.intra.42.fr/assets/8-sorry.gif" alt="Girl in a jacket" width="100%" height="100%">'
