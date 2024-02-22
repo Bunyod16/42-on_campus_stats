@@ -35,17 +35,21 @@ class Token(
     def get_token(self):
         """Get the 42 API token, renew if expired"""
         if datetime.now() > self._token_expiration - timedelta(seconds=60):
-            logging.debug("API token expired")
-            headers = {"Content-type": "application/json"}
-            r = requests.post(
-                f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={self.uid}&client_secret={self.secret}",
-                headers=headers,
-            )
-            print("REQUEST JSON ACCESS TOKEN", r.json())
-            self._token = r.json()["access_token"]
-            self._token_expiration = datetime.now() + timedelta(
-                seconds=r.json()["expires_in"]
-            )
+            try:
+                logging.debug("API token expired")
+                headers = {"Content-type": "application/json"}
+                r = requests.post(
+                    f"https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id={self.uid}&client_secret={self.secret}",
+                    headers=headers,
+                )
+                print("REQUEST JSON ACCESS TOKEN", r.json())
+                self._token = r.json()["access_token"]
+                self._token_expiration = datetime.now() + timedelta(
+                    seconds=r.json()["expires_in"]
+                )
+            except Exception as e:
+                logging.error(f"Failed to renew token: {e}")
+                exit(-1)
         return self._token
 
     def __init__(self, campus_id, uid, secret):
