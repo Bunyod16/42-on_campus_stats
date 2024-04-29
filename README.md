@@ -35,11 +35,15 @@ Due to the structure of the campus building in Kuala Lumpur, it was hard for boc
 It gives useful insights about who is on campus, what projects are they doing/finished aswell as give a little morale boost to the Cadets.
 <br/>
 <b>Please keep in mind that its best to view it on a TV.</b>
+
 ### Built with
+
 #### Frontend
+
 <img title="Typescript, Javascript, React, Tailwind, D3.js & Axios" src="https://skillicons.dev/icons?i=ts,js,react,tailwind,d3"/>
 
 #### Backend
+
 <img title="Python, Flask" src="https://skillicons.dev/icons?i=python,flask"/>
 
 ### Deployed on
@@ -50,7 +54,9 @@ It gives useful insights about who is on campus, what projects are they doing/fi
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Installation & Usage
+
 #### note: install backend first
+
 <details>
 <summary style="font-size: 1.25em;font-weight: bold;">Click for Backend</summary>
 <br/>
@@ -61,25 +67,25 @@ It gives useful insights about who is on campus, what projects are they doing/fi
 cd backend
 ```
 
--   Create a virtual environment in python
+- Create a virtual environment in python
 
 ```bash
 python3 -m venv venv
 ```
 
--   Install dependencies
+- Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
--   Create .env file with secrets, you may find your API keys [on the intra](https://profile.intra.42.fr/oauth/applications/new), create a new application if you dont have one. <br>
+- Create .env file with secrets, you may find your API keys [on the intra](https://profile.intra.42.fr/oauth/applications/new), create a new application if you dont have one. <br>
 
 ```bash
 touch .env
 ```
 
--   .env file example
+- .env file example
 
 ```python
 FT_API_UID = "YOUR_UID_HERE"
@@ -88,14 +94,13 @@ FT_CAMPUS_ID = "YOUR_FT_CAMPUS_ID_HERE"
 #tip: [How to find your campus id](https://google.com)
 ```
 
--   Run the backend
+- Run the backend
 
 ```bash
 flask run
 ```
 
 </details>
-
 
 <details>
 <summary style="font-size: 1.25em;font-weight: bold;">Click for Frontend</summary>
@@ -120,7 +125,6 @@ touch .env
 
 - .env file example,  if run locally, usually `REACT_APP_BACKEND_API_URL="http://localhost:5000/api"`
 
-
 ```python
 REACT_APP_BACKEND_API_URL="your_backend_url_here" 
 ```
@@ -137,38 +141,39 @@ pnpm start
 
 ## Roadmap
 
--   [x] Deploy project
--   [x] Connecting Frontend with Backend
--   [x] Configure view to fit tv
--   [x] Replace skills chart with something more useful
-    -   [x] Remove skill spider chart
-    -   [x] Add Top 5 most online users per week
-    -   [x] Add Top 5 most experienced gained per week
--   [x] Convert Styled Components to use Tailwind CSS
--   [x] Convert existing component files written in .js to .tsx
--   [ ] Auto refresh TV when new deployment happen
--   [ ] Refactor Code
--   [ ] Update User Interface
--   [ ] Change Color Scheme
+- [x] Deploy project
+- [x] Connecting Frontend with Backend
+- [x] Configure view to fit tv
+- [x] Replace skills chart with something more useful
+  - [x] Remove skill spider chart
+  - [x] Add Top 5 most online users per week
+  - [x] Add Top 5 most experienced gained per week
+- [x] Convert Styled Components to use Tailwind CSS
+- [x] Convert existing component files written in .js to .tsx
+- [ ] Auto refresh TV when new deployment happen
+- [ ] Refactor Code
+- [ ] Update User Interface
+- [ ] Change Color Scheme
 
 See the [open issues](https://github.com/Bunyod16/42-on_campus_stats/issues) for a full list of proposed features (and known issues).
 
 ## How To Contribute
 
--   Kindly fork this repo if you wish to use it on your own campus.
+- Kindly fork this repo if you wish to use it on your own campus.
 
--   Pull requests are welcome. For major changes, please open an issue first
-    to discuss what you would like to change.
+- Pull requests are welcome. For major changes, please open an issue first
+  to discuss what you would like to change.
 
 <!-- ACKNOWLEDGMENTS -->
 
 ## Acknowledgments
 
--   [Bunyod](https://github.com/Bunyod16) for the initial idea and backend contribution
--   [Jaclyn](https://github.com/Jachokoreto) for the frontend and UI/UX
--   [Jason](https://github.com/jasonkwm) for frontend
--   [Kevin](https://github.com/locorocorolling) for helping with Bug Fixes
--   [Zer](https://github.com/sirhcofe) for glorius responsiveness contribution
+
+- [Bunyod](https://github.com/Bunyod16) for the initial idea and backend contribution
+- [Jaclyn](https://github.com/Jachokoreto) for the frontend and UI/UX
+- [Jason](https://github.com/jasonkwm) for frontend
+- [Kevin](https://github.com/locorocorolling) for helping with Bug Fixes
+- [Zer](https://github.com/sirhcofe) for glorius responsiveness contribution
 
 <!-- LICENSE -->
 
