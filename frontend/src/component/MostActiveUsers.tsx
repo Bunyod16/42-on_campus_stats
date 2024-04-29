@@ -38,7 +38,7 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
   React.useEffect(() => {
     const fetchUsers = async () => {
       await axios
-        .get("/weekly-most-active-users")
+        .get("/on-campus/weekly-most-active-users")
         .then((res) => {
           let data = res.data;
           if (JSON.stringify(data) !== "{}") {

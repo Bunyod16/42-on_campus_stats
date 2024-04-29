@@ -50,7 +50,7 @@ const TopFarmers = ({ className }: ITopFarmers) => {
   React.useEffect(() => {
     const fetchUsers = async () => {
       await axios
-        .get("/weekly-most-gained-xp")
+        .get("/on-campus/weekly-most-gained-xp")
         .then((res) => {
           let data = res.data;
           if (JSON.stringify(data) !== "{}") {

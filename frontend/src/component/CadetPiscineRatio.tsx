@@ -66,7 +66,7 @@ export default function CadetPiscineRatio(props: TPropsType) {
   return (
     <Card className={props.className + " flex flex-col"}>
       <CardTitle>
-        <span className="h1-cadets">Cadets </span> to{" "}
+        <span className="h1-cadets">Students </span> to{" "}
         <span className="h1-piscine">Pisciners </span> Ratio
         {` ( ${students?.cadets ? students?.cadets : 0} : ${
           students?.pisciners ? students?.pisciners : 0
