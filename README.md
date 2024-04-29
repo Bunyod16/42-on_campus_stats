@@ -123,10 +123,10 @@ pnpm install
 touch .env
 ```
 
-- .env file example, if run locally, usually `REACT_APP_BACKEND_API_URL="http://localhost:5000/api"`
+- .env file example,  if run locally, usually `REACT_APP_BACKEND_API_URL="http://localhost:5000/api"`
 
 ```python
-REACT_APP_BACKEND_API_URL="your_backend_url_here"
+REACT_APP_BACKEND_API_URL="your_backend_url_here" 
 ```
 
 - Run frontend
@@ -167,6 +167,7 @@ See the [open issues](https://github.com/Bunyod16/42-on_campus_stats/issues) for
 <!-- ACKNOWLEDGMENTS -->
 
 ## Acknowledgments
+
 
 - [Bunyod](https://github.com/Bunyod16) for the initial idea and backend contribution
 - [Jaclyn](https://github.com/Jachokoreto) for the frontend and UI/UX
