@@ -28,14 +28,17 @@ function ColumnComponent({
   login,
   xp,
   imgSize,
-}: ColumnComponentProps) {
+  profileUrl,
+}: ColumnComponentProps & { profileUrl: string }) {
   return (
-    <UserContainer
-      imgSrc={imageSrc}
-      login={login}
-      extra={formatNumber(xp)}
-      imgSize={imgSize}
-    />
+    <a href={profileUrl} target="_blank" rel="nooper noreferrer">
+      <UserContainer
+        imgSrc={imageSrc}
+        login={login}
+        extra={formatNumber(xp)}
+        imgSize={imgSize}
+      />
+    </a>
   );
 }
 
@@ -115,6 +118,7 @@ const TopFarmers = ({ className }: ITopFarmers) => {
                   login={item.login}
                   xp={item.xp}
                   imgSize={imageSize}
+                  profileUrl={`https://intra.42.fr/users/${item.login}`}
                 />
               ))}
             </div>

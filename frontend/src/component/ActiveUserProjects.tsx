@@ -23,27 +23,59 @@ dataset = [
 ]
 */
 
+// type TDataType = {
+//   project: string;
+//   user_num: number;
+//   percentage: string;
+// };
+
+interface User {
+  login: string;  // Add other necessary fields
+  image: string;
+}
+
+// NEW type TDataType
 type TDataType = {
   project: string;
   user_num: number;
   percentage: string;
+  users: User[]; // Each project should include a users array
 };
 
 type TApiDataType = {
   [key: string]: number;
 };
 
-function cleaningData(dataObj: TApiDataType) {
+// function cleaningData(dataObj: TApiDataType) {
+//   let dataset: TDataType[] = [];
+//   let tots = 0;
+//   for (let d in dataObj) {
+//     dataset = [
+//       ...dataset,
+//       { project: d, user_num: dataObj[d], percentage: "" },
+//     ];
+//   }
+//   dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
+//   tots = d3.sum(dataset, (d) => d["user_num"]);
+//   dataset.forEach((x) => {
+//     const floatNum = (x.user_num / tots) * 100;
+//     x.percentage = floatNum.toFixed(2) + "%";
+//   });
+//   return dataset;
+// }
+
+// NEW cleaningData function
+function cleaningData(dataObj: TApiDataType): TDataType[] {
   let dataset: TDataType[] = [];
   let tots = 0;
   for (let d in dataObj) {
     dataset = [
       ...dataset,
-      { project: d, user_num: dataObj[d], percentage: "" },
+      { project: d, user_num: dataObj[d], percentage: "", users: [] },
     ];
   }
-  dataset = dataset.sort((a, b) => b["user_num"] - a["user_num"]).slice(0, 10);
-  tots = d3.sum(dataset, (d) => d["user_num"]);
+  dataset = dataset.sort((a, b) => b.user_num - a.user_num).slice(0, 10);
+  tots = d3.sum(dataset, (d) => d.user_num);
   dataset.forEach((x) => {
     const floatNum = (x.user_num / tots) * 100;
     x.percentage = floatNum.toFixed(2) + "%";
@@ -51,7 +83,47 @@ function cleaningData(dataObj: TApiDataType) {
   return dataset;
 }
 
-// Function PieChart Plotting
+// // Function PieChart Plotting
+// function PieChart({
+//   projects,
+//   color,
+//   radius,
+//   height,
+//   xOffset,
+// }: {
+//   projects: any;
+//   color: Function;
+//   radius: number;
+//   height: number;
+//   xOffset: number;
+// }) {
+//   const pie = d3.pie().value((d: any) => d["user_num"]);
+//   const arc = d3
+//     .arc()
+//     .innerRadius(0)
+//     .outerRadius(radius * 0.9);
+//   return (
+//     <g transform={"translate(" + xOffset + "," + height / 2 + ")"}>
+//       {pie(projects).map((d: any, i) => {
+//         return (
+//           <g className="arc" key={i}>
+//             <path fill={color(i)} d={arc(d)!}></path>
+//             <text
+//               className="chart-text"
+//               transform={`translate(${arc.centroid(d)[0]}, ${
+//                 arc.centroid(d)[1]
+//               })`}
+//             >
+//               {d.data.user_num}
+//             </text>
+//           </g>
+//         );
+//       })}
+//     </g>
+//   );
+// }
+
+// NEW Function PieChart Plotting
 function PieChart({
   projects,
   color,
@@ -59,34 +131,54 @@ function PieChart({
   height,
   xOffset,
 }: {
-  projects: any;
+  projects: TDataType[];
   color: Function;
   radius: number;
   height: number;
   xOffset: number;
 }) {
-  const pie = d3.pie().value((d: any) => d["user_num"]);
-  const arc = d3
-    .arc()
-    .innerRadius(0)
-    .outerRadius(radius * 0.9);
+  const [tooltip, setTooltip] = useState({ visible: false, content: '', x: 0, y: 0 });
+
+  // const pie = d3.pie().value((d: any) => d["user_num"]);
+  const pie = d3.pie<TDataType>().value((d) => d.user_num);
+  const arc = d3.arc().innerRadius(0).outerRadius(radius * 0.9);
+
+  const handleMouseOver = (event: React.MouseEvent, data: any) => {
+    const [x, y] = arc.centroid(data);
+    setTooltip({
+      visible: true,
+      content: `Users: ${data.data.users.map((data: User) => data.login).join(', ')}`,
+      x: xOffset + x,
+      y: height / 2 + y,
+    });
+  };
+
+  const handleMouseOut = () => {
+    setTooltip({ visible: false, content: '', x: 0, y: 0 });
+  };
+
   return (
     <g transform={"translate(" + xOffset + "," + height / 2 + ")"}>
-      {pie(projects).map((d: any, i) => {
-        return (
-          <g className="arc" key={i}>
-            <path fill={color(i)} d={arc(d)!}></path>
-            <text
-              className="chart-text"
-              transform={`translate(${arc.centroid(d)[0]}, ${
-                arc.centroid(d)[1]
-              })`}
-            >
-              {d.data.user_num}
-            </text>
-          </g>
-        );
-      })}
+      {pie(projects).map((d: any, i) => (
+        <g className="arc" key={i} onMouseOver={(e) => handleMouseOver(e, d)} onMouseOut={handleMouseOut}>
+          <path fill={color(i)} d={arc(d)!}></path>
+          <text
+            transform={`translate(${arc.centroid(d)[0]}, ${arc.centroid(d)[1]})`}
+            textAnchor="middle"
+            alignmentBaseline="central"
+            fill="white"
+          >
+            {d.data.user_num}
+          </text>
+        </g>
+      ))}
+      {tooltip.visible && (
+        <foreignObject x={tooltip.x - 60} y={tooltip.y - 30} width="120" height="60">
+          <div className="tooltip" style={{ background: 'white', padding: '5px', borderRadius: '5px', border: '1px solid black' }}>
+            {tooltip.content}
+          </div>
+        </foreignObject>
+      )}
     </g>
   );
 }

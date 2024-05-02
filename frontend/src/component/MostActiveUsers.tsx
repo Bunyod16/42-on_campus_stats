@@ -16,14 +16,17 @@ function ColumnComponent({
   login,
   hours,
   imgSize,
-}: ColumnComponentProps) {
+  profileUrl,
+}: ColumnComponentProps & { profileUrl: string }) {
   return (
-    <UserContainer
-      imgSrc={imageSrc}
-      login={login}
-      extra={hours + "h"}
-      imgSize={imgSize}
-    />
+    <a href={profileUrl} target="_blank" rel="nooper noreferrer">
+      <UserContainer
+        imgSrc={imageSrc}
+        login={login}
+        extra={hours + "h"}
+        imgSize={imgSize}
+      />
+    </a>
   );
 }
 
@@ -95,6 +98,7 @@ const MostActiveUsers = ({ className }: IMostActiveUsers) => {
                   login={item.login}
                   hours={item.hours}
                   imgSize={imageSize}
+                  profileUrl={`https://intra.42.fr/users/${item.login}`}
                 />
               ))}
             </div>

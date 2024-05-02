@@ -102,7 +102,7 @@ export default function CadetPiscineRatio(props: TPropsType) {
                     y="70%"
                     className="cadet-piscine-ratio-text"
                   >
-                    Cadet
+                    Student
                   </text>
                 )}
               </g>

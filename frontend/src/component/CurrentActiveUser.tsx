@@ -135,12 +135,14 @@ React.useEffect(() => {
 // Generate user gallery
 const userGallery = users?.map((singleUser, i) => (
   <div key={i} className="flex flex-col items-center justify-center">
+    <a href={`https://intra.42.fr/users/${singleUser.login}`} target="_blank" rel="noopener noreferrer">
     <img
       src={singleUser.image}
       alt="current-active-user"
       className={`rounded-full object-cover border-4 ${singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]"}`}
       style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
     />
+    </a>
     <p className="text-xs xl:text-sm 2xl:text-base 3xl:text-lg">{singleUser.login}</p>
   </div>
 ));

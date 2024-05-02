@@ -28,7 +28,11 @@ interface ColumnComponentProps {
 }
 
 function ColumnComponent({ imageSrc, login, imgSize }: ColumnComponentProps) {
-  return <UserContainer imgSrc={imageSrc} login={login} imgSize={imgSize} />;
+  return (
+    <a href={`https://profile.intra.42.fr/users/${login}`} target="_blank" rel="noreferrer">
+      <UserContainer imgSrc={imageSrc} login={login} imgSize={imgSize} />
+    </a>
+  );
 }
 
 function ProjectContainer({
