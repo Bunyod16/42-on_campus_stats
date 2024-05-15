@@ -174,7 +174,7 @@ See the [open issues](https://github.com/Bunyod16/42-on_campus_stats/issues) for
 - [Jason](https://github.com/jasonkwm) for frontend
 - [Kevin](https://github.com/locorocorolling) for helping with Bug Fixes
 - [Zer](https://github.com/sirhcofe) for glorius responsiveness contribution
-
+- [Cerberus2290](https://github.com/Cerberus2290) for clickable profiles for easy navigation
 <!-- LICENSE -->
 
 ## License
