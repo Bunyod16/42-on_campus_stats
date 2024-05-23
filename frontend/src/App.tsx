@@ -10,12 +10,14 @@ import ActiveUserProjects from "./component/ActiveUserProjects";
 import WeeklyCadetXp from "./component/WeeklyCadetXp";
 import MostActiveUsers from "./component/MostActiveUsers";
 import TopFarmers from "./component/TopFarmers";
-import { timeout } from "d3";
+import Cookies from "universal-cookie";
 
 // todo dynamic width/height based on whichever is narrower on screen
 
 type GraphType = "TAU7D" | "WeeklyCadetXp";
 type ViewType = "Desktop" | "Laptop" | "Tablet" | "Mobile" | "";
+
+const cookies = new Cookies();
 
 function App() {
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -29,35 +31,23 @@ function App() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // check if isLoggedIn cookie exists
+  useEffect(() => {}, []);
+
   const handleLogin = () => {
     setTimeout(() => {
       if (
         username === process.env.USERNAME &&
         password === process.env.PASSWORD
       ) {
-        // sleep for 1 second to prevent brute force
         setIsLoggedIn(true);
       } else setError("Invalid username or password");
-    }, 1000);
+    }, 2000);
   };
 
   // useEffect to determine device type based on screen width
   useEffect(() => {
-    if (divRef.current) {
-      const width = divRef.current.clientWidth;
-      if (width >= 1900) setViewType("Desktop");
-      else if (width >= 1280 && width < 1900) setViewType("Laptop");
-      else if (width >= 736 && width < 1280) setViewType("Tablet");
-      else setViewType("Mobile");
-    }
-  }, [divRef]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      window.location.reload();
-      // reload page every hour
-    }, 1000 * 60 * 60 * 1);
-    return () => clearInterval(intervalId);
+    cookies.get("isLoggedIn") ? setIsLoggedIn(true) : setIsLoggedIn(false);
   }, []);
 
   // interval to cycle between TotalActiveUser7Days and WeeklyCadetXp graph
@@ -125,7 +115,10 @@ function App() {
       <div className="h-[10px] items-start bg-gray-800">
         <div
           className="flex h-[10px] w-[10px]"
-          onClick={() => setIsLoggedIn(true)}
+          onClick={() => {
+            cookies.set("isLoggedIn", "true", { path: "/" });
+            setIsLoggedIn(true);
+          }}
         ></div>
       </div>
       <div className="flex flex-col items-center justify-center h-screen bg-gray-800 text-white">
