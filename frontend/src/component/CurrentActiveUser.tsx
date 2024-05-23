@@ -81,7 +81,10 @@ function CurrentActiveUser({
               "rounded-full object-cover border-4 " +
               (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
             }
-            style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
+            style={{
+              width: `${imageSize ? imageSize : 64}px`,
+              height: `${imageSize ? imageSize : 64}px`,
+            }}
           />
         </a>
         <p className="text-xs xl:text-sm 2xl:text-base 3xl:text-lg">
