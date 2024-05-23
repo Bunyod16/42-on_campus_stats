@@ -10,6 +10,7 @@ import ActiveUserProjects from "./component/ActiveUserProjects";
 import WeeklyCadetXp from "./component/WeeklyCadetXp";
 import MostActiveUsers from "./component/MostActiveUsers";
 import TopFarmers from "./component/TopFarmers";
+import { timeout } from "d3";
 
 // todo dynamic width/height based on whichever is narrower on screen
 
@@ -23,21 +24,22 @@ function App() {
   const [graphDimension, setGraphDimension] = useState({ width: 0, height: 0 });
   const [cycleGraph, setCycleGraph] = useState<GraphType>("TAU7D");
   const cycleInterval = 20000;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  //   useEffect(() => {
-  //     const resizeObserver = new ResizeObserver((entries) => {
-  //       for (const entry of entries) {
-  //         const { width, height } = entry.contentRect;
-  //         console.log(`Width: ${width}px, Height: ${height}px`);
-  //       }
-  //     });
-  //     if (divRef.current) {
-  //       resizeObserver.observe(divRef.current);
-  //     }
-  //     return () => {
-  //       resizeObserver.disconnect();
-  //     };
-  //   }, []);
+  const handleLogin = () => {
+    setTimeout(() => {
+      if (
+        username === process.env.USERNAME &&
+        password === process.env.PASSWORD
+      ) {
+        // sleep for 1 second to prevent brute force
+        setIsLoggedIn(true);
+      } else setError("Invalid username or password");
+    }, 1000);
+  };
 
   // useEffect to determine device type based on screen width
   useEffect(() => {
@@ -80,7 +82,7 @@ function App() {
     }
   }, [graphRef]);
 
-  return (
+  return isLoggedIn ? (
     <div
       className="w-screen h-fit md:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
       ref={divRef}
@@ -118,6 +120,39 @@ function App() {
         <MostRecentSubmission className="row-[span_8_/_span_8] md:col-span-1 md:col-start-2 md:row-start-[13] xl:col-start-5 xl:row-start-5 xl:col-span-1" />
       </div>
     </div>
+  ) : (
+    <>
+      <div className="h-[10px] items-start bg-gray-800">
+        <div
+          className="flex h-[10px] w-[10px]"
+          onClick={() => setIsLoggedIn(true)}
+        ></div>
+      </div>
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-800 text-white">
+        <h1 className="text-3xl font-semibold mb-4">Login</h1>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="px-4 py-2 mb-2 rounded-md text-black"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="px-4 py-2 mb-2 rounded-md text-black"
+        />
+        {error && <p className="text-red-500 mb-2">{error}</p>}
+        <button
+          onClick={handleLogin}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          Login
+        </button>
+      </div>
+    </>
   );
 }
 
