@@ -146,7 +146,7 @@ const WeeklyCadetXp = ({ className, dimension }: IWeeklyCadetXp) => {
     fetchUsers();
 
     // Call the API every 5 minutes
-    const interval = setInterval(fetchUsers, 1000 * 60 * 5);
+    const interval = setInterval(fetchUsers, 1000 * 60 * 60);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);

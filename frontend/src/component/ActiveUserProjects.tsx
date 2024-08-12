@@ -129,9 +129,13 @@ function ChartLegends({
             ></circle>
             <text
               className={
-				viewType === "Desktop" ? (
-					project.length > 28 ? "text-sm" : "text-base"
-				) : (project.length > 28 ? "text-xs" : "text-sm")
+                viewType === "Desktop"
+                  ? project.length > 28
+                    ? "text-sm"
+                    : "text-base"
+                  : project.length > 28
+                  ? "text-xs"
+                  : "text-sm"
               } // scale text if project name is too long
               x="16"
               y={legendMargin * i}
@@ -183,7 +187,7 @@ export default function ActiveUserProjects(props: TPropsType) {
         });
     };
     fetchProjects();
-    const interval = setInterval(fetchProjects, 1000 * 60 * 1);
+    const interval = setInterval(fetchProjects, 1000 * 60 * 20);
     return () => clearInterval(interval);
   }, []);
 
@@ -213,14 +217,7 @@ export default function ActiveUserProjects(props: TPropsType) {
     <Card className={props.className + " flex flex-col"} ref={ref}>
       <CardTitle>Active User Projects</CardTitle>
       <div className="w-full h-full" ref={childRef}>
-        {projects &&
-        props.viewType !== "" &&
-        dimension.width !== 0 &&
-        dimension.height !== 0 &&
-        dimension.radius !== 0 &&
-        dimension.pieOffset !== 0 &&
-        dimension.legendOffset !== 0 &&
-        projectCount !== 0 ? (
+        {projects ? (
           <svg
             className="pie-chart-svg"
             width={dimension.width}

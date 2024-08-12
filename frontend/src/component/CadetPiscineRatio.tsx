@@ -46,7 +46,7 @@ export default function CadetPiscineRatio(props: TPropsType) {
         });
     };
     fetchRatio();
-    const interval = setInterval(fetchRatio, 1000 * 60 * 1);
+    const interval = setInterval(fetchRatio, 1000 * 60 * 20);
     return () => clearInterval(interval);
   }, []);
 

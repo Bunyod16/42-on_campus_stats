@@ -72,7 +72,7 @@ function App() {
     }
   }, [graphRef]);
 
-  return isLoggedIn ? (
+  return (
     <div
       className="w-screen h-fit md:h-screen flex flex-col items-center justify-start bg-gray-800 text-center text-base overflow-y-auto"
       ref={divRef}
@@ -110,42 +110,6 @@ function App() {
         <MostRecentSubmission className="row-[span_8_/_span_8] md:col-span-1 md:col-start-2 md:row-start-[13] xl:col-start-5 xl:row-start-5 xl:col-span-1" />
       </div>
     </div>
-  ) : (
-    <>
-      <div className="h-[10px] items-start bg-gray-800">
-        <div
-          className="flex h-[10px] w-[10px]"
-          onClick={() => {
-            cookies.set("isLoggedIn", "true", { path: "/" });
-            setIsLoggedIn(true);
-          }}
-        ></div>
-      </div>
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-800 text-white">
-        <h1 className="text-3xl font-semibold mb-4">Login</h1>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="px-4 py-2 mb-2 rounded-md text-black"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="px-4 py-2 mb-2 rounded-md text-black"
-        />
-        {error && <p className="text-red-500 mb-2">{error}</p>}
-        <button
-          onClick={handleLogin}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          Login
-        </button>
-      </div>
-    </>
   );
 }
 

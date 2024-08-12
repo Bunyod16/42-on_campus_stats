@@ -21,7 +21,7 @@ const AverageLevel = ({ className }: { className: string }) => {
     fetchData();
 
     // Call the API every 5 minutes
-    const interval = setInterval(fetchData, 1000 * 60 * 1);
+    const interval = setInterval(fetchData, 1000 * 60 * 15);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
