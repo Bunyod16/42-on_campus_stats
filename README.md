@@ -125,7 +125,7 @@ touch .env
 - .env file example,  if run locally, usually `REACT_APP_BACKEND_API_URL="http://localhost:5000/api"`
 
 ```python
-REACT_APP_BACKEND_API_URL="your_backend_url_here" 
+REACT_APP_BACKEND_API_URL="http://localhost:5000/api" 
 ```
 
 - Run frontend
