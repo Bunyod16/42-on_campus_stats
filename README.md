@@ -16,8 +16,6 @@
     An awesome tool to give LIVE insights about your 42 campus
     <br />
     <br />
-    <a href="https://42-on-campus-stats.vercel.app" target="_blank">View Demo</a>
-    ·
     <a href="https://github.com/Bunyod16/42-on_campus_stats/issues">Report Bug</a>
     ·
     <a href="https://github.com/Bunyod16/42-on_campus_stats/issues">Request Feature</a>
