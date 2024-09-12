@@ -91,7 +91,6 @@ touch .env
 FT_API_UID = "YOUR_UID_HERE"
 FT_API_SECRET = "YOUR_SECRET_HERE"
 FT_CAMPUS_ID = "YOUR_FT_CAMPUS_ID_HERE"
-#tip: [How to find your campus id](https://google.com)
 ```
 
 - Run the backend
