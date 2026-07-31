@@ -79,7 +79,7 @@ function CurrentActiveUser({
             alt="current-active-user"
             className={
               "rounded-full object-cover border-4 " +
-              (singleUser.is_cadet ? "border-[#009596]" : "border-[#f1b245]")
+              (singleUser.is_cadet ? "border-[var(--avatar-cadet-border)]" : "border-[var(--avatar-piscine-border)]")
             }
             style={{
               width: `${imageSize ? imageSize : 64}px`,
@@ -105,7 +105,7 @@ function CurrentActiveUser({
         {users ? (
           userGallery
         ) : (
-          <div className="col-span-5 h-full rounded bg-gray-500 animate-pulse"></div>
+          <div className="col-span-5 h-full rounded bg-[var(--color-loading)] animate-pulse"></div>
         )}
       </div>
     </Card>

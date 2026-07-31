@@ -119,7 +119,7 @@ const TopFarmers = ({ className }: ITopFarmers) => {
               ))}
             </div>
           ) : (
-            <div className="bg-gray-500 rounded animate-pulse w-full h-full" />
+            <div className="bg-[var(--color-loading)] rounded animate-pulse w-full h-full" />
           ))}
       </div>
     </Card>

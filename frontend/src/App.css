@@ -1,12 +1,91 @@
 @keyframes fade-in-out {
-    0% { opacity: 0; }
-    10% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-  
-  .fade-in-out {
-    animation-name: fade-in-out;
-    animation-duration: 21s;
-    animation-fill-mode: forwards;
-  }
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.fade-in-out {
+  animation-name: fade-in-out;
+  animation-duration: 21s;
+  animation-fill-mode: forwards;
+}
+
+/* ── CRT Terminal theme ── */
+[data-theme="terminal"] #root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 255, 65, 0.03) 1px,
+    rgba(0, 255, 65, 0.03) 2px
+  );
+}
+
+[data-theme="terminal"] .header-bar {
+  border-bottom: 1px solid var(--color-accent);
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.15);
+}
+
+[data-theme="terminal"] .header-bar h1::before {
+  content: "> ";
+  color: var(--color-accent);
+}
+
+/* ── Bauhaus theme ── */
+[data-theme="bauhaus"] .card-grid {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+[data-theme="bauhaus"] .card-title-accent {
+  border-left: 4px solid var(--color-accent);
+}
+
+/* ── Lunar theme ── */
+[data-theme="lunar"] #root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 45% 45%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 65% 75%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 5% 55%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 55% 95%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 35% 75%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 75% 25%, rgba(255,255,255,0.4), transparent);
+  background-size: 200px 200px;
+}
+
+[data-theme="lunar"] .card-title-accent {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 0.5rem;
+}
+
+/* ── Shared ── */
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}

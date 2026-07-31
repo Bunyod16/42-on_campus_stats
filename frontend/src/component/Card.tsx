@@ -10,7 +10,7 @@ interface ICardProps extends React.HTMLProps<HTMLDivElement> {
 const Card = forwardRef<HTMLDivElement, ICardProps>(({ children, className }: ICardProps, ref) => {
     return (
         <div
-            className={"w-full rounded-md bg-gray-700 p-2 text-center align-middle text-gray-200  " + className}
+            className={"w-full rounded-md bg-surface p-2 text-center align-middle text-text-primary " + className}
             ref={ref}
         >
             {children}

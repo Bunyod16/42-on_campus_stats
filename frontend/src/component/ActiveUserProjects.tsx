@@ -240,7 +240,7 @@ export default function ActiveUserProjects(props: TPropsType) {
             />
           </svg>
         ) : (
-          <div className="w-full h-full bg-gray-500 rounded animate-pulse p-1" />
+          <div className="w-full h-full bg-[var(--color-loading)] rounded animate-pulse p-1" />
         )}
       </div>
     </Card>

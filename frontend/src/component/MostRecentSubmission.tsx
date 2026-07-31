@@ -52,11 +52,11 @@ function ProjectContainer({
       </div>
       <p className="text-base">{name}</p>
       <div className="text-sm 3xl:text-lg inline-flex items-center">
-        <span className="text-base 2xl:text-lg 3xl:text-2xl font-semibold text-green-500">
+        <span className="text-base 2xl:text-lg 3xl:text-2xl font-semibold text-[var(--color-score)]">
           {score}
         </span>
         /100
-        <p className="text-xs 2xl:text-sm 3xl:text-lg text-gray-400 ml-3">{time_string}</p>
+        <p className="text-xs 2xl:text-sm 3xl:text-lg text-text-muted ml-3">{time_string}</p>
       </div>
     </div>
   );
@@ -127,7 +127,7 @@ const MostRecentSubmission = ({ className }: IMostRecentSubmissionProps) => {
               ))}
             </div>
           ) : (
-            <div className="w-full h-full animate-pulse rounded bg-gray-500" />
+            <div className="w-full h-full animate-pulse rounded bg-[var(--color-loading)]" />
           ))}
       </div>
     </Card>

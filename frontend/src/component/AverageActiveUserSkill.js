@@ -245,7 +245,7 @@ export default function AverageActiveUserSkill(props) {
         </div>
       ) : (
         <div
-          className="bg-gray-500 rounded animate-pulse"
+          className="bg-[var(--color-loading)] rounded animate-pulse"
           style={{
             width: `${dimension.width}px`,
             height: `${((dimension.width - 50) / 16) * 9}px`,

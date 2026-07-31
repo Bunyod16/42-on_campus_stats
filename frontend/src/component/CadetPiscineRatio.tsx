@@ -4,7 +4,6 @@ import CardTitle from "./CardTitle";
 import "../styles/ratio.css";
 import { useDimensions } from "../hooks/useDimension";
 import axios from "axios";
-import { TranspileOutput } from "typescript";
 // Ratio Bar for Cadets vs Pisciners
 
 type TStudentType = {
@@ -132,7 +131,7 @@ export default function CadetPiscineRatio(props: TPropsType) {
               </g>
             </svg>
           ) : (
-            <div className="w-full h-full animate-pulse bg-gray-500" />
+            <div className="w-full h-full animate-pulse bg-[var(--color-loading)]" />
           ))}
       </div>
     </Card>

@@ -164,7 +164,7 @@ const TotalActiveUser7Days = ({
           (data ? (
             <BarChart data={data} dimension={dimension} />
           ) : (
-            <div className="w-full h-full bg-gray-500 rounded animate-pulse" />
+            <div className="w-full h-full bg-[var(--color-loading)] rounded animate-pulse" />
           ))}
       </div>
     </Card>
